@@ -1,0 +1,13 @@
+Raggedy Spineboy.png
+	size: 256, 256
+	filter: Linear, Linear
+	pma: true
+arm
+	bounds: 140, 178, 71, 75
+head
+	bounds: 2, 66, 136, 187
+leg
+	bounds: 140, 77, 36, 99
+torso
+	bounds: 2, 2, 62, 95
+	rotate: 90

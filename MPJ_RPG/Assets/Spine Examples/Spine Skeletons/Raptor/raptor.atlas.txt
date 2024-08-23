@@ -1,0 +1,86 @@
+raptor.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+back_arm
+	bounds: 410, 545, 46, 29
+back_bracer
+	bounds: 540, 548, 39, 28
+back_hand
+	bounds: 504, 538, 36, 34
+	rotate: 90
+back_knee
+	bounds: 299, 478, 49, 67
+back_thigh
+	bounds: 140, 247, 39, 24
+	rotate: 90
+eyes_open
+	bounds: 2, 2, 47, 45
+	rotate: 90
+front_arm
+	bounds: 360, 544, 48, 30
+front_bracer
+	bounds: 538, 578, 41, 29
+front_hand
+	bounds: 538, 609, 41, 38
+front_open_hand
+	bounds: 894, 782, 43, 44
+front_thigh
+	bounds: 942, 849, 57, 29
+gun
+	bounds: 785, 774, 107, 103
+gun_nohand
+	bounds: 614, 703, 105, 102
+head
+	bounds: 2, 137, 136, 149
+lower_leg
+	bounds: 780, 699, 73, 98
+	rotate: 90
+mouth_smile
+	bounds: 49, 2, 47, 30
+	rotate: 90
+neck
+	bounds: 1001, 860, 18, 21
+	rotate: 90
+raptor_arm_back
+	bounds: 940, 936, 82, 86
+raptor_body
+	bounds: 2, 737, 610, 285
+raptor_front_arm
+	bounds: 195, 464, 81, 102
+	rotate: 90
+raptor_front_leg
+	bounds: 2, 478, 191, 257
+raptor_hindleg_back
+	bounds: 614, 807, 169, 215
+raptor_horn
+	bounds: 360, 655, 182, 80
+raptor_horn_back
+	bounds: 360, 576, 176, 77
+raptor_jaw
+	bounds: 785, 879, 153, 143
+raptor_saddle_noshadow
+	bounds: 2, 288, 163, 188
+raptor_saddle_strap_front
+	bounds: 721, 710, 57, 95
+raptor_saddle_strap_rear
+	bounds: 940, 880, 54, 74
+	rotate: 90
+raptor_saddle_w_shadow
+	bounds: 195, 547, 163, 188
+raptor_tongue
+	bounds: 544, 649, 86, 64
+	rotate: 90
+stirrup_back
+	bounds: 458, 539, 44, 35
+stirrup_front
+	bounds: 81, 4, 45, 50
+	rotate: 90
+stirrup_strap
+	bounds: 894, 828, 49, 46
+	rotate: 90
+torso
+	bounds: 610, 647, 54, 91
+	rotate: 90
+visor
+	bounds: 2, 51, 131, 84

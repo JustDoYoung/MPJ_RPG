@@ -1,0 +1,10 @@
+Gauge.png
+	size: 1024, 64
+	filter: Linear, Linear
+	pma: true
+Background
+	bounds: 254, 30, 224, 32
+Bar
+	bounds: 480, 30, 224, 32
+Border
+	bounds: 2, 2, 250, 60
