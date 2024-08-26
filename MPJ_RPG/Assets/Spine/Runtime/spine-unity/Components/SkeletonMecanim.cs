@@ -66,8 +66,7 @@ namespace Spine.Unity {
 		/// <summary>
 		/// Occurs after the Skeleton's bone world space values are resolved (including all constraints).
 		/// Using this callback will cause the world space values to be solved an extra time.
-		/// Use this callback if want to use bone world space values, and also set bone local values.
-		/// </summary>
+		/// Use this callback if want to use bone world space values, and also set bone local values.</summary>
 		public event UpdateBonesDelegate UpdateWorld { add { _UpdateWorld += value; } remove { _UpdateWorld -= value; } }
 
 		/// <summary>
@@ -102,36 +101,32 @@ namespace Spine.Unity {
 
 		public virtual void Update () {
 			if (!valid || updateTiming != UpdateTiming.InUpdate) return;
-			UpdateAnimation(Time.deltaTime);
+			UpdateAnimation();
 		}
 
 		public virtual void FixedUpdate () {
 			if (!valid || updateTiming != UpdateTiming.InFixedUpdate) return;
-			UpdateAnimation(Time.deltaTime);
+			UpdateAnimation();
 		}
 
 		/// <summary>Manual animation update. Required when <c>updateTiming</c> is set to <c>ManualUpdate</c>.</summary>
 		/// <param name="deltaTime">Ignored parameter.</param>
 		public virtual void Update (float deltaTime) {
 			if (!valid) return;
-			UpdateAnimation(deltaTime);
+			UpdateAnimation();
 		}
 
-		protected void UpdateAnimation (float deltaTime) {
+		protected void UpdateAnimation () {
 			wasUpdatedAfterInit = true;
 
 			// animation status is kept by Mecanim Animator component
 			if (updateMode <= UpdateMode.OnlyAnimationStatus)
 				return;
 
-			skeleton.Update(deltaTime);
-
-			ApplyTransformMovementToPhysics();
-
 			ApplyAnimation();
 		}
 
-		public virtual void ApplyAnimation () {
+		protected void ApplyAnimation () {
 			if (_BeforeApply != null)
 				_BeforeApply(this);
 
@@ -153,28 +148,27 @@ namespace Spine.Unity {
 #else
 			translator.Apply(skeleton);
 #endif
-			AfterAnimationApplied();
-		}
 
-		public virtual void AfterAnimationApplied () {
-			if (_UpdateLocal != null)
-				_UpdateLocal(this);
+			// UpdateWorldTransform and Bone Callbacks
+			{
+				if (_UpdateLocal != null)
+					_UpdateLocal(this);
 
-			if (_UpdateWorld == null) {
-				UpdateWorldTransform(Skeleton.Physics.Update);
-			} else {
-				UpdateWorldTransform(Skeleton.Physics.Pose);
-				_UpdateWorld(this);
-				UpdateWorldTransform(Skeleton.Physics.Update);
+				skeleton.UpdateWorldTransform();
+
+				if (_UpdateWorld != null) {
+					_UpdateWorld(this);
+					skeleton.UpdateWorldTransform();
+				}
+
+				if (_UpdateComplete != null)
+					_UpdateComplete(this);
 			}
-
-			if (_UpdateComplete != null)
-				_UpdateComplete(this);
 		}
 
 		public override void LateUpdate () {
 			if (updateTiming == UpdateTiming.InLateUpdate && valid && translator != null && translator.Animator != null)
-				UpdateAnimation(Time.deltaTime);
+				UpdateAnimation();
 			// instantiation can happen from Update() after this component, leading to a missing Update() call.
 			if (!wasUpdatedAfterInit) Update();
 			base.LateUpdate();

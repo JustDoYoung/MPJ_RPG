@@ -42,6 +42,7 @@ namespace Spine {
 	public abstract class SkeletonLoader {
 		protected readonly AttachmentLoader attachmentLoader;
 		protected float scale = 1;
+		protected readonly List<LinkedMesh> linkedMeshes = new List<LinkedMesh>();
 
 		/// <summary>Creates a skeleton loader that loads attachments using an <see cref="AtlasAttachmentLoader"/> with the specified atlas.
 		/// </summary>
@@ -71,5 +72,21 @@ namespace Spine {
 		}
 
 		public abstract SkeletonData ReadSkeletonData (string path);
+
+		protected class LinkedMesh {
+			internal string parent, skin;
+			internal int slotIndex;
+			internal MeshAttachment mesh;
+			internal bool inheritTimelines;
+
+			public LinkedMesh (MeshAttachment mesh, string skin, int slotIndex, string parent, bool inheritTimelines) {
+				this.mesh = mesh;
+				this.skin = skin;
+				this.slotIndex = slotIndex;
+				this.parent = parent;
+				this.inheritTimelines = inheritTimelines;
+			}
+		}
+
 	}
 }

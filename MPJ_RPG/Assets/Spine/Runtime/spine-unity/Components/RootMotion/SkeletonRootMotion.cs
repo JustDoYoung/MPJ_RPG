@@ -88,8 +88,8 @@ namespace Spine.Unity {
 			animationTrackFlags = DefaultAnimationTrackFlags;
 		}
 
-		public override void Initialize () {
-			base.Initialize();
+		protected override void Start () {
+			base.Start();
 			IAnimationStateComponent animstateComponent = skeletonComponent as IAnimationStateComponent;
 			this.animationState = (animstateComponent != null) ? animstateComponent.AnimationState : null;
 

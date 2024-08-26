@@ -93,7 +93,6 @@ Material:
     - _ThresholdEnd: 0.25
     - _TintBlack: 0
     - _Use8Neighbourhood: 1
-    - _UseScreenSpaceOutlineWidth: 0
     - _ZWrite: 0
     m_Colors:
     - _Black: {r: 0, g: 0, b: 0, a: 0}

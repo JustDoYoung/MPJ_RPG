@@ -329,13 +329,13 @@ namespace Spine.Unity.Editor {
 
 					boneTransform.parent = parentTransform;
 					boneTransform.localPosition = new Vector3(boneData.X, boneData.Y, 0);
-					Inherit inherit = boneData.Inherit;
-					if (inherit.InheritsRotation())
+					TransformMode tm = boneData.TransformMode;
+					if (tm.InheritsRotation())
 						boneTransform.localRotation = Quaternion.Euler(0, 0, boneData.Rotation);
 					else
 						boneTransform.rotation = Quaternion.Euler(0, 0, boneData.Rotation);
 
-					if (inherit.InheritsScale())
+					if (tm.InheritsScale())
 						boneTransform.localScale = new Vector3(boneData.ScaleX, boneData.ScaleY, 1);
 				}
 
@@ -614,7 +614,7 @@ namespace Spine.Unity.Editor {
 				throw new System.ArgumentException("Mesh is not weighted.", "attachment");
 
 			Skeleton skeleton = new Skeleton(skeletonData);
-			skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+			skeleton.UpdateWorldTransform();
 
 			float[] floatVerts = new float[attachment.WorldVerticesLength];
 			attachment.ComputeWorldVertices(skeleton.Slots.Items[slotIndex], floatVerts);
@@ -774,7 +774,7 @@ namespace Spine.Unity.Editor {
 			}
 
 			foreach (Bone b in skeleton.Bones) {
-				if (!b.Data.Inherit.InheritsRotation()) {
+				if (!b.Data.TransformMode.InheritsRotation()) {
 					int index = b.Data.Index;
 					if (ignoreRotateTimelineIndexes.Contains(index) == false) {
 						ignoreRotateTimelineIndexes.Add(index);
@@ -832,10 +832,10 @@ namespace Spine.Unity.Editor {
 
 		static void BakeBoneConstraints (Bone bone, Spine.Animation animation, AnimationClip clip) {
 			Skeleton skeleton = bone.Skeleton;
-			bool inheritRotation = bone.Data.Inherit.InheritsRotation();
+			bool inheritRotation = bone.Data.TransformMode.InheritsRotation();
 
 			animation.Apply(skeleton, 0, 0, false, null, 1f, MixBlend.Setup, MixDirection.In);
-			skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+			skeleton.UpdateWorldTransform();
 			float duration = animation.Duration;
 
 			AnimationCurve curve = new AnimationCurve();
@@ -863,7 +863,7 @@ namespace Spine.Unity.Editor {
 					currentTime = duration;
 
 				animation.Apply(skeleton, 0, currentTime, true, null, 1f, MixBlend.Setup, MixDirection.In);
-				skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+				skeleton.UpdateWorldTransform();
 
 				int pIndex = listIndex;
 
@@ -1449,7 +1449,7 @@ namespace Spine.Unity.Editor {
 					float time = frames[f];
 
 					timeline.Apply(skeleton, lastTime, currentTime, null, 1, MixBlend.Setup, MixDirection.In);
-					skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+					skeleton.UpdateWorldTransform();
 
 					rotation = frames[f + 1] + boneData.Rotation;
 					angle += Mathf.DeltaAngle(angle, rotation);
@@ -1463,7 +1463,7 @@ namespace Spine.Unity.Editor {
 							currentTime = time;
 
 						timeline.Apply(skeleton, lastTime, currentTime, null, 1, MixBlend.Setup, MixDirection.In);
-						skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+						skeleton.UpdateWorldTransform();
 						pk = keys[listIndex];
 
 						rotation = bone.Rotation;

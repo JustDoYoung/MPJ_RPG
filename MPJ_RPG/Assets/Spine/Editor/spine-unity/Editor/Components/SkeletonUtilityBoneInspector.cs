@@ -158,10 +158,8 @@ namespace Spine.Unity.Editor {
 				}
 			}
 
-			bool isOverrideMode = mode.enumValueIndex == 1;
-			using (new EditorGUI.DisabledGroupScope(isOverrideMode))
-				EditorGUILayout.PropertyField(zPosition);
-			EditorGUILayout.PropertyField(position, new GUIContent("XY Position"));
+			EditorGUILayout.PropertyField(zPosition);
+			EditorGUILayout.PropertyField(position);
 			EditorGUILayout.PropertyField(rotation);
 			EditorGUILayout.PropertyField(scale);
 
@@ -213,7 +211,7 @@ namespace Spine.Unity.Editor {
 								GUILayout.Space(30);
 								string buttonLabel = box.IsWeighted() ? box.Name + " (!)" : box.Name;
 								if (GUILayout.Button(buttonLabel, GUILayout.Width(200))) {
-									utilityBone.bone.Skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+									utilityBone.bone.Skeleton.UpdateWorldTransform();
 									Transform bbTransform = utilityBone.transform.Find("[BoundingBox]" + box.Name); // Use FindChild in older versions of Unity.
 									if (bbTransform != null) {
 										PolygonCollider2D originalCollider = bbTransform.GetComponent<PolygonCollider2D>();

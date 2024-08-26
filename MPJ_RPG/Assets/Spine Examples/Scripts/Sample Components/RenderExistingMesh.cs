@@ -31,10 +31,6 @@
 #define NEW_PREFAB_SYSTEM
 #endif
 
-#if UNITY_2018_2_OR_NEWER
-#define HAS_GET_SHARED_MATERIALS
-#endif
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -63,28 +59,20 @@ namespace Spine.Unity.Examples {
 
 		private Dictionary<Material, Material> replacementMaterialDict = new Dictionary<Material, Material>();
 		private Material[] sharedMaterials = new Material[0];
-#if HAS_GET_SHARED_MATERIALS
-		private List<Material> parentMaterials = new List<Material>();
-#endif
 
 #if UNITY_EDITOR
 		private void Reset () {
 			if (referenceRenderer == null) {
-				if (this.transform.parent)
-					referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
-				if (referenceRenderer == null) return;
+				referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
+				if (!referenceRenderer)
+					return;
 			}
-#if HAS_GET_SHARED_MATERIALS
-			referenceRenderer.GetSharedMaterials(parentMaterials);
-			int parentMaterialsCount = parentMaterials.Count;
-#else
+
 			Material[] parentMaterials = referenceRenderer.sharedMaterials;
-			int parentMaterialsCount = parentMaterials.Length;
-#endif
-			if (replacementMaterials.Length != parentMaterialsCount) {
-				replacementMaterials = new MaterialReplacement[parentMaterialsCount];
+			if (replacementMaterials.Length != parentMaterials.Length) {
+				replacementMaterials = new MaterialReplacement[parentMaterials.Length];
 			}
-			for (int i = 0; i < parentMaterialsCount; ++i) {
+			for (int i = 0; i < parentMaterials.Length; ++i) {
 				replacementMaterials[i].originalMaterial = parentMaterials[i];
 				replacementMaterials[i].replacementMaterial = parentMaterials[i];
 			}
@@ -94,15 +82,9 @@ namespace Spine.Unity.Examples {
 #endif
 
 		void Awake () {
-			ownRenderer = this.GetComponent<MeshRenderer>();
-			ownMeshFilter = this.GetComponent<MeshFilter>();
-
 			if (referenceRenderer == null) {
-				if (this.transform.parent != null)
-					referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
-				if (referenceRenderer == null) return;
+				referenceRenderer = this.transform.parent.GetComponentInParent<MeshRenderer>();
 			}
-			referenceMeshFilter = referenceRenderer.GetComponent<MeshFilter>();
 
 			// subscribe to OnMeshAndMaterialsUpdated
 			SkeletonAnimation skeletonRenderer = referenceRenderer.GetComponent<SkeletonAnimation>();
@@ -111,6 +93,9 @@ namespace Spine.Unity.Examples {
 				skeletonRenderer.OnMeshAndMaterialsUpdated += UpdateOnCallback;
 				updateViaSkeletonCallback = true;
 			}
+			referenceMeshFilter = referenceRenderer.GetComponent<MeshFilter>();
+			ownRenderer = this.GetComponent<MeshRenderer>();
+			ownMeshFilter = this.GetComponent<MeshFilter>();
 
 			InitializeDict();
 		}
@@ -146,23 +131,13 @@ namespace Spine.Unity.Examples {
 		}
 
 		void UpdateMaterials () {
-#if UNITY_EDITOR
-			if (!referenceRenderer) return;
-			if (!referenceMeshFilter) Reset();
-#endif
 			ownMeshFilter.sharedMesh = referenceMeshFilter.sharedMesh;
 
-#if HAS_GET_SHARED_MATERIALS
-			referenceRenderer.GetSharedMaterials(parentMaterials);
-			int parentMaterialsCount = parentMaterials.Count;
-#else
 			Material[] parentMaterials = referenceRenderer.sharedMaterials;
-			int parentMaterialsCount = parentMaterials.Length;
-#endif
-			if (sharedMaterials.Length != parentMaterialsCount) {
-				sharedMaterials = new Material[parentMaterialsCount];
+			if (sharedMaterials.Length != parentMaterials.Length) {
+				sharedMaterials = new Material[parentMaterials.Length];
 			}
-			for (int i = 0; i < parentMaterialsCount; ++i) {
+			for (int i = 0; i < parentMaterials.Length; ++i) {
 				Material parentMaterial = parentMaterials[i];
 				if (replacementMaterialDict.ContainsKey(parentMaterial)) {
 					sharedMaterials[i] = replacementMaterialDict[parentMaterial];

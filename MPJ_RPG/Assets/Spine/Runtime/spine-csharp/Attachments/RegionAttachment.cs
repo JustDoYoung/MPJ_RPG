@@ -106,7 +106,8 @@ namespace Spine {
 				return;
 			}
 
-			float width = Width, height = Height;
+			float width = Width;
+			float height = Height;
 			float localX2 = width / 2;
 			float localY2 = height / 2;
 			float localX = -localX2;
@@ -125,13 +126,17 @@ namespace Spine {
 					localY2 -= (region.originalHeight - region.offsetY - region.packedHeight) / region.originalHeight * height;
 				}
 			}
-			float scaleX = ScaleX, scaleY = ScaleY;
+			float scaleX = ScaleX;
+			float scaleY = ScaleY;
 			localX *= scaleX;
 			localY *= scaleY;
 			localX2 *= scaleX;
 			localY2 *= scaleY;
-			float r = Rotation * MathUtils.DegRad, cos = (float)Math.Cos(r), sin = (float)Math.Sin(r);
-			float x = X, y = Y;
+			float rotation = Rotation;
+			float cos = MathUtils.CosDeg(this.rotation);
+			float sin = MathUtils.SinDeg(this.rotation);
+			float x = X;
+			float y = Y;
 			float localXCos = localX * cos + x;
 			float localXSin = localX * sin;
 			float localYCos = localY * cos + y;

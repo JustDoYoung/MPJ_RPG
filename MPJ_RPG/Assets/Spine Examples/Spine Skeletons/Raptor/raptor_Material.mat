@@ -42,7 +42,6 @@ Material:
     - _StraightAlphaInput: 0
     - _ThresholdEnd: 0.25
     - _Use8Neighbourhood: 1
-    - _UseScreenSpaceOutlineWidth: 0
     m_Colors:
     - _Black: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

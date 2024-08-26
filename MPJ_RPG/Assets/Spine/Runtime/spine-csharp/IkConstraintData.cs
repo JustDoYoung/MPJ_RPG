@@ -35,9 +35,9 @@ namespace Spine {
 	public class IkConstraintData : ConstraintData {
 		internal ExposedList<BoneData> bones = new ExposedList<BoneData>();
 		internal BoneData target;
-		internal int bendDirection;
+		internal int bendDirection = 1;
 		internal bool compress, stretch, uniform;
-		internal float mix, softness;
+		internal float mix = 1, softness;
 
 		public IkConstraintData (string name) : base(name) {
 		}

@@ -56,8 +56,7 @@ VertexOutput vert(VertexInput input)
 	output.texcoord = calculateTextureCoord(input.texcoord);
 	output.color = calculateVertexColor(input.color);
 #if defined(_TINT_BLACK_ON)
-	output.darkColor = GammaToTargetSpace(half3(input.tintBlackRG.r, input.tintBlackRG.g, input.tintBlackB.r))
-		+ (_Black.rgb * input.color.a);
+	output.darkColor = GammaToTargetSpace(half3(input.tintBlackRG.r, input.tintBlackRG.g, input.tintBlackB.r)) + _Black.rgb;
 #endif
 
 #if defined(_FOG)

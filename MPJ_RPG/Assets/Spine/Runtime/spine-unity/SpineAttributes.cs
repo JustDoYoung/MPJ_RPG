@@ -33,13 +33,12 @@ using UnityEngine;
 
 namespace Spine.Unity {
 
-	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
 	public abstract class SpineAttributeBase : PropertyAttribute {
 		public string dataField = "";
 		public string startsWith = "";
 		public bool includeNone = true;
 		public bool fallbackToTextField = false;
-		public bool avoidGenericMenu = false;
 	}
 
 	public class SpineBone : SpineAttributeBase {
@@ -104,14 +103,11 @@ namespace Spine.Unity {
 		/// Valid types are SkeletonDataAsset and SkeletonRenderer (and derivatives)
 		/// If left empty and the script the attribute is applied to is derived from Component, GetComponent<SkeletonRenderer>() will be called as a fallback.
 		/// </param>
-		public SpineAnimation (string startsWith = "", string dataField = "",
-			bool includeNone = true, bool fallbackToTextField = false, bool avoidGenericMenu = false) {
-
+		public SpineAnimation (string startsWith = "", string dataField = "", bool includeNone = true, bool fallbackToTextField = false) {
 			this.startsWith = startsWith;
 			this.dataField = dataField;
 			this.includeNone = includeNone;
 			this.fallbackToTextField = fallbackToTextField;
-			this.avoidGenericMenu = avoidGenericMenu;
 		}
 	}
 
@@ -209,15 +205,12 @@ namespace Spine.Unity {
 
 		public bool defaultAsEmptyString = false;
 
-		public SpineSkin (string startsWith = "", string dataField = "", bool includeNone = false,
-			bool fallbackToTextField = false, bool defaultAsEmptyString = false, bool avoidGenericMenu = false) {
-
+		public SpineSkin (string startsWith = "", string dataField = "", bool includeNone = true, bool fallbackToTextField = false, bool defaultAsEmptyString = false) {
 			this.startsWith = startsWith;
 			this.dataField = dataField;
 			this.includeNone = includeNone;
 			this.fallbackToTextField = fallbackToTextField;
 			this.defaultAsEmptyString = defaultAsEmptyString;
-			this.avoidGenericMenu = avoidGenericMenu;
 		}
 	}
 

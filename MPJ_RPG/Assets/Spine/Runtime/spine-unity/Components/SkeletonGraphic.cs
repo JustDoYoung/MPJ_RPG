@@ -60,13 +60,6 @@ namespace Spine.Unity {
 		public Material multiplyMaterial;
 		public Material screenMaterial;
 
-		/// <summary>Own color to replace <c>Graphic.m_Color</c>.</summary>
-		[UnityEngine.Serialization.FormerlySerializedAs("m_Color")]
-		[SerializeField] protected Color m_SkeletonColor = Color.white;
-		/// <summary>Sets the color of the skeleton. Does not call <see cref="Rebuild"/> and <see cref="UpdateMesh"/>
-		/// unnecessarily as <c>Graphic.color</c> would otherwise do.</summary>
-		override public Color color { get { return m_SkeletonColor; } set { m_SkeletonColor = value; } }
-
 		[SpineSkin(dataField: "skeletonDataAsset", defaultAsEmptyString: true)]
 		public string initialSkinName;
 		public bool initialFlipX, initialFlipY;
@@ -77,9 +70,7 @@ namespace Spine.Unity {
 		public float timeScale = 1f;
 		public bool freeze;
 		protected float meshScale = 1f;
-		protected Vector2 meshOffset = Vector2.zero;
 		public float MeshScale { get { return meshScale; } }
-		public Vector2 MeshOffset { get { return meshOffset; } }
 
 		public enum LayoutMode {
 			None = 0,
@@ -90,10 +81,7 @@ namespace Spine.Unity {
 		}
 		public LayoutMode layoutScaleMode = LayoutMode.None;
 		[SerializeField] protected Vector2 referenceSize = Vector2.one;
-		/// <summary>Offset relative to the pivot position, before potential layout scale is applied.</summary>
-		[SerializeField] protected Vector2 pivotOffset = Vector2.zero;
 		[SerializeField] protected float referenceScale = 1f;
-		[SerializeField] protected float layoutScale = 1f;
 #if UNITY_EDITOR
 		protected LayoutMode previousLayoutScaleMode = LayoutMode.None;
 		[SerializeField] protected Vector2 rectTransformSize = Vector2.zero;
@@ -364,8 +352,10 @@ namespace Spine.Unity {
 				return;
 			UpdateAnimationStatus(deltaTime);
 
-			if (updateMode == UpdateMode.OnlyAnimationStatus)
+			if (updateMode == UpdateMode.OnlyAnimationStatus) {
+				state.ApplyEventTimelinesOnly(skeleton, issueEvents: false);
 				return;
+			}
 			ApplyAnimation();
 		}
 
@@ -390,65 +380,9 @@ namespace Spine.Unity {
 		protected void UpdateAnimationStatus (float deltaTime) {
 			deltaTime *= timeScale;
 			state.Update(deltaTime);
-			skeleton.Update(deltaTime);
-
-			ApplyTransformMovementToPhysics();
-
-			if (updateMode == UpdateMode.OnlyAnimationStatus) {
-				state.ApplyEventTimelinesOnly(skeleton, issueEvents: false);
-				return;
-			}
 		}
 
-		public virtual void ApplyTransformMovementToPhysics () {
-			if (Application.isPlaying) {
-				if (physicsPositionInheritanceFactor != Vector2.zero) {
-					Vector2 position = GetPhysicsTransformPosition();
-					Vector2 positionDelta = (position - lastPosition) / meshScale;
-
-					positionDelta = transform.InverseTransformVector(positionDelta);
-					if (physicsMovementRelativeTo != null) {
-						positionDelta = physicsMovementRelativeTo.TransformVector(positionDelta);
-					}
-					positionDelta.x *= physicsPositionInheritanceFactor.x;
-					positionDelta.y *= physicsPositionInheritanceFactor.y;
-
-					skeleton.PhysicsTranslate(positionDelta.x, positionDelta.y);
-					lastPosition = position;
-				}
-				if (physicsRotationInheritanceFactor != 0f) {
-					float rotation = GetPhysicsTransformRotation();
-					skeleton.PhysicsRotate(0, 0, physicsRotationInheritanceFactor * (rotation - lastRotation));
-					lastRotation = rotation;
-				}
-			}
-		}
-
-		protected Vector2 GetPhysicsTransformPosition () {
-			if (physicsMovementRelativeTo == null) {
-				return transform.position;
-			} else {
-				if (physicsMovementRelativeTo == transform.parent)
-					return transform.localPosition;
-				else
-					return physicsMovementRelativeTo.InverseTransformPoint(transform.position);
-			}
-		}
-
-		protected float GetPhysicsTransformRotation () {
-			if (physicsMovementRelativeTo == null) {
-				return this.transform.rotation.eulerAngles.z;
-			} else {
-				if (physicsMovementRelativeTo == this.transform.parent)
-					return this.transform.localRotation.eulerAngles.z;
-				else {
-					Quaternion relative = Quaternion.Inverse(physicsMovementRelativeTo.rotation) * this.transform.rotation;
-					return relative.eulerAngles.z;
-				}
-			}
-		}
-
-		public virtual void ApplyAnimation () {
+		protected void ApplyAnimation () {
 			if (BeforeApply != null)
 				BeforeApply(this);
 
@@ -460,24 +394,19 @@ namespace Spine.Unity {
 			AfterAnimationApplied();
 		}
 
-		public virtual void AfterAnimationApplied () {
+		public void AfterAnimationApplied () {
 			if (UpdateLocal != null)
 				UpdateLocal(this);
 
-			if (UpdateWorld == null) {
-				UpdateWorldTransform(Skeleton.Physics.Update);
-			} else {
-				UpdateWorldTransform(Skeleton.Physics.Pose);
+			skeleton.UpdateWorldTransform();
+
+			if (UpdateWorld != null) {
 				UpdateWorld(this);
-				UpdateWorldTransform(Skeleton.Physics.Update);
+				skeleton.UpdateWorldTransform();
 			}
 
 			if (UpdateComplete != null)
 				UpdateComplete(this);
-		}
-
-		protected void UpdateWorldTransform (Skeleton.Physics physics) {
-			skeleton.UpdateWorldTransform(physics);
 		}
 
 		public void LateUpdate () {
@@ -533,7 +462,6 @@ namespace Spine.Unity {
 
 		#region API
 		protected Skeleton skeleton;
-
 		public Skeleton Skeleton {
 			get {
 				Initialize(false);
@@ -576,73 +504,6 @@ namespace Spine.Unity {
 			}
 		}
 
-		/// <seealso cref="PhysicsPositionInheritanceFactor"/>
-		[SerializeField] protected Vector2 physicsPositionInheritanceFactor = Vector2.one;
-		/// <seealso cref="PhysicsRotationInheritanceFactor"/>
-		[SerializeField] protected float physicsRotationInheritanceFactor = 1.0f;
-		/// <summary>Reference transform relative to which physics movement will be calculated, or null to use world location.</summary>
-		[SerializeField] protected Transform physicsMovementRelativeTo = null;
-
-		/// <summary>Used for applying Transform translation to skeleton PhysicsConstraints.</summary>
-		protected Vector2 lastPosition;
-		/// <summary>Used for applying Transform rotation to skeleton PhysicsConstraints.</summary>
-		protected float lastRotation;
-
-		/// <summary>When set to non-zero, Transform position movement in X and Y direction
-		/// is applied to skeleton PhysicsConstraints, multiplied by this scale factor.
-		/// Typical values are <c>Vector2.one</c> to apply XY movement 1:1,
-		/// <c>Vector2(2f, 2f)</c> to apply movement with double intensity,
-		/// <c>Vector2(1f, 0f)</c> to apply only horizontal movement, or
-		/// <c>Vector2.zero</c> to not apply any Transform position movement at all.</summary>
-		public Vector2 PhysicsPositionInheritanceFactor {
-			get {
-				return physicsPositionInheritanceFactor;
-			}
-			set {
-				if (physicsPositionInheritanceFactor == Vector2.zero && value != Vector2.zero) ResetLastPosition();
-				physicsPositionInheritanceFactor = value;
-			}
-		}
-
-		/// <summary>When set to non-zero, Transform rotation movement is applied to skeleton PhysicsConstraints,
-		/// multiplied by this scale factor. Typical values are <c>1</c> to apply movement 1:1,
-		/// <c>2</c> to apply movement with double intensity, or
-		/// <c>0</c> to not apply any Transform rotation movement at all.</summary>
-		public float PhysicsRotationInheritanceFactor {
-			get {
-				return physicsRotationInheritanceFactor;
-			}
-			set {
-				if (physicsRotationInheritanceFactor == 0f && value != 0f) ResetLastRotation();
-				physicsRotationInheritanceFactor = value;
-			}
-		}
-
-		/// <summary>Reference transform relative to which physics movement will be calculated, or null to use world location.</summary>
-		public Transform PhysicsMovementRelativeTo {
-			get {
-				return physicsMovementRelativeTo;
-			}
-			set {
-				physicsMovementRelativeTo = value;
-				if (physicsPositionInheritanceFactor != Vector2.zero) ResetLastPosition();
-				if (physicsRotationInheritanceFactor != 0f) ResetLastRotation();
-			}
-		}
-
-		public void ResetLastPosition () {
-			lastPosition = GetPhysicsTransformPosition();
-		}
-
-		public void ResetLastRotation () {
-			lastRotation = GetPhysicsTransformRotation();
-		}
-
-		public void ResetLastPositionAndRotation () {
-			lastPosition = GetPhysicsTransformPosition();
-			lastRotation = GetPhysicsTransformRotation();
-		}
-
 		[SerializeField] protected Spine.Unity.MeshGenerator meshGenerator = new MeshGenerator();
 		public Spine.Unity.MeshGenerator MeshGenerator { get { return this.meshGenerator; } }
 		DoubleBuffered<Spine.Unity.MeshRendererBuffers.SmartMesh> meshBuffers;
@@ -650,11 +511,6 @@ namespace Spine.Unity {
 		readonly ExposedList<Mesh> meshes = new ExposedList<Mesh>();
 		readonly ExposedList<Material> usedMaterials = new ExposedList<Material>();
 		readonly ExposedList<Texture> usedTextures = new ExposedList<Texture>();
-
-		/// <summary>Returns the <see cref="SkeletonClipping"/> used by this renderer for use with e.g.
-		/// <see cref="Skeleton.GetBounds(out float, out float, out float, out float, ref float[], SkeletonClipping)"/>
-		/// </summary>
-		public SkeletonClipping SkeletonClipping { get { return meshGenerator.SkeletonClipping; } }
 
 		public ExposedList<Mesh> MeshesMultipleCanvasRenderers { get { return meshes; } }
 		public ExposedList<Material> MaterialsMultipleCanvasRenderers { get { return usedMaterials; } }
@@ -743,9 +599,8 @@ namespace Spine.Unity {
 				SetRectTransformSize(submeshGraphic, size);
 				submeshGraphic.rectTransform.pivot = p;
 			}
+
 			this.referenceSize = size;
-			referenceScale = referenceScale * layoutScale;
-			layoutScale = 1f;
 		}
 
 		public static void SetRectTransformSize (Graphic target, Vector2 size) {
@@ -827,8 +682,6 @@ namespace Spine.Unity {
 			InitMeshBuffers();
 			baseTexture = skeletonDataAsset.atlasAssets[0].PrimaryMaterial.mainTexture;
 			canvasRenderer.SetTexture(this.mainTexture); // Needed for overwriting initializations.
-
-			ResetLastPositionAndRotation();
 
 			// Set the initial Skin and Animation
 			if (!string.IsNullOrEmpty(initialSkinName))
@@ -945,19 +798,10 @@ namespace Spine.Unity {
 			meshScale = (canvas == null) ? 100 : canvas.referencePixelsPerUnit;
 			if (layoutScaleMode != LayoutMode.None) {
 				meshScale *= referenceScale;
-				layoutScale = GetLayoutScale(layoutScaleMode);
-				if (!EditReferenceRect) {
-					meshScale *= layoutScale;
-				}
-				meshOffset = pivotOffset * layoutScale;
-			} else {
-				meshOffset = pivotOffset;
+				if (!EditReferenceRect)
+					meshScale *= GetLayoutScale(layoutScaleMode);
 			}
-			if (meshOffset == Vector2.zero)
-				meshGenerator.ScaleVertexData(meshScale);
-			else
-				meshGenerator.ScaleAndOffsetVertexData(meshScale, meshOffset);
-
+			meshGenerator.ScaleVertexData(meshScale);
 			if (OnPostProcessVertices != null) OnPostProcessVertices.Invoke(this.meshGenerator.Buffers);
 
 			Mesh mesh = smartMesh.mesh;
@@ -1045,13 +889,8 @@ namespace Spine.Unity {
 			meshScale = (canvas == null) ? 100 : canvas.referencePixelsPerUnit;
 			if (layoutScaleMode != LayoutMode.None) {
 				meshScale *= referenceScale;
-				layoutScale = GetLayoutScale(layoutScaleMode);
-				if (!EditReferenceRect) {
-					meshScale *= layoutScale;
-				}
-				meshOffset = pivotOffset * layoutScale;
-			} else {
-				meshOffset = pivotOffset;
+				if (!EditReferenceRect)
+					meshScale *= GetLayoutScale(layoutScaleMode);
 			}
 			// Generate meshes.
 			int submeshCount = currentInstructions.submeshInstructions.Count;
@@ -1072,10 +911,7 @@ namespace Spine.Unity {
 				meshGenerator.AddSubmesh(submeshInstructionItem);
 
 				Mesh targetMesh = meshesItems[i];
-				if (meshOffset == Vector2.zero)
-					meshGenerator.ScaleVertexData(meshScale);
-				else
-					meshGenerator.ScaleAndOffsetVertexData(meshScale, meshOffset);
+				meshGenerator.ScaleVertexData(meshScale);
 				if (OnPostProcessVertices != null) OnPostProcessVertices.Invoke(this.meshGenerator.Buffers);
 				meshGenerator.FillVertexData(targetMesh);
 				meshGenerator.FillTriangles(targetMesh);
@@ -1374,9 +1210,9 @@ namespace Spine.Unity {
 					SetRectTransformSize(this, rectTransformSize);
 				}
 			}
-			if (editReferenceRect || layoutScaleMode == LayoutMode.None)
+			if (editReferenceRect || layoutScaleMode == LayoutMode.None) {
 				referenceSize = GetCurrentRectSize();
-
+			}
 			previousLayoutScaleMode = layoutScaleMode;
 		}
 
@@ -1397,7 +1233,13 @@ namespace Spine.Unity {
 			float referenceAspect = referenceSize.x / referenceSize.y;
 			Vector2 newSize = GetCurrentRectSize();
 
-			LayoutMode mode = GetEffectiveLayoutMode(previousLayoutScaleMode);
+			LayoutMode mode = previousLayoutScaleMode;
+			float frameAspect = newSize.x / newSize.y;
+			if (mode == LayoutMode.FitInParent)
+				mode = frameAspect > referenceAspect ? LayoutMode.HeightControlsWidth : LayoutMode.WidthControlsHeight;
+			else if (mode == LayoutMode.EnvelopeParent)
+				mode = frameAspect > referenceAspect ? LayoutMode.WidthControlsHeight : LayoutMode.HeightControlsWidth;
+
 			if (mode == LayoutMode.WidthControlsHeight)
 				newSize.y = newSize.x / referenceAspect;
 			else if (mode == LayoutMode.HeightControlsWidth)
@@ -1408,36 +1250,9 @@ namespace Spine.Unity {
 		public Vector2 GetReferenceRectSize () {
 			return referenceSize * GetLayoutScale(layoutScaleMode);
 		}
-
-		public Vector2 GetPivotOffset () {
-			return pivotOffset;
-		}
-
-		public Vector2 GetScaledPivotOffset () {
-			return pivotOffset * GetLayoutScale(layoutScaleMode);
-		}
-
-		public void SetScaledPivotOffset (Vector2 pivotOffsetScaled) {
-			pivotOffset = pivotOffsetScaled / GetLayoutScale(layoutScaleMode);
-		}
 #endif
-		protected float GetLayoutScale (LayoutMode mode) {
-			Vector2 currentSize = GetCurrentRectSize();
-			mode = GetEffectiveLayoutMode(mode);
-			if (mode == LayoutMode.WidthControlsHeight) {
-				return currentSize.x / referenceSize.x;
-			} else if (mode == LayoutMode.HeightControlsWidth) {
-				return currentSize.y / referenceSize.y;
-			}
-			return 1f;
-		}
 
-		/// <summary>
-		/// <c>LayoutMode FitInParent</c> and <c>EnvelopeParent</c> actually result in
-		/// <c>HeightControlsWidth</c> or <c>WidthControlsHeight</c> depending on the actual vs reference aspect ratio.
-		/// This method returns the respective <c>LayoutMode</c> of the two for any given input <c>mode</c>.
-		/// </summary>
-		protected LayoutMode GetEffectiveLayoutMode (LayoutMode mode) {
+		protected float GetLayoutScale (LayoutMode mode) {
 			Vector2 currentSize = GetCurrentRectSize();
 			float referenceAspect = referenceSize.x / referenceSize.y;
 			float frameAspect = currentSize.x / currentSize.y;
@@ -1445,7 +1260,13 @@ namespace Spine.Unity {
 				mode = frameAspect > referenceAspect ? LayoutMode.HeightControlsWidth : LayoutMode.WidthControlsHeight;
 			else if (mode == LayoutMode.EnvelopeParent)
 				mode = frameAspect > referenceAspect ? LayoutMode.WidthControlsHeight : LayoutMode.HeightControlsWidth;
-			return mode;
+
+			if (mode == LayoutMode.WidthControlsHeight) {
+				return currentSize.x / referenceSize.x;
+			} else if (mode == LayoutMode.HeightControlsWidth) {
+				return currentSize.y / referenceSize.y;
+			}
+			return 1f;
 		}
 
 		private Vector2 GetCurrentRectSize () {

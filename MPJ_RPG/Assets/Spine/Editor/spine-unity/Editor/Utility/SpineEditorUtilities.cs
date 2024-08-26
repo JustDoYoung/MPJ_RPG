@@ -75,10 +75,6 @@ namespace Spine.Unity.Editor {
 		public static bool initialized;
 		private static List<string> texturesWithoutMetaFile = new List<string>();
 
-		public static void OnTextureImportedFirstTime (string texturePath) {
-			texturesWithoutMetaFile.Add(texturePath);
-		}
-
 		// Auto-import entry point for textures
 		void OnPreprocessTexture () {
 #if UNITY_2018_1_OR_NEWER
@@ -128,10 +124,10 @@ namespace Spine.Unity.Editor {
 				Mesh mesh = meshFilter.sharedMesh;
 				if (mesh == null) continue;
 
-				string meshName = string.Format("Skeleton Prefab Mesh [{0}]", renderer.name);
+				string meshName = string.Format("Skeleton Prefab Mesh \"{0}\"", renderer.name);
 				if (nameUsageCount.ContainsKey(meshName)) {
 					nameUsageCount[meshName]++;
-					meshName = string.Format("Skeleton Prefab Mesh [{0} ({1})]", renderer.name, nameUsageCount[meshName]);
+					meshName = string.Format("Skeleton Prefab Mesh \"{0} ({1})\"", renderer.name, nameUsageCount[meshName]);
 				} else {
 					nameUsageCount.Add(meshName, 0);
 				}
@@ -547,16 +543,6 @@ namespace Spine.Unity.Editor {
 				return isLastNode;
 			}
 #endif
-		}
-	}
-
-	public class SpineAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
-		static void OnWillCreateAsset (string assetName) {
-			// Note: This method seems to be called from the main thread,
-			// not from worker threads when Project Settings - Editor - Parallel Import is enabled.
-			int endIndex = assetName.LastIndexOf(".meta");
-			string assetPath = endIndex < 0 ? assetName : assetName.Substring(0, endIndex);
-			SpineEditorUtilities.OnTextureImportedFirstTime(assetPath);
 		}
 	}
 
