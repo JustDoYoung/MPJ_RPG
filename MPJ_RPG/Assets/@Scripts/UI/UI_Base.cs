@@ -1,18 +1,87 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class UI_Base : MonoBehaviour
+public class UI_Base : InitBase
 {
-    // Start is called before the first frame update
-    void Start()
+    protected Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
+
+    protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
-        
+        if (!type.IsEnum)
+        {
+            throw new ArgumentException("Type must be an enum.");
+        }
+
+        string[] names = Enum.GetNames(type);
+
+        UnityEngine.Object[] objects = new UnityEngine.Object[names.Length];
+        _objects.Add(typeof(T), objects);
+
+        for(int i = 0; i < names.Length; i++)
+        {
+            if(typeof(T) == typeof(GameObject))
+            {
+                objects[i] = Utils.FindChild(gameObject, names[i], true);
+            }
+            else
+            {
+                objects[i] = Utils.FindChild<T>(gameObject, names[i], true);
+            }
+
+            if (objects[i] == null)
+                Debug.Log($"Failed to bind({names[i]})");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    protected void BindObjects(Type type) { Bind<GameObject>(type); }
+    protected void BindImages(Type type) { Bind<Image>(type); }
+    protected void BindTexts(Type type) { Bind<TMP_Text>(type); }
+    protected void BindButtons(Type type) { Bind<Button>(type); }
+    protected void BindToggles(Type type) { Bind<Toggle>(type); }
+
+    protected T Get<T>(int index) where T : UnityEngine.Object
     {
-        
+        UnityEngine.Object[] objects = null;
+
+        if (_objects.TryGetValue(typeof(T), out objects) == false)
+            return null;
+
+        return objects[index] as T;
+    }
+
+    protected GameObject GetObject(int idx) { return Get<GameObject>(idx); }
+    protected TMP_Text GetText(int idx) { return Get<TMP_Text>(idx); }
+    protected Button GetButton(int idx) { return Get<Button>(idx); }
+    protected Image GetImage(int idx) { return Get<Image>(idx); }
+    protected Toggle GetToggle(int idx) { return Get<Toggle>(idx); }
+
+    public static void BindEvent(GameObject go, Action<PointerEventData> action = null, Define.EUIEvent type = Define.EUIEvent.Click)
+    {
+        UI_EventHandler evt = Utils.GetOrAddComponent<UI_EventHandler>(go);
+
+        switch (type)
+        {
+            case Define.EUIEvent.Click:
+                evt.OnClickHandler -= action;
+                evt.OnClickHandler += action;
+                break;
+            case Define.EUIEvent.PointerDown:
+                evt.OnPointerDownHandler -= action;
+                evt.OnPointerDownHandler += action;
+                break;
+            case Define.EUIEvent.PointerUp:
+                evt.OnPointerUpHandler -= action;
+                evt.OnPointerUpHandler += action;
+                break;
+            case Define.EUIEvent.Drag:
+                evt.OnDragHandler -= action;
+                evt.OnDragHandler += action;
+                break;
+        }
     }
 }

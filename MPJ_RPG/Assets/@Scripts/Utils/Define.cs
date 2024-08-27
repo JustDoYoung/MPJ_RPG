@@ -10,4 +10,12 @@ public static class Define
         TitleScene,
         GameScene,
     }
+
+    public enum EUIEvent
+    {
+        Click,
+        PointerDown,
+        PointerUp,
+        Drag,
+    }
 }
