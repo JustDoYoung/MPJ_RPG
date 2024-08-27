@@ -18,19 +18,19 @@ MonoBehaviour:
   m_GUID: 9a242875c6063bf4b947d5dc655135de
   m_SerializeEntries:
   - m_GUID: e1af63b3f82b96741bc0f6d3af7aab04
-    m_Address: Object_Firewood
+    m_Address: Object_Firewood.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bd7dca8a75e3ac6488b62b9023009320
-    m_Address: Object_Meat
+    m_Address: Object_Meat.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 922a4297bb9799443b2c36bf30dd9899
-    m_Address: Object_Mineral
+    m_Address: Object_Mineral.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
