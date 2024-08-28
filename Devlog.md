@@ -48,7 +48,7 @@ using UnityEngine.Pool; 와 같이 using 키워드를 통해 가져오는 것�
 이미 있는 기능을 새로운 클래스로 감싸서 새로운 정책에 대응할 수 있음.
 (ex. SceneManager의 씬 전환 기능을 비동기 처리로 할 지, 즉시 전환으로 할 지 바뀔 수 있는 상황을 SceneMangerEx 클래스로 감싸서 LoadScene 기능을 구현할 수 있다.)
 
-### [UI 프레임워크](https://github.com/JustDoYoung/Algorithm/blob/master/Section%200/%EC%84%B9%EC%85%98%200.%20%EC%88%9C%EC%97%B4.md "리드미")
+### [UI 프레임워크](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/Devlog.md "리드미")
 UI와 관련된 프레임워크 구조가 흥미롭다.
 구현하는데 복잡하지만 유지 보수와 개발속도 관점에서 볼 때 이득이 매우 크다. 프레임워크 구조는 반복숙달하면서 체화시켜야겠다.
 
