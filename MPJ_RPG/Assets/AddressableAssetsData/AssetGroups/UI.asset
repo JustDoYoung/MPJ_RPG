@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 7922ffb29f6065b419de9dded5c414ca
-  m_SerializeEntries:
-  - m_GUID: e63e5c6f4ba9ac64589a9af29b047a15
-    m_Address: Assets/@Resources/Prefabs/UI/UI_TitleScene.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6502b88284fefc8409f7fc1626d11bcf, type: 2}
   m_SchemaSet:
