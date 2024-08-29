@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Object = UnityEngine.Object;
 
 public class ResourceManager
 {
-    private Dictionary<string, Object> _resources = new Dictionary<string, Object>();
+    private Dictionary<string, UnityEngine.Object> _resources = new Dictionary<string, UnityEngine.Object>();
+
+    //로드 진행 상태 체크와 메모리 해제를 위해 필요.
     private Dictionary<string, AsyncOperationHandle> _handles = new Dictionary<string, AsyncOperationHandle>();
 
     #region Load Resource
-    public T Load<T>(string key) where T : Object
+    public T Load<T>(string key) where T : UnityEngine.Object
     {
-        if (_resources.TryGetValue(key, out Object resource))
+        if (_resources.TryGetValue(key, out UnityEngine.Object resource))
             return resource as T;
 
         return null;
@@ -32,10 +33,10 @@ public class ResourceManager
 
         if (pooling)
         {
-
+            return Managers.Pool.Pop(prefab);
         }
 
-        GameObject go = Object.Instantiate(prefab, parent);
+        GameObject go = UnityEngine.Object.Instantiate(prefab, parent);
         go.name = prefab.name;
 
         return go;
@@ -45,15 +46,17 @@ public class ResourceManager
     {
         if (go == null) return;
 
-        Object.Destroy(go);
+        if (Managers.Pool.Push(go)) return;
+
+        UnityEngine.Object.Destroy(go);
     }
     #endregion
 
     #region Addressable
-    private void LoadAsync<T>(string key, Action<T> callback = null) where T : Object
+    private void LoadAsync<T>(string key, Action<T> callback = null) where T : UnityEngine.Object
     {
         //Cache
-        if (_resources.TryGetValue(key, out Object resource))
+        if (_resources.TryGetValue(key, out UnityEngine.Object resource))
         {
             callback?.Invoke(resource as T);
             return;
@@ -72,7 +75,7 @@ public class ResourceManager
         };
     }
 
-    public void LoadAllAsync<T>(string label, Action<string, int, int> callback) where T : Object
+    public void LoadAllAsync<T>(string label, Action<string, int, int> callback) where T : UnityEngine.Object
     {
         var opHandle = Addressables.LoadResourceLocationsAsync(label, typeof(T));
         opHandle.Completed += (op) =>

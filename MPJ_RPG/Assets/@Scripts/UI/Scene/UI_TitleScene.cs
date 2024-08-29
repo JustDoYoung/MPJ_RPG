@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using static Define;
 
@@ -39,12 +41,23 @@ public class UI_TitleScene : UI_Scene
     {
         Managers.Resource.LoadAllAsync<UnityEngine.Object>("Preload", (key, count, totalCount) =>
         {
-            print($"{key} {count}/{totalCount}");
+            //print($"{key} {count}/{totalCount}");
 
             if(count == totalCount)
             {
+                Managers.Data.Init();
                 GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
                 GetText((int)Texts.DisplayText).text = $"Touch to Start";
+
+                Type type = typeof(Data.TestData);
+                FieldInfo[] fields = type.GetFields(BindingFlags.Public|BindingFlags.Instance);
+
+                foreach(FieldInfo field in fields)
+                {
+                    object value = field.GetValue(Managers.Data.TestDic[1]);
+
+                    print($"{field.Name} : {value}");
+                }
             }
         });
     }

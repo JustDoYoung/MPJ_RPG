@@ -1,18 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+
+//인터페이스
+public interface ILoader<Key, Value>
+{
+    Dictionary<Key, Value> MakeDict();
+}
 
 public class DataManager
 {
-    // Start is called before the first frame update
-    void Start()
+    public Dictionary<int, Data.TestData> TestDic = new Dictionary<int, Data.TestData>();
+
+    public void Init()
     {
-        
+        TestDic = LoadJson<Data.TestDataLoader, int, Data.TestData>("TestData").MakeDict();
     }
 
-    // Update is called once per frame
-    void Update()
+    private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {
-        
+        //json 파일(바이트 스트림, 직렬화)
+        TextAsset testAsset = Managers.Resource.Load<TextAsset>(path);
+
+        if (testAsset == null) return default(Loader);
+
+        //객체로 변환(역직렬화)
+        return JsonConvert.DeserializeObject<Loader>(testAsset.text);
     }
 }
