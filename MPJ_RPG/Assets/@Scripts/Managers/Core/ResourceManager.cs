@@ -75,6 +75,7 @@ public class ResourceManager
         };
     }
 
+    //Addressable에서 label에 속한 리소스를 모두 로드한다.
     public void LoadAllAsync<T>(string label, Action<string, int, int> callback) where T : UnityEngine.Object
     {
         var opHandle = Addressables.LoadResourceLocationsAsync(label, typeof(T));

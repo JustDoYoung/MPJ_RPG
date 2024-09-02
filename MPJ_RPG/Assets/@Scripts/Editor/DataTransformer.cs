@@ -118,7 +118,8 @@ public class DataTransformer : EditorWindow
 				FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
 				Type type = field.FieldType;
 
-				//컬렉션(데이터 그룹) : 배열, 리스트, set, 딕셔너리
+				//참고) 컬렉션(데이터 그룹) : 배열, 리스트, set, 딕셔너리
+				//List<>, Dictionary<> ... 모두 제네릭 타입
 				if (type.IsGenericType)
 				{
 					object value = ConvertList(row[f], type);
@@ -126,7 +127,7 @@ public class DataTransformer : EditorWindow
 				}
 				else
 				{
-					object value = ConvertValue(row[f], field.FieldType);
+					object value = ConvertValue(row[f], type);
 					field.SetValue(loaderData, value);
 				}
 			}
@@ -137,6 +138,7 @@ public class DataTransformer : EditorWindow
 		return loaderDatas;
 	}
 
+	//value(문자열)를 type 형식으로 변환
 	private static object ConvertValue(string value, Type type)
 	{
 		if (string.IsNullOrEmpty(value))
@@ -152,9 +154,9 @@ public class DataTransformer : EditorWindow
 			return null;
 
 		// Reflection
-		Type valueType = type.GetGenericArguments()[0];
-		Type genericListType = typeof(List<>).MakeGenericType(valueType);
-		var genericList = Activator.CreateInstance(genericListType) as IList;
+		Type valueType = type.GetGenericArguments()[0]; //제네릭 변수의 첫번째 인자 타입
+		Type genericListType = typeof(List<>).MakeGenericType(valueType); //List<valueType> 형식의 타입 생성
+		var genericList = Activator.CreateInstance(genericListType) as IList; //리스트 인스턴스 생성
 
 		// Parse Excel
 		var list = value.Split('&').Select(x => ConvertValue(x, valueType)).ToList();

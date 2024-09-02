@@ -18,10 +18,10 @@ public class DataManager
         TestDic = LoadJson<Data.TestDataLoader, int, Data.TestData>("TestData").MakeDict();
     }
 
-    private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
+    private Loader LoadJson<Loader, Key, Value>(string key)where Loader : ILoader<Key, Value>
     {
         //json 파일(바이트 스트림, 직렬화)
-        TextAsset testAsset = Managers.Resource.Load<TextAsset>(path);
+        TextAsset testAsset = Managers.Resource.Load<TextAsset>(key);
 
         if (testAsset == null) return default(Loader);
 
