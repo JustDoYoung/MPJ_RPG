@@ -48,16 +48,6 @@ public class UI_TitleScene : UI_Scene
                 Managers.Data.Init();
                 GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
                 GetText((int)Texts.DisplayText).text = $"Touch to Start";
-
-                Type type = typeof(Data.TestData);
-                FieldInfo[] fields = type.GetFields(BindingFlags.Public|BindingFlags.Instance);
-
-                foreach(FieldInfo field in fields)
-                {
-                    object value = field.GetValue(Managers.Data.TestDic[1]);
-
-                    print($"{field.Name} : {value}");
-                }
             }
         });
     }

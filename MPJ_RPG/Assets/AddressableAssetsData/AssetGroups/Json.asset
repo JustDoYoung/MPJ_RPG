@@ -10,13 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Data
+  m_Name: Json
   m_EditorClassIdentifier: 
   m_GroupName: Packed Assets
   m_Data:
     m_SerializedData: []
   m_GUID: e4a1218f1500a0a48a26caf8dc3ff7db
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 4890cbe89a9c7cc4b9e7d7683584326e
+    m_Address: Assets/@Resources/Data/JsonData/TestData.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6502b88284fefc8409f7fc1626d11bcf, type: 2}
   m_SchemaSet:
