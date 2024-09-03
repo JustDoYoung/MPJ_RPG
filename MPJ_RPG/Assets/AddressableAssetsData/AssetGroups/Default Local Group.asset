@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 9f714f44e0a5aae47861d3c1c6358d13
-  m_SerializeEntries:
-  - m_GUID: 4890cbe89a9c7cc4b9e7d7683584326e
-    m_Address: Assets/@Resources/Data/JsonData/TestData.json
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6502b88284fefc8409f7fc1626d11bcf, type: 2}
   m_SchemaSet:
