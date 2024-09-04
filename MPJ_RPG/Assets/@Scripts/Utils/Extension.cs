@@ -15,4 +15,11 @@ public static class Extension
     {
         UI_Base.BindEvent(go, action, type);
     }
+
+    public static void TranslateEx(this Transform transform, Vector3 dir)
+    {
+        BaseObject bo = transform.gameObject.GetComponent<BaseObject>();
+        if (bo != null)
+            bo.TranslateEx(dir);
+    }
 }

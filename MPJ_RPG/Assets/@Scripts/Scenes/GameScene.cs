@@ -13,18 +13,9 @@ public class GameScene : BaseScene
 
         SceneType = EScene.GameScene;
 
-        //Managers.Resource.Instantiate("BaseMap");
-
-        Managers.Resource.LoadAllAsync<UnityEngine.Object>("Preload", (key, count, totalCount) =>
-        {
-            print($"{key} {count}/{totalCount}");
-
-            if(count == totalCount)
-            {
-                LoadMap();
-                Managers.Resource.Instantiate("Hero");
-            }
-        });
+        LoadMap();
+        Managers.Object.Spawn<Hero>(Vector3.zero);
+        Managers.UI.ShowBaseUI<UI_Joystick>();
 
         return true;
     }

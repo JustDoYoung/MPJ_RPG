@@ -16,6 +16,7 @@ public class BaseObject : InitBase
 	/// </summary>
 	public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
 
+	//좌우 뒤집기 - 1
 	bool _lookLeft = true;
 	public bool LookLeft
     {
@@ -38,10 +39,21 @@ public class BaseObject : InitBase
         return true;
     }
 
+	public void TranslateEx(Vector3 dir)
+	{
+		//이동처리
+		transform.Translate(dir);
+
+		//좌우 뒤집기 - 2
+		if (dir.x < 0)
+			LookLeft = true;
+		else if (dir.x > 0)
+			LookLeft = false;
+	}
+
 	#region Spine
 	protected virtual void UpdateAnimation()
 	{
-
 	}
 
 	public void PlayAnimation(int trackIndex, string AnimName, bool loop)
@@ -60,7 +72,7 @@ public class BaseObject : InitBase
 		SkeletonAnim.AnimationState.AddAnimation(trackIndex, AnimName, loop, delay);
 	}
 
-	//기본값은 왼쪽을 바라보는 상태
+	//좌우 뒤집기 - 3
 	public void Flip(bool flag)
 	{
 		if (SkeletonAnim == null)

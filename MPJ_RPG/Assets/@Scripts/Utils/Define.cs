@@ -49,6 +49,13 @@ public static class Define
         Skill,
         Dead,
     }
+
+    public enum EJoystickState
+    {
+        PointerDown,
+        PointerUp,
+        Drag,
+    }
 }
 
 public static class AnimName
