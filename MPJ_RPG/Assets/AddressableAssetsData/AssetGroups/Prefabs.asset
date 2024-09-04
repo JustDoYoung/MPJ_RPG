@@ -17,16 +17,17 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 22ac89051c74c6a48a933bbb00decd67
   m_SerializeEntries:
-  - m_GUID: 48fc7976b63b7dc459fba1af3af1a1c4
-    m_Address: Spine GameObject (knight)
+  - m_GUID: 5a40e413d750cdb44b0fe888fbf55284
+    m_Address: BaseMap
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5a40e413d750cdb44b0fe888fbf55284
-    m_Address: BaseMap
+  - m_GUID: b170be020094d2a4eac1dd4cf478ab53
+    m_Address: Hero
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6502b88284fefc8409f7fc1626d11bcf, type: 2}

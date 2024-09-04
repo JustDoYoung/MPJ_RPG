@@ -25,4 +25,37 @@ public static class Define
         Effect,
         Max,
     }
+
+    public enum EObjectType {
+        None,
+        Creature,
+        Projectile,
+        Env,
+    }
+
+    public enum ECreatureType
+    {
+        None,
+        Hero,
+        Monster,
+        Npc,
+    }
+    
+    public enum ECreatureState
+    {
+        None,
+        Idle,
+        Move,
+        Skill,
+        Dead,
+    }
+}
+
+public static class AnimName
+{
+    public static string IDLE = "idle";
+    public static string ATTACK_A = "attack_a";
+    public static string ATTACK_B = "attack_b";
+    public static string MOVE = "move";
+    public static string DEAD = "dead";
 }
