@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Define;
 
@@ -14,8 +15,14 @@ public class GameScene : BaseScene
         SceneType = EScene.GameScene;
 
         LoadMap();
-        Managers.Object.Spawn<Hero>(Vector3.zero);
+
+        Hero hero = Managers.Object.Spawn<Hero>(new Vector3(-10, -5, 0));
+        CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
+        camera.Target = hero;
+
         Managers.UI.ShowBaseUI<UI_Joystick>();
+
+        Monster monster = Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0));
 
         return true;
     }

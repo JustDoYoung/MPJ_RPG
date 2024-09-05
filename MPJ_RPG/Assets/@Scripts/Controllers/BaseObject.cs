@@ -15,6 +15,7 @@ public class BaseObject : InitBase
 	/// (병합연산자) public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
 	/// </summary>
 	public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
+	public Vector3 CenterPosition { get { return transform.position + Collider.radius * Vector3.up; } }
 
 	//좌우 뒤집기 - 1
 	bool _lookLeft = true;
@@ -24,7 +25,7 @@ public class BaseObject : InitBase
         set
         {
 			_lookLeft = value;
-			Flip(!value);
+			Flip(value);
         }
     }
 
@@ -78,7 +79,7 @@ public class BaseObject : InitBase
 		if (SkeletonAnim == null)
 			return;
 
-		SkeletonAnim.Skeleton.ScaleX = flag ? -1 : 1;
+		SkeletonAnim.Skeleton.ScaleX = flag ? 1 : -1;
 	}
 	#endregion
 }
