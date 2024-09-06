@@ -12,3 +12,10 @@
 
 ### 4. 확장함수(Utils/Extension.cs)
 > 자주 반복적으로 사용되는 코드를 래핑해서 정적함수나 확장함수로 만들어두면 무지 편하다...
+
+### 5. 애니메이션 관리
+> State 패턴 기반의 FSM으로 관리한다. 이 프로젝트의 경우 동작 블렌드가 되는 연속기나 복잡한 애니메이션 상태 전환이 없기 때문에 Behavior Tree를 사용해서 구현하지 않아도 충분.
+
+### 6. 객체 생성을 별도의 클래스로 관리한다.([팩토리패턴](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/팩토리패턴.md "리드미"))
+
+### 7. UI 입력에 따른 객체의 상태변화는 옵저버 패턴과 State 패턴으로 관리한다.([옵저버패턴, 상태패턴](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/옵저버상태패턴.md "리드미"))

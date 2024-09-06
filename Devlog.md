@@ -6,4 +6,6 @@
 
 ### - [데이터 관리](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/DataManage.md "리드미")
 
+### - [움직이는 객체 관리](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/ObjectManage.md "리드미")
+
 ### - [기타](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/etc.md "리드미")
