@@ -7,22 +7,24 @@ public class ObjectManager
 {
     public HashSet<Hero> Heros { get; } = new HashSet<Hero>();
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
-
+    public HashSet<Env> Envs { get; } = new HashSet<Env>();
 
     #region Root
     public Transform HeroRoot { get { return GetRootTransform("@Heros"); } }
     public Transform MonsterRoot { get { return GetRootTransform("@Mosnters"); } }
+    public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
+
     public Transform GetRootTransform(string name)
     {
         GameObject root = GameObject.Find(name);
-        if(root == null)
+        if (root == null)
             root = new GameObject(name);
 
         return root.transform;
     }
     #endregion
 
-    public T Spawn<T>(Vector3 position) where T : BaseObject
+    public T Spawn<T>(Vector3 position, int templateID) where T : BaseObject
     {
         string prefabName = typeof(T).Name;
 
@@ -35,13 +37,36 @@ public class ObjectManager
         switch (obj.ObjectType)
         {
             case EObjectType.Creature:
-                Creature creature = go.GetComponent<Creature>();
-                SpawnCreature(creature);
-                break;
+                {
+                    //Data Check
+                    if (templateID != 0 && Managers.Data.CreatureDic.TryGetValue(templateID, out Data.CreatureData data) == false)
+                    {
+                        Debug.LogError($"ObjectManager Spawn Creature Failed! TryGetValue TemplateID : {templateID}");
+                        return null;
+                    }
+
+                    Creature creature = go.GetComponent<Creature>();
+                    SpawnCreature(creature);
+                    creature.SetInfo(templateID);
+                    break;
+                }
             case EObjectType.Projectile:
                 break;
             case EObjectType.Env:
-                break;
+                {
+                    //Data Check
+                    if (templateID != 0 && Managers.Data.EnvDic.TryGetValue(templateID, out Data.EnvData data) == false)
+                    {
+                        Debug.LogError($"ObjectManager Spawn Creature Failed! TryGetValue TemplateID : {templateID}");
+                        return null;
+                    }
+
+                    obj.transform.parent = EnvRoot;
+                    Env env = obj.GetComponent<Env>();
+                    Envs.Add(env);
+                    env.SetInfo(templateID);
+                    break;
+                }
             default:
                 break;
         }
@@ -54,12 +79,17 @@ public class ObjectManager
         switch (obj.ObjectType)
         {
             case EObjectType.Creature:
-                Creature creature = obj.gameObject.GetComponent<Creature>();
-                DeSpawnCreature(creature);
+                {
+                    Creature creature = obj.gameObject.GetComponent<Creature>();
+                    DeSpawnCreature(creature);
+                }
                 break;
             case EObjectType.Projectile:
                 break;
             case EObjectType.Env:
+                {
+                    Envs.Remove(obj as Env);
+                }
                 break;
             default:
                 break;

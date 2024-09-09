@@ -17,65 +17,11 @@ public class DataTransformer : EditorWindow
 	[MenuItem("Tools/ParseExcel %#K")]
 	public static void ParseExcelDataToJson()
 	{
-		ParseExcelDataToJson<TestDataLoader, TestData>("Test");
-		//LEGACY_ParseTestData("Test");
+		ParseExcelDataToJson<CreatureDataLoader, CreatureData>("Creature");
+		ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
 
 		Debug.Log("DataTransformer Completed");
 	}
-
-	#region LEGACY
-	// LEGACY !
-	public static T ConvertValue<T>(string value)
-	{
-		// csv 셀 내용을 알맞은 타입으로 변환
-		if (string.IsNullOrEmpty(value))
-			return default(T);
-
-		TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
-		return (T)converter.ConvertFromString(value);
-	}
-
-	public static List<T> ConvertList<T>(string value)
-	{
-		if (string.IsNullOrEmpty(value))
-			return new List<T>();
-
-		return value.Split('&').Select(x => ConvertValue<T>(x)).ToList();
-	}
-
-	static void LEGACY_ParseTestData(string filename)
-	{
-		TestDataLoader loader = new TestDataLoader();
-
-		string[] lines = File.ReadAllText($"{Application.dataPath}/@Resources/Data/ExcelData/{filename}Data.csv").Split("\n");
-
-		for (int y = 1; y < lines.Length; y++)
-		{
-			// \r : 캐리지 리턴(줄바꿈)
-			string[] row = lines[y].Replace("\r", "").Split(',');
-			if (row.Length == 0)
-				continue;
-			if (string.IsNullOrEmpty(row[0]))
-				continue;
-
-			int i = 0;
-			TestData testData = new TestData();
-			testData.Level = ConvertValue<int>(row[i++]);
-			testData.Exp = ConvertValue<int>(row[i++]);
-			testData.Skills = ConvertList<int>(row[i++]);
-			testData.Speed = ConvertValue<float>(row[i++]);
-			testData.Name = ConvertValue<string>(row[i++]);
-
-			loader.tests.Add(testData);
-		}
-
-		string jsonStr = JsonConvert.SerializeObject(loader, Formatting.Indented); //Json 문자열을 읽기 쉽게 들여쓰기 형식으로 수정한다.
-
-		//{Application.dataPath}는 Unity 프로젝트의 데이터 폴더 경로를 나타냅니다.
-		File.WriteAllText($"{Application.dataPath}/@Resources/Data/JsonData/{filename}Data.json", jsonStr);
-		AssetDatabase.Refresh();
-	}
-	#endregion
 
 	#region Helpers
 	//where Loader : new()와 where LoaderData : new()는 Loader와 LoaderData 형식이 기본 생성자를 가져야 한다는 제약 조건을 나타냅니다. 즉, 이 함수 내에서 Loader와 LoaderData는 반드시 인스턴스화할 수 있어야 합니다.

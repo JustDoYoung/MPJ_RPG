@@ -46,6 +46,13 @@ public class Monster : Creature
         return true;
     }
 
+    public override void SetInfo(int templateID)
+    {
+        base.SetInfo(templateID);
+
+
+    }
+
     #region AI
     public float SearchDistance { get; private set; } = 8.0f;
     public float AttackDistance { get; private set; } = 4.0f;

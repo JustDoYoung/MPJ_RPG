@@ -2,6 +2,7 @@ using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Define;
 
 public class BaseObject : InitBase
@@ -16,6 +17,8 @@ public class BaseObject : InitBase
 	/// </summary>
 	public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
 	public Vector3 CenterPosition { get { return transform.position + Collider.radius * Vector3.up; } }
+
+	public int DataTemplateID { get; set; }
 
 	//좌우 뒤집기 - 1
 	bool _lookLeft = true;
@@ -34,10 +37,10 @@ public class BaseObject : InitBase
         if (base.Init() == false) return false;
 
         Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
-        SkeletonAnim = GetComponent<SkeletonAnimation>();
-        Rigidbody = GetComponent<Rigidbody2D>();
+		SkeletonAnim = GetComponent<SkeletonAnimation>();
+		Rigidbody = GetComponent<Rigidbody2D>();
 
-        return true;
+		return true;
     }
 
 	public void TranslateEx(Vector3 dir)
@@ -55,6 +58,20 @@ public class BaseObject : InitBase
 	#region Spine
 	protected virtual void UpdateAnimation()
 	{
+	}
+
+	protected virtual void SetSpineAnimation(string dataLabel, int sortingOrder)
+	{
+		if (SkeletonAnim == null)
+			return;
+
+		SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(dataLabel);
+		SkeletonAnim.Initialize(true);
+
+		// Spine SkeletonAnimation은 SpriteRenderer 를 사용하지 않고 MeshRenderer을 사용함
+		// 그렇기떄문에 2D Sort Axis가 안먹히게 되는데 SortingGroup을 SpriteRenderer,MeshRenderer을 같이 계산함.
+		SortingGroup sg = Utils.GetOrAddComponent<SortingGroup>(gameObject);
+		sg.sortingOrder = sortingOrder;
 	}
 
 	public void PlayAnimation(int trackIndex, string AnimName, bool loop)
