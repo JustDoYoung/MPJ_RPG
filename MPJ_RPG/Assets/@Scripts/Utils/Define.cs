@@ -51,6 +51,16 @@ public static class Define
         Dead,
     }
 
+    //Hero가 Move 상태로 전환된 이유를 상태로 정의한다.
+    public enum EHeroMoveState
+    {
+        None,
+        TargetMonster,
+        CollectEnv,
+        ReturnToCamp,
+        ForceMove
+    }
+
     public enum EJoystickState
     {
         PointerDown,

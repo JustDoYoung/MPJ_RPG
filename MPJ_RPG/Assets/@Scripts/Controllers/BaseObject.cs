@@ -13,10 +13,10 @@ public class BaseObject : InitBase
     public Rigidbody2D Rigidbody { get; private set; }
 
 	/// <summary>
-	/// (병합연산자) public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
+	/// (병합연산자) public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
 	/// </summary>
-	public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
-	public Vector3 CenterPosition { get { return transform.position + Collider.radius * Vector3.up; } }
+	public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
+    public Vector3 CenterPosition { get { return transform.position + Collider.radius * Vector3.up; } }
 
 	public int DataTemplateID { get; set; }
 
@@ -43,6 +43,20 @@ public class BaseObject : InitBase
 		return true;
     }
 
+    #region Move 처리
+    public void SetRigidBodyVelocity(Vector2 velocity)
+	{
+		if (Rigidbody == null)
+			return;
+
+		Rigidbody.velocity = velocity;
+
+		if (velocity.x < 0)
+			LookLeft = true;
+		else if (velocity.x > 0)
+			LookLeft = false;
+	}
+
 	public void TranslateEx(Vector3 dir)
 	{
 		//이동처리
@@ -54,11 +68,10 @@ public class BaseObject : InitBase
 		else if (dir.x > 0)
 			LookLeft = false;
 	}
+	#endregion
 
 	#region Spine
-	protected virtual void UpdateAnimation()
-	{
-	}
+	protected virtual void UpdateAnimation() { }
 
 	protected virtual void SetSpineAnimation(string dataLabel, int sortingOrder)
 	{

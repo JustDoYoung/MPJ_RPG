@@ -7,8 +7,6 @@ using static Define;
 
 public class Creature : BaseObject
 {
-    public float Speed { get; protected set; } = 1.0f;
-
     public Data.CreatureData CreatureData { get; private set; } 
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 

@@ -39,7 +39,6 @@ public class Monster : Creature
         if (base.Init() == false) return false;
 
         CreatureType = ECreatureType.Monster;
-        Speed = 3.0f;
 
         StartCoroutine(CoUpdateAI());
 
@@ -108,7 +107,7 @@ public class Monster : Creature
         if (_target == null)
         {
             Vector3 dir = _destPos - transform.position;
-            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * Speed);
+            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
             transform.TranslateEx(dir.normalized * moveDist);
 
             if(dir.sqrMagnitude <= 0.01f)
@@ -130,7 +129,7 @@ public class Monster : Creature
             else
             {
                 //Chase
-                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * Speed);
+                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
                 transform.TranslateEx(dir.normalized * moveDist);
 
                 //포기 when too far
