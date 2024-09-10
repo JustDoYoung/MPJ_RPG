@@ -8,14 +8,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Dummy1
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Hero
+  - Monster
+  - GatheringResource
+  - Obstacle
+  - Projectile
   - 
   - 
   - 

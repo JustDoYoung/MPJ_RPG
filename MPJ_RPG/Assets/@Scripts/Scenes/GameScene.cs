@@ -17,12 +17,16 @@ public class GameScene : BaseScene
         LoadMap();
 
 
-        Hero hero = Managers.Object.Spawn<Hero>(new Vector3(-10, -5, 0), HERO_KNIGHT_ID);
+        HeroCamp camp = Managers.Object.Spawn<HeroCamp>(new Vector3Int(-10, -5, 0), 0);
+        for (int i = 0; i < 5; i++)
+        {
+            Hero hero = Managers.Object.Spawn<Hero>(new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0), HERO_KNIGHT_ID);
+        }
         Monster monster = Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_BEAR_ID);
         Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
 
         CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
-        camera.Target = hero;
+        camera.Target = camp;
 
         Managers.UI.ShowBaseUI<UI_Joystick>();
 

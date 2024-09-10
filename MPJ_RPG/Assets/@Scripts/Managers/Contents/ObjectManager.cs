@@ -8,6 +8,7 @@ public class ObjectManager
     public HashSet<Hero> Heros { get; } = new HashSet<Hero>();
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
+    public HeroCamp Camp { get; private set; }
 
     #region Root
     public Transform HeroRoot { get { return GetRootTransform("@Heros"); } }
@@ -67,6 +68,11 @@ public class ObjectManager
                     env.SetInfo(templateID);
                     break;
                 }
+            case EObjectType.HeroCamp:
+                {
+                    Camp = go.GetComponent<HeroCamp>();
+                    break;
+                }
             default:
                 break;
         }
@@ -89,8 +95,13 @@ public class ObjectManager
             case EObjectType.Env:
                 {
                     Envs.Remove(obj as Env);
+                    break;
                 }
-                break;
+            case EObjectType.HeroCamp:
+                {
+                    Camp = null;
+                    break;
+                }
             default:
                 break;
         }
