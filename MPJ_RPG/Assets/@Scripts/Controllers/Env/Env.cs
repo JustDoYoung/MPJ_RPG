@@ -63,4 +63,32 @@ public class Env : BaseObject
 				break;
 		}
 	}
+
+	#region Battle
+	public override void OnDamaged(BaseObject attacker)
+	{
+		if (EnvState == Define.EEnvState.Dead) return;
+
+		base.OnDamaged(attacker);
+
+		// TODO
+		float finalDamage = 1;
+		Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
+
+		if (Hp <= 0)
+		{
+			OnDead(attacker);
+		}
+	}
+
+	public override void OnDead(BaseObject attacker)
+	{
+		base.OnDead(attacker);
+
+		EnvState = Define.EEnvState.Dead;
+
+		//To do: 아이템 떨구기
+		Managers.Object.DeSpawn(this);
+	}
+	#endregion
 }

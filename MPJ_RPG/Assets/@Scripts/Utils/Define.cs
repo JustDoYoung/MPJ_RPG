@@ -90,6 +90,13 @@ public static class Define
         Projectile = 10,
     }
 
+    public enum EColliderSize
+    {
+        Small,
+        Normal,
+        Big
+    }
+
     //임시 코드
     public const int CAMERA_PROJECTION_SIZE = 12;
 

@@ -1,3 +1,4 @@
+using Spine;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -57,17 +58,17 @@ public class BaseObject : InitBase
 			LookLeft = false;
 	}
 
-	public void TranslateEx(Vector3 dir)
-	{
-		//이동처리
-		transform.Translate(dir);
+	//public void TranslateEx(Vector3 dir)
+	//{
+	//	//이동처리
+	//	transform.Translate(dir);
 
-		//좌우 뒤집기 - 2
-		if (dir.x < 0)
-			LookLeft = true;
-		else if (dir.x > 0)
-			LookLeft = false;
-	}
+	//	//좌우 뒤집기 - 2
+	//	if (dir.x < 0)
+	//		LookLeft = true;
+	//	else if (dir.x > 0)
+	//		LookLeft = false;
+	//}
 	#endregion
 
 	#region Spine
@@ -110,6 +111,23 @@ public class BaseObject : InitBase
 			return;
 
 		SkeletonAnim.Skeleton.ScaleX = flag ? 1 : -1;
+	}
+
+	public virtual void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
+	{
+        Debug.Log("OnAnimEventHandler");
+    }
+	#endregion
+
+	#region Battle
+	public virtual void OnDamaged(BaseObject attacker)
+	{
+
+	}
+
+	public virtual void OnDead(BaseObject attacker)
+	{
+
 	}
 	#endregion
 }

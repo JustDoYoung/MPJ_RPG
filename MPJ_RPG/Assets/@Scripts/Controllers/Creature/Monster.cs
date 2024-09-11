@@ -85,7 +85,7 @@ public class Monster : Creature
                 Vector3 dir = hero.transform.position - transform.position;
                 float distToTargetSqr = dir.sqrMagnitude;
 
-                print(distToTargetSqr);
+                //print(distToTargetSqr);
 
                 if (distToTargetSqr > searchDistanceSqr) continue;
                 if (distToTargetSqr > bestDistanceSqr) continue;
@@ -100,17 +100,18 @@ public class Monster : Creature
                 CreatureState = ECreatureState.Move;
         }
     }
+
+    public float StopDistance { get; private set; } = 1.0f;
     protected override void UpdateMove()
     {
-        print("Move");
+        //print("Move");
 
         if (_target == null)
         {
             Vector3 dir = _destPos - transform.position;
-            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-            transform.TranslateEx(dir.normalized * moveDist);
+            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
-            if(dir.sqrMagnitude <= 0.01f)
+            if(dir.sqrMagnitude <= StopDistance)
                 CreatureState = ECreatureState.Idle;
         }
         else
@@ -129,8 +130,7 @@ public class Monster : Creature
             else
             {
                 //Chase
-                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-                transform.TranslateEx(dir.normalized * moveDist);
+                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
                 //포기 when too far
                 float searchDistanceSqr = SearchDistance * SearchDistance;
@@ -146,7 +146,7 @@ public class Monster : Creature
 
     protected override void UpdateSkill()
     {
-        Debug.Log("Skill");
+        //Debug.Log("Skill");
 
         //공격 끝날 때까지 대기
         if (_coWait != null)
@@ -157,8 +157,22 @@ public class Monster : Creature
 
     protected override void UpdateDead()
     {
-        Debug.Log("Dead");
+        //Debug.Log("Dead");
 
+    }
+    #endregion
+
+    #region Battle
+    public override void OnDamaged(BaseObject attacker)
+    {
+        base.OnDamaged(attacker);
+    }
+
+    public override void OnDead(BaseObject attacker)
+    {
+        base.OnDead(attacker);
+
+        Managers.Object.DeSpawn(this);
     }
     #endregion
 

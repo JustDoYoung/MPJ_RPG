@@ -66,20 +66,13 @@ public class Creature : BaseObject
 
         // Spine
         SetSpineAnimation(CreatureData.SkeletonDataID, SortingLayers.CREATURE);
-        //SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(CreatureData.SkeletonDataID);
-        //SkeletonAnim.Initialize(true);
 
-        //// Spine SkeletonAnimation은 SpriteRenderer 를 사용하지 않고 MeshRenderer을 사용함.
-        //// 그렇기떄문에 2D Sort Axis가 안먹히게 되는데 SortingGroup을 SpriteRenderer, MeshRenderer을같이 계산함.
-        //SortingGroup sg = Utils.GetOrAddComponent<SortingGroup>(gameObject);
-        //sg.sortingOrder = SortingLayers.CREATURE;
-
-        //// Register AnimEvent
-        //if (SkeletonAnim.AnimationState != null)
-        //{
-        //    SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-        //    SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
-        //}
+        // Register AnimEvent
+        if (SkeletonAnim.AnimationState != null)
+        {
+            SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+            SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
+        }
 
         // Skills
         // CreatureData.SkillIdList;
@@ -147,6 +140,53 @@ public class Creature : BaseObject
     protected virtual void UpdateMove() { }
     protected virtual void UpdateSkill() { }
     protected virtual void UpdateDead() { }
+    #endregion
+
+    public void ChangeColliderSize(EColliderSize size = EColliderSize.Normal)
+    {
+        switch (size)
+        {
+            case EColliderSize.Small:
+                Collider.radius = CreatureData.ColliderRadius * 0.8f;
+                break;
+            case EColliderSize.Normal:
+                Collider.radius = CreatureData.ColliderRadius;
+                break;
+            case EColliderSize.Big:
+                Collider.radius = CreatureData.ColliderRadius * 1.2f;
+                break;
+        }
+    }
+
+    #region Battle
+    public override void OnDamaged(BaseObject attacker)
+    {
+        base.OnDamaged(attacker);
+
+        if (attacker.IsValid() == false)
+            return;
+
+        Creature creature = attacker as Creature;
+        if (creature == null)
+            return;
+
+        // TODO
+        float finalDamage = creature.Atk; 
+        Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
+
+        if (Hp <= 0)
+        {
+            OnDead(attacker);
+            CreatureState = ECreatureState.Dead;
+        }
+    }
+
+    public override void OnDead(BaseObject attacker)
+    {
+        base.OnDead(attacker);
+
+
+    }
     #endregion
 
     #region Wait

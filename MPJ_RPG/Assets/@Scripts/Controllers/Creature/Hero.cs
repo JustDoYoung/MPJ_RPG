@@ -1,3 +1,4 @@
+using Spine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -85,10 +86,10 @@ public class Hero : Creature
         {
             _needArrange = value;
 
-            //if (value)
-            //    ChangeColliderSize(EColliderSize.Big);
-            //else
-            //    TryResizeCollider();
+            if (value)
+                ChangeColliderSize(EColliderSize.Big);
+            else
+                TryResizeCollider();
         }
     }
     public float AttackDistance
@@ -194,7 +195,7 @@ public class Hero : Creature
         {
             Vector3 dir = HeroCampDest.position - transform.position;
             float stopDistanceSqr = StopDistance * StopDistance;
-            if (dir.sqrMagnitude <= StopDistance)
+            if (dir.sqrMagnitude <= stopDistanceSqr)
             {
                 HeroMoveState = EHeroMoveState.None;
                 CreatureState = ECreatureState.Idle;
@@ -216,7 +217,17 @@ public class Hero : Creature
     }
     protected override void UpdateSkill() 
     {
+        if(HeroMoveState == EHeroMoveState.ForceMove)
+        {
+            CreatureState = ECreatureState.Move;
+            return;
+        }
 
+        if(_target.IsValid() == false)
+        {
+            CreatureState = ECreatureState.Move;
+            return;
+        }
     }
     protected override void UpdateDead() 
     { 
@@ -301,6 +312,40 @@ public class Hero : Creature
                 break;
             default:
                 break;
+        }
+    }
+
+    public override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
+    {
+        base.OnAnimEventHandler(trackEntry, e);
+
+        // TODO
+        CreatureState = ECreatureState.Move;
+
+        // Skill
+        if (_target.IsValid() == false)
+            return;
+
+        _target.OnDamaged(this);
+    }
+
+    private void TryResizeCollider()
+    {
+        // 일단 충돌체 아주 작게.
+        ChangeColliderSize(EColliderSize.Small);
+
+        foreach (var hero in Managers.Object.Heros)
+        {
+            if (hero.HeroMoveState == EHeroMoveState.ReturnToCamp)
+                return;
+        }
+
+        // ReturnToCamp가 한 명도 없으면 콜라이더 조정.
+        foreach (var hero in Managers.Object.Heros)
+        {
+            // 단 채집이나 전투중이면 스킵.
+            if (hero.CreatureState == ECreatureState.Idle)
+                hero.ChangeColliderSize(EColliderSize.Big);
         }
     }
 }
