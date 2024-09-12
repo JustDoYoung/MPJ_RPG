@@ -28,22 +28,122 @@ namespace Data
 		public float AtkRate;
 		public float DefRate;
 		public float MoveSpeedRate;
+		public string IconImage; // NEW
 		public string SkeletonDataID;
 		public string AnimatorName;
 		public List<int> SkillIdList = new List<int>();
 		public int DropItemId;
 	}
+    #endregion
+
+    #region MonsterData
+    [Serializable]
+	public class MonsterData : CreatureData
+	{
+		
+	}
 
 	[Serializable]
-	public class CreatureDataLoader : ILoader<int, CreatureData>
+	public class MonsterDataLoader : ILoader<int, MonsterData>
 	{
-		public List<CreatureData> creatures = new List<CreatureData>();
-
-		public Dictionary<int, CreatureData> MakeDict()
+		public List<MonsterData> monsters = new List<MonsterData>();
+		public Dictionary<int, MonsterData> MakeDict()
 		{
-			Dictionary<int, CreatureData> dict = new Dictionary<int, CreatureData>();
-			foreach (CreatureData creature in creatures)
-				dict.Add(creature.DataId, creature);
+			Dictionary<int, MonsterData> dict = new Dictionary<int, MonsterData>();
+			foreach (MonsterData monster in monsters)
+				dict.Add(monster.DataId, monster);
+			return dict;
+		}
+	}
+	#endregion
+
+	#region HeroData
+	[Serializable]
+	public class HeroData : CreatureData
+	{
+	}
+
+	[Serializable]
+	public class HeroDataLoader : ILoader<int, HeroData>
+	{
+		public List<HeroData> heroes = new List<HeroData>();
+		public Dictionary<int, HeroData> MakeDict()
+		{
+			Dictionary<int, HeroData> dict = new Dictionary<int, HeroData>();
+			foreach (HeroData hero in heroes)
+				dict.Add(hero.DataId, hero);
+			return dict;
+		}
+	}
+	#endregion
+
+	#region SkillData
+	[Serializable]
+	public class SkillData
+	{
+		public int DataId;
+		public string Name;
+		public string ClassName;
+		public string ComponentName;
+		public string Description;
+		public int ProjectileId;
+		public string PrefabLabel;
+		public string IconLabel;
+		public string AnimName;
+		public float CoolTime;
+		public float DamageMultiplier;
+		public float Duration;
+		public float NumProjectiles;
+		public string CastingSound;
+		public float AngleBetweenProj;
+		public float SkillRange;
+		public float RotateSpeed;
+		public float ScaleMultiplier;
+		public float AngleRange;
+	}
+
+	[Serializable]
+	public class SkillDataLoader : ILoader<int, SkillData>
+	{
+		public List<SkillData> skills = new List<SkillData>();
+
+		public Dictionary<int, SkillData> MakeDict()
+		{
+			Dictionary<int, SkillData> dict = new Dictionary<int, SkillData>();
+			foreach (SkillData skill in skills)
+				dict.Add(skill.DataId, skill);
+			return dict;
+		}
+	}
+	#endregion
+
+	#region ProjectileData
+	[Serializable]
+	public class ProjectileData
+	{
+		public int DataId;
+		public string Name;
+		public string ComponentName;
+		public string ProjectileSpriteName;
+		public string PrefabLabel;
+		public float Duration;
+		public float NumBounce;
+		public float NumPenerations;
+		public float HitSound;
+		public float ProjRange;
+		public float ProjSpeed;
+	}
+
+	[Serializable]
+	public class ProjectileDataLoader : ILoader<int, ProjectileData>
+	{
+		public List<ProjectileData> projectiles = new List<ProjectileData>();
+
+		public Dictionary<int, ProjectileData> MakeDict()
+		{
+			Dictionary<int, ProjectileData> dict = new Dictionary<int, ProjectileData>();
+			foreach (ProjectileData projectile in projectiles)
+				dict.Add(projectile.DataId, projectile);
 			return dict;
 		}
 	}
@@ -60,7 +160,7 @@ namespace Data
 		public int ResourceAmount;
 		public float RegenTime;
 		public List<String> SkeletonDataIDs = new List<String>();
-		public int DropItemId; //죽었을 때 떨구는 아이템
+		public int DropItemId;
 	}
 
 	[Serializable]
@@ -76,4 +176,5 @@ namespace Data
 		}
 	}
 	#endregion
+
 }

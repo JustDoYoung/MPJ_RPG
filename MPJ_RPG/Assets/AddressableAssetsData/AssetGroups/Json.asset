@@ -23,14 +23,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b1e986d4943a9ab458624f29cc07be1b
-    m_Address: CreatureData
+  - m_GUID: 5be25fc0422feba438a91fcbd01c2fc4
+    m_Address: HeroData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9726b1d5cd1b6314d866ef5f5acb86e4
     m_Address: EnvData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9cdbb7296d78624792c9f853e37116f
+    m_Address: MonsterData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload

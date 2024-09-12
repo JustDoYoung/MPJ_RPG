@@ -53,9 +53,7 @@ public class Monster : Creature
     }
 
     #region AI
-    public float SearchDistance { get; private set; } = 8.0f;
     public float AttackDistance { get; private set; } = 4.0f;
-    Creature _target;
     Vector3 _destPos;
     Vector3 _initPos;
 
@@ -68,6 +66,7 @@ public class Monster : Creature
             int rand = Random.Range(0, 100);
             if(rand <= patrolPercent)
             {
+                print("Patrol");
                 _destPos = _initPos + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2));
                 CreatureState = ECreatureState.Move;
                 return;
@@ -75,70 +74,55 @@ public class Monster : Creature
         }
 
         //Search Player
+        Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heros, IsValid) as Creature;
+
+        if(creature != null)
         {
-            Creature target = null;
-            float bestDistanceSqr = float.MaxValue;
-            float searchDistanceSqr = SearchDistance * SearchDistance;
-
-            foreach (Hero hero in Managers.Object.Heros)
-            {
-                Vector3 dir = hero.transform.position - transform.position;
-                float distToTargetSqr = dir.sqrMagnitude;
-
-                //print(distToTargetSqr);
-
-                if (distToTargetSqr > searchDistanceSqr) continue;
-                if (distToTargetSqr > bestDistanceSqr) continue;
-
-                target = hero;
-                bestDistanceSqr = distToTargetSqr;
-            }
-
-            _target = target;
-
-            if (_target != null)
-                CreatureState = ECreatureState.Move;
+            print("Search Player");
+            Target = creature;
+            CreatureState = ECreatureState.Move;
+            return;
         }
     }
 
-    public float StopDistance { get; private set; } = 1.0f;
     protected override void UpdateMove()
     {
         //print("Move");
 
-        if (_target == null)
+        if (Target == null)
         {
             Vector3 dir = _destPos - transform.position;
             SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
-            if(dir.sqrMagnitude <= StopDistance)
+            if(dir.sqrMagnitude <= 0.01f)
                 CreatureState = ECreatureState.Idle;
         }
         else
         {
             //Chase
-            Vector3 dir = _target.transform.position - transform.position;
+            Vector3 dir = Target.transform.position - transform.position;
             float distToTargetSqr = dir.sqrMagnitude;
             float attackDistanceSqr = AttackDistance * AttackDistance;
 
+            //공격 범위 이내
             if(distToTargetSqr < attackDistanceSqr)
             {
                 //Attack 전환
                 CreatureState = ECreatureState.Skill;
                 StartWait(2.0f);
             }
+            //공격 범위 밖
             else
             {
                 //Chase
-                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
+                ChaseOrAttackTarget(AttackDistance, MONSTER_SEARCH_DISTANCE);
 
-                //포기 when too far
-                float searchDistanceSqr = SearchDistance * SearchDistance;
-                if(distToTargetSqr > searchDistanceSqr)
+                // 타겟이 유효하지 않으면 포기(죽을 때)
+                if (Target.IsValid() == false)
                 {
+                    Target = null;
                     _destPos = _initPos;
-                    _target = null;
-                    CreatureState = ECreatureState.Move;
+                    return;
                 }
             }
         }

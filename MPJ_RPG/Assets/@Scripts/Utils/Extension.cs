@@ -26,6 +26,10 @@ public static class Extension
         if (bo == null || bo.isActiveAndEnabled == false)
             return false;
 
+        Creature creature = bo as Creature;
+        if (creature != null)
+            return creature.CreatureState != Define.ECreatureState.Dead;
+
         return true;
     }
 

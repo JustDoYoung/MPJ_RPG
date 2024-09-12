@@ -97,7 +97,12 @@ public static class Define
         Big
     }
 
-    //임시 코드
+    // HARD CODING
+    public const float HERO_SEARCH_DISTANCE = 8.0f;
+    public const float MONSTER_SEARCH_DISTANCE = 8.0f;
+    public const int HERO_DEFAULT_MELEE_ATTACK_RANGE = 1;
+    public const int HERO_DEFAULT_RANGED_ATTACK_RANGE = 5;
+    public const float HERO_DEFAULT_STOP_RANGE = 1.5f;
     public const int CAMERA_PROJECTION_SIZE = 12;
 
     public const int HERO_WIZARD_ID = 201000;

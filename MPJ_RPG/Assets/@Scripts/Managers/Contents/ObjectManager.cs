@@ -40,11 +40,11 @@ public class ObjectManager
             case EObjectType.Creature:
                 {
                     //Data Check
-                    if (templateID != 0 && Managers.Data.CreatureDic.TryGetValue(templateID, out Data.CreatureData data) == false)
-                    {
-                        Debug.LogError($"ObjectManager Spawn Creature Failed! TryGetValue TemplateID : {templateID}");
-                        return null;
-                    }
+                    //if (templateID != 0 && Managers.Data.MonsterDic.TryGetValue(templateID, out Data.MonsterData data) == false)
+                    //{
+                    //    Debug.LogError($"ObjectManager Spawn Creature Failed! TryGetValue TemplateID : {templateID}");
+                    //    return null;
+                    //}
 
                     Creature creature = go.GetComponent<Creature>();
                     SpawnCreature(creature);
