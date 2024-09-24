@@ -100,6 +100,7 @@ public class Hero : Creature
     #endregion
     protected override void UpdateIdle() 
     {
+        print("Hero Idle");
         SetRigidBodyVelocity(Vector2.zero);
 
         //0. 이동 상태라면 강제 변경
@@ -112,7 +113,7 @@ public class Hero : Creature
         //0. 너무 멀어졌다면 강제로 이동
 
         //1. 몬스터
-        Creature creature = FindClosestInRange(3f, Managers.Object.Monsters) as Creature;
+        Creature creature = FindClosestInRange(HERO_SEARCH_DISTANCE, Managers.Object.Monsters) as Creature;
         if (creature != null)
         {
             Target = creature;
@@ -160,7 +161,9 @@ public class Hero : Creature
                 return;
             }
 
-            ChaseOrAttackTarget(HERO_DEFAULT_MELEE_ATTACK_RANGE, HERO_SEARCH_DISTANCE);
+            //현재 사용가능 스킬
+            SkillBase skill = Skills.GetReadySkill();
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
             return;
         }
 
@@ -185,7 +188,9 @@ public class Hero : Creature
                 return;
             }
 
-            ChaseOrAttackTarget(HERO_DEFAULT_MELEE_ATTACK_RANGE, HERO_SEARCH_DISTANCE);
+
+            SkillBase skill = Skills.GetReadySkill();
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
             return;
         }
 
@@ -216,7 +221,10 @@ public class Hero : Creature
     }
     protected override void UpdateSkill() 
     {
-        if(HeroMoveState == EHeroMoveState.ForceMove)
+        print("Hero Skill");
+        SetRigidBodyVelocity(Vector2.zero);
+        
+        if (HeroMoveState == EHeroMoveState.ForceMove)
         {
             CreatureState = ECreatureState.Move;
             return;
@@ -229,8 +237,8 @@ public class Hero : Creature
         }
     }
     protected override void UpdateDead() 
-    { 
-
+    {
+        base.UpdateDead();
     }
     #endregion
 
@@ -238,7 +246,12 @@ public class Hero : Creature
     {
         base.SetInfo(templateID);
 
+        //State
         CreatureState = ECreatureState.Idle;
+
+        //Skill
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     private void HandleOnJoystickStateChanged(EJoystickState joystickState)
@@ -262,15 +275,6 @@ public class Hero : Creature
     public override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
     {
         base.OnAnimEventHandler(trackEntry, e);
-
-        // TODO
-        CreatureState = ECreatureState.Move;
-
-        // Skill
-        if (Target.IsValid() == false)
-            return;
-
-        Target.OnDamaged(this);
     }
 
     private void TryResizeCollider()

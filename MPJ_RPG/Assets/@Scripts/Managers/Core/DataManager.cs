@@ -14,12 +14,14 @@ public class DataManager
     public Dictionary<int, Data.HeroData> HeroDic = new Dictionary<int, Data.HeroData>();
     public Dictionary<int, Data.MonsterData> MonsterDic = new Dictionary<int, Data.MonsterData>();
     public Dictionary<int, Data.EnvData> EnvDic = new Dictionary<int, Data.EnvData>();
+    public Dictionary<int, Data.SkillData> SkillDic = new Dictionary<int, Data.SkillData>();
 
     public void Init()
     {
         HeroDic = LoadJson<Data.HeroDataLoader, int, Data.HeroData>("HeroData").MakeDict();
         MonsterDic = LoadJson<Data.MonsterDataLoader, int, Data.MonsterData>("MonsterData").MakeDict();
         EnvDic = LoadJson<Data.EnvDataLoader, int, Data.EnvData>("EnvData").MakeDict();
+        SkillDic = LoadJson<Data.SkillDataLoader, int, Data.SkillData>("SkillData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string key)where Loader : ILoader<Key, Value>

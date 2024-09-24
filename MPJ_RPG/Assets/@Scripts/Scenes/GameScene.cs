@@ -20,8 +20,9 @@ public class GameScene : BaseScene
         HeroCamp camp = Managers.Object.Spawn<HeroCamp>(new Vector3Int(-10, -5, 0), 0);
         for (int i = 0; i < 5; i++)
         {
-            int heroID = HERO_WIZARD_ID + Random.Range(0, 5);
-            Hero hero = Managers.Object.Spawn<Hero>(new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0), heroID);
+            //int heroID = HERO_WIZARD_ID + Random.Range(0, 5);
+            //Hero hero = Managers.Object.Spawn<Hero>(new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0), heroID);
+            Managers.Object.Spawn<Hero>(new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0), HERO_KNIGHT_ID);
         }
 
         {
@@ -29,7 +30,7 @@ public class GameScene : BaseScene
             //Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_SLIME_ID);
             //Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_SPIDER_COMMON_ID);
         }
-        
+
         Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
 
         CameraController camera = Camera.main.GetOrAddComponent<CameraController>();

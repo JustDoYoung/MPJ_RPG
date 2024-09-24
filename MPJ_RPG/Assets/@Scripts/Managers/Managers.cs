@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
+    private static bool Initialized = false;
+
     private static Managers s_instance;
     public static Managers Instance { get { Init(); return s_instance; } }
 
@@ -33,8 +35,10 @@ public class Managers : MonoBehaviour
     #endregion
     private static void Init()
     {
-        if(s_instance == null)
+        if(s_instance == null && Initialized == false)
         {
+            Initialized = true;
+
             GameObject go = GameObject.Find("@Managers");
 
             if(go == null)

@@ -65,11 +65,11 @@ public class Env : BaseObject
 	}
 
 	#region Battle
-	public override void OnDamaged(BaseObject attacker)
+	public override void OnDamaged(BaseObject attacker, SkillBase skill)
 	{
 		if (EnvState == Define.EEnvState.Dead) return;
 
-		base.OnDamaged(attacker);
+		base.OnDamaged(attacker, skill);
 
 		// TODO
 		float finalDamage = 1;

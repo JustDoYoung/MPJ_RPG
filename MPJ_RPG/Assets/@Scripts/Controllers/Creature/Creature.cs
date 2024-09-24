@@ -9,6 +9,8 @@ using static Define;
 public class Creature : BaseObject
 {
     public BaseObject Target { get; protected set; }
+    public SkillComponent Skills { get; protected set; }
+
     public Data.CreatureData CreatureData { get; private set; } 
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
@@ -105,7 +107,7 @@ public class Creature : BaseObject
                 PlayAnimation(0, AnimName.MOVE, true);
                 break;
             case ECreatureState.Skill:
-                PlayAnimation(0, AnimName.ATTACK_A, true);
+                //PlayAnimation(0, AnimName.ATTACK_A, true);
                 break;
             case ECreatureState.Dead:
                 PlayAnimation(0, AnimName.DEAD, true);
@@ -145,7 +147,7 @@ public class Creature : BaseObject
     protected virtual void UpdateIdle() { }
     protected virtual void UpdateMove() { }
     protected virtual void UpdateSkill() { }
-    protected virtual void UpdateDead() { }
+    protected virtual void UpdateDead() { SetRigidBodyVelocity(Vector2.zero); }
     #endregion
 
     public void ChangeColliderSize(EColliderSize size = EColliderSize.Normal)
@@ -165,16 +167,24 @@ public class Creature : BaseObject
     }
 
     #region Battle
-    protected void ChaseOrAttackTarget(float attackRange, float chaseRange)
+    protected void ChaseOrAttackTarget(float chaseRange, SkillBase skill)
     {
         Vector3 dir = (Target.transform.position - transform.position);
         float distToTargetSqr = dir.sqrMagnitude;
-        float attackDistanceSqr = attackRange * attackRange;
+
+        // TEMP
+        float attackRange = HERO_DEFAULT_MELEE_ATTACK_RANGE;
+        if (skill.SkillData.ProjectileId != 0)
+            attackRange = HERO_DEFAULT_RANGED_ATTACK_RANGE;
+
+        float finalAttackRange = attackRange + Target.ColliderRadius + ColliderRadius;
+        float attackDistanceSqr = finalAttackRange * finalAttackRange;
 
         if (distToTargetSqr <= attackDistanceSqr)
         {
             // 공격 범위 이내로 들어왔다면 공격.
             CreatureState = ECreatureState.Skill;
+            skill.DoSkill();
             return;
         }
         else
@@ -192,6 +202,33 @@ public class Creature : BaseObject
             return;
         }
     }
+    //protected void ChaseOrAttackTarget(float attackRange, float chaseRange)
+    //{
+    //    Vector3 dir = (Target.transform.position - transform.position);
+    //    float distToTargetSqr = dir.sqrMagnitude;
+    //    float attackDistanceSqr = attackRange * attackRange;
+
+    //    if (distToTargetSqr <= attackDistanceSqr)
+    //    {
+    //        // 공격 범위 이내로 들어왔다면 공격.
+    //        CreatureState = ECreatureState.Skill;
+    //        return;
+    //    }
+    //    else
+    //    {
+    //        // 공격 범위 밖이라면 추적.
+    //        SetRigidBodyVelocity(dir.normalized * MoveSpeed);
+
+    //        // 너무 멀어지면 포기.
+    //        float searchDistanceSqr = chaseRange * chaseRange;
+    //        if (distToTargetSqr > searchDistanceSqr)
+    //        {
+    //            Target = null;
+    //            CreatureState = ECreatureState.Move;
+    //        }
+    //        return;
+    //    }
+    //}
     protected BaseObject FindClosestInRange(float range, IEnumerable<BaseObject> objs, Func<BaseObject, bool> func = null)
     {
         BaseObject target = null;
@@ -211,7 +248,7 @@ public class Creature : BaseObject
             if (distToTargetSqr > bestDistanceSqr)
                 continue;
 
-            if (func == null || func.Invoke(obj) == false) 
+            if (func != null && func.Invoke(obj) == false)
                 continue;
 
             target = obj;
@@ -221,9 +258,9 @@ public class Creature : BaseObject
         return target;
     }
 
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
 
         if (attacker.IsValid() == false)
             return;
@@ -233,7 +270,7 @@ public class Creature : BaseObject
             return;
 
         // TODO
-        float finalDamage = creature.Atk;
+        float finalDamage = creature.Atk; //ToDo
         Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
 
         if (Hp <= 0)

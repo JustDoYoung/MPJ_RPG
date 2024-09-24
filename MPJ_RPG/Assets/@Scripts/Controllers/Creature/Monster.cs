@@ -49,7 +49,9 @@ public class Monster : Creature
     {
         base.SetInfo(templateID);
 
-
+        //Skill
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     #region AI
@@ -78,17 +80,19 @@ public class Monster : Creature
 
         if(creature != null)
         {
-            print("Search Player");
             Target = creature;
             CreatureState = ECreatureState.Move;
             return;
         }
     }
 
+    private void Update()
+    {
+        print(CreatureState.ToString());
+    }
     protected override void UpdateMove()
     {
         //print("Move");
-
         if (Target == null)
         {
             Vector3 dir = _destPos - transform.position;
@@ -99,57 +103,44 @@ public class Monster : Creature
         }
         else
         {
-            //Chase
-            Vector3 dir = Target.transform.position - transform.position;
-            float distToTargetSqr = dir.sqrMagnitude;
-            float attackDistanceSqr = AttackDistance * AttackDistance;
+            // Chase
+            SkillBase skill = Skills.GetReadySkill();
+            ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
+            //ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, 5.0f);
 
-            //공격 범위 이내
-            if(distToTargetSqr < attackDistanceSqr)
+            // 너무 멀어지면 포기.
+            if (Target.IsValid() == false)
             {
-                //Attack 전환
-                CreatureState = ECreatureState.Skill;
-                StartWait(2.0f);
-            }
-            //공격 범위 밖
-            else
-            {
-                //Chase
-                ChaseOrAttackTarget(AttackDistance, MONSTER_SEARCH_DISTANCE);
-
-                // 타겟이 유효하지 않으면 포기(죽을 때)
-                if (Target.IsValid() == false)
-                {
-                    Target = null;
-                    _destPos = _initPos;
-                    return;
-                }
+                Target = null;
+                _destPos = _initPos;
+                return;
             }
         }
     }
 
     protected override void UpdateSkill()
     {
-        //Debug.Log("Skill");
-
-        //공격 끝날 때까지 대기
-        if (_coWait != null)
+        if (Target.IsValid() == false)
+        {
+            Target = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heros, IsValid) as Creature;
+            _destPos = _initPos;
+            CreatureState = ECreatureState.Move;
             return;
-
-        CreatureState = ECreatureState.Move;
+        }
     }
 
     protected override void UpdateDead()
     {
+        base.UpdateDead();
         //Debug.Log("Dead");
 
     }
     #endregion
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker)
+    public override void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
     }
 
     public override void OnDead(BaseObject attacker)
