@@ -21,6 +21,7 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<MonsterDataLoader, MonsterData>("Monster");
 		ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
 		ParseExcelDataToJson<SkillDataLoader, SkillData>("Skill");
+		ParseExcelDataToJson<ProjectileDataLoader, ProjectileData>("Projectile");
 
 		Debug.Log("DataTransformer Completed");
 	}
@@ -34,6 +35,7 @@ public class DataTransformer : EditorWindow
 		FieldInfo field = loader.GetType().GetFields()[0];
 		field.SetValue(loader, ParseExcelDataToList<LoaderData>(filename));
 
+		//loader 객체를 json 파일로 직렬화
 		string jsonStr = JsonConvert.SerializeObject(loader, Formatting.Indented);
 
 		//{Application.dataPath}는 Unity 프로젝트의 데이터 폴더 경로를 나타냅니다.

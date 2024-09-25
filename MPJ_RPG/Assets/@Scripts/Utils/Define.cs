@@ -85,7 +85,7 @@ public static class Define
         UI = 5,
         Hero = 6,
         Monster = 7,
-        GatheringResource = 8,
+        Env = 8,
         Obstacle = 9,
         Projectile = 10,
     }

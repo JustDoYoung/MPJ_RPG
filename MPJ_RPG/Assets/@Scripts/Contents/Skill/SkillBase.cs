@@ -55,4 +55,27 @@ public abstract class SkillBase : InitBase
     {
         //RemainCoolTime = SkillData.CoolTime;
     }
+
+    protected virtual void GenerateProjectile(Creature owner, Vector3 spawnPos)
+    {
+        Projectile projectile = Managers.Object.Spawn<Projectile>(spawnPos, SkillData.ProjectileId);
+
+        LayerMask excludeMask = 0;
+        excludeMask.AddLayer(Define.ELayer.Default);
+        excludeMask.AddLayer(Define.ELayer.Projectile);
+        excludeMask.AddLayer(Define.ELayer.Env);
+        excludeMask.AddLayer(Define.ELayer.Obstacle);
+
+        switch (owner.CreatureType)
+        {
+            case Define.ECreatureType.Hero:
+                excludeMask.AddLayer(Define.ELayer.Hero);
+                break;
+            case Define.ECreatureType.Monster:
+                excludeMask.AddLayer(Define.ELayer.Monster);
+                break;
+        }
+
+        projectile.SetSpawnInfo(Owner, this, excludeMask);
+    }
 }

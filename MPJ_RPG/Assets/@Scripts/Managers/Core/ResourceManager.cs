@@ -18,6 +18,9 @@ public class ResourceManager
         if (_resources.TryGetValue(key, out UnityEngine.Object resource))
             return resource as T;
 
+        //if (typeof(T) == typeof(Sprite) && key.Contains(".sprite") == false)
+        //    return resource as T;
+
         return null;
     }
 

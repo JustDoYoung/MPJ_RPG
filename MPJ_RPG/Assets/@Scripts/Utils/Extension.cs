@@ -33,6 +33,22 @@ public static class Extension
         return true;
     }
 
+    public static void MakeMask(this ref LayerMask mask, List<Define.ELayer> list)
+    {
+        foreach (Define.ELayer layer in list)
+            mask |= (1 << (int)layer);
+    }
+
+    public static void AddLayer(this ref LayerMask mask, Define.ELayer layer)
+    {
+        mask |= (1 << (int)layer);
+    }
+
+    public static void RemoveLayer(this ref LayerMask mask, Define.ELayer layer)
+    {
+        mask &= ~(1 << (int)layer);
+    }
+
     //public static void TranslateEx(this Transform transform, Vector3 dir)
     //{
     //    BaseObject bo = transform.gameObject.GetComponent<BaseObject>();

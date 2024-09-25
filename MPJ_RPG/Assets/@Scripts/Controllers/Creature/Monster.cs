@@ -55,7 +55,6 @@ public class Monster : Creature
     }
 
     #region AI
-    public float AttackDistance { get; private set; } = 4.0f;
     Vector3 _destPos;
     Vector3 _initPos;
 
@@ -147,7 +146,7 @@ public class Monster : Creature
     {
         base.OnDead(attacker);
 
-        Managers.Object.DeSpawn(this);
+        Managers.Object.Despawn(this);
     }
     #endregion
 

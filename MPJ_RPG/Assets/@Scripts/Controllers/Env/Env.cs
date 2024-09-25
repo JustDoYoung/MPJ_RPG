@@ -28,6 +28,7 @@ public class Env : BaseObject
 			return false;
 
 		ObjectType = Define.EObjectType.Env;
+		EnvState = Define.EEnvState.Idle;
 
 		return true;
 	}
@@ -72,13 +73,12 @@ public class Env : BaseObject
 		base.OnDamaged(attacker, skill);
 
 		// TODO
+		EnvState = Define.EEnvState.OnDamaged;
 		float finalDamage = 1;
 		Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
 
 		if (Hp <= 0)
-		{
 			OnDead(attacker);
-		}
 	}
 
 	public override void OnDead(BaseObject attacker)
@@ -88,7 +88,7 @@ public class Env : BaseObject
 		EnvState = Define.EEnvState.Dead;
 
 		//To do: 아이템 떨구기
-		Managers.Object.DeSpawn(this);
+		Managers.Object.Despawn(this);
 	}
 	#endregion
 }
