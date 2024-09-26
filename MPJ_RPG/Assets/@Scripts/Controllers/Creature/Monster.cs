@@ -5,154 +5,157 @@ using static Define;
 
 public class Monster : Creature
 {
-    public override ECreatureState CreatureState { get
-        {
-            return base.CreatureState;
-        }
+	public override ECreatureState CreatureState 
+	{
+		get { return base.CreatureState; }
+		set
+		{
+			if (_creatureState != value)
+			{
+				base.CreatureState = value;
+				switch (value)
+				{
+					case ECreatureState.Idle:
+						UpdateAITick = 0.5f;
+						break;
+					case ECreatureState.Move:
+						UpdateAITick = 0.0f;
+						break;
+					case ECreatureState.Skill:
+						UpdateAITick = 0.0f;
+						break;
+					case ECreatureState.Dead:
+						UpdateAITick = 1.0f;
+						break;
+				}
+			}
+		}
+	}
 
-        set
-        {
-            if (_creatureState != value)
-            {
-                base.CreatureState = value;
-                switch (value)
-                {
-                    case ECreatureState.Idle:
-                        UpdateAITick = 0.5f;
-                        break;
-                    case ECreatureState.Move:
-                        UpdateAITick = 0.0f;
-                        break;
-                    case ECreatureState.Skill:
-                        UpdateAITick = 0.0f;
-                        break;
-                    case ECreatureState.Dead:
-                        UpdateAITick = 1.0f;
-                        break;
-                }
-            }
-        }
-    }
+	public override bool Init()
+	{
+		if (base.Init() == false)
+			return false;
 
-    public override bool Init()
-    {
-        if (base.Init() == false) return false;
+		CreatureType = ECreatureType.Monster;
 
-        CreatureType = ECreatureType.Monster;
+		StartCoroutine(CoUpdateAI());
 
-        StartCoroutine(CoUpdateAI());
+		return true;
+	}
 
-        return true;
-    }
+	public override void SetInfo(int templateID)
+	{
+		base.SetInfo(templateID);
 
-    public override void SetInfo(int templateID)
-    {
-        base.SetInfo(templateID);
+		// State
+		CreatureState = ECreatureState.Idle;
 
-        //Skill
-        Skills = gameObject.GetOrAddComponent<SkillComponent>();
-        Skills.SetInfo(this, CreatureData.SkillIdList);
-    }
+		// Skill
+		Skills = gameObject.GetOrAddComponent<SkillComponent>();
+		Skills.SetInfo(this, CreatureData.SkillIdList);
+	}
 
-    #region AI
-    Vector3 _destPos;
-    Vector3 _initPos;
+	void Start()
+	{
+		_initPos = transform.position;
+	}
 
-    protected override void UpdateIdle() {
-        print("Idle");
+	#region AI
+	Vector3 _destPos;
+	Vector3 _initPos;
 
-        //Patrol
-        {
-            int patrolPercent = 10;
-            int rand = Random.Range(0, 100);
-            if(rand <= patrolPercent)
-            {
-                print("Patrol");
-                _destPos = _initPos + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2));
-                CreatureState = ECreatureState.Move;
-                return;
-            }
-        }
+	protected override void UpdateIdle()
+	{
+		// Patrol
+		{
+			int patrolPercent = 10;
+			int rand = Random.Range(0, 100);
+			if (rand <= patrolPercent)
+			{
+				_destPos = _initPos + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2));
+				CreatureState = ECreatureState.Move;
+				return;
+			}
+		}
 
-        //Search Player
-        Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heros, IsValid) as Creature;
+		// Search Player
+		Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heroes, func: IsValid) as Creature;
+		if (creature != null)
+		{
+			Target = creature;
+			CreatureState = ECreatureState.Move;
+			return;
+		}
+	}
 
-        if(creature != null)
-        {
-            Target = creature;
-            CreatureState = ECreatureState.Move;
-            return;
-        }
-    }
+	protected override void UpdateMove()
+	{
+		if (Target.IsValid() == false)
+		{
+			Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heroes, func: IsValid) as Creature;
+			if (creature != null)
+			{
+				Target = creature;
+				CreatureState = ECreatureState.Move;
+				return;
+			}
 
-    private void Update()
-    {
-        print(CreatureState.ToString());
-    }
-    protected override void UpdateMove()
-    {
-        //print("Move");
-        if (Target == null)
-        {
-            Vector3 dir = _destPos - transform.position;
-            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
+			// Move
+			FindPathAndMoveToCellPos(_destPos, MONSTER_DEFAULT_MOVE_DEPTH);
 
-            if(dir.sqrMagnitude <= 0.01f)
-                CreatureState = ECreatureState.Idle;
-        }
-        else
-        {
-            // Chase
-            SkillBase skill = Skills.GetReadySkill();
-            ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
-            //ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, 5.0f);
+			if (LerpCellPosCompleted)
+			{
+				CreatureState = ECreatureState.Idle;
+				return;
+			}
+		}
+		else
+		{
+			// Chase
+			SkillBase skill = Skills.GetReadySkill();
+			ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
 
-            // 너무 멀어지면 포기.
-            if (Target.IsValid() == false)
-            {
-                Target = null;
-                _destPos = _initPos;
-                return;
-            }
-        }
-    }
+			// 너무 멀어지면 포기.
+			if (Target.IsValid() == false)
+			{
+				Target = null;
+				_destPos = _initPos;
+				return;
+			}
+		}
+	}
 
-    protected override void UpdateSkill()
-    {
-        if (Target.IsValid() == false)
-        {
-            Target = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heros, IsValid) as Creature;
-            _destPos = _initPos;
-            CreatureState = ECreatureState.Move;
-            return;
-        }
-    }
+	protected override void UpdateSkill()
+	{
+		if (Target.IsValid() == false)
+		{
+			Target = null;
+			_destPos = _initPos;
+			CreatureState = ECreatureState.Move;
+			return;
+		}
+	}
 
-    protected override void UpdateDead()
-    {
-        base.UpdateDead();
-        //Debug.Log("Dead");
+	protected override void UpdateDead()
+	{
 
-    }
-    #endregion
+	}
+	#endregion
 
-    #region Battle
-    public override void OnDamaged(BaseObject attacker, SkillBase skill)
-    {
-        base.OnDamaged(attacker, skill);
-    }
+	#region Battle
+	public override void OnDamaged(BaseObject attacker, SkillBase skill)
+	{
+		base.OnDamaged(attacker, skill);
+	}
 
-    public override void OnDead(BaseObject attacker)
-    {
-        base.OnDead(attacker);
+	public override void OnDead(BaseObject attacker, SkillBase skill)
+	{
+		base.OnDead(attacker, skill);
 
-        Managers.Object.Despawn(this);
-    }
-    #endregion
+		// TODO : Drop Item
 
-
-    void Start()
-    {
-        _initPos = transform.position;
-    }
+		Managers.Object.Despawn(this);
+	}
+	#endregion
 }

@@ -172,14 +172,15 @@ namespace Spine.Unity.Editor {
 
 			if (EditorApplication.isPlayingOrWillChangePlaymode) return;
 
+			string[] folders = { "Assets", "Packages" };
 			string[] assets;
 			string assetPath;
-			assets = AssetDatabase.FindAssets("t:texture icon-subMeshRenderer", null);
+			assets = AssetDatabase.FindAssets("t:texture icon-subMeshRenderer", folders);
 			if (assets.Length > 0) {
 				assetPath = AssetDatabase.GUIDToAssetPath(assets[0]);
 				editorGUIPath = Path.GetDirectoryName(assetPath).Replace('\\', '/');
 			}
-			assets = AssetDatabase.FindAssets("t:script SpineEditorUtilities", null);
+			assets = AssetDatabase.FindAssets("t:script SpineEditorUtilities", folders);
 			if (assets.Length > 0) {
 				assetPath = AssetDatabase.GUIDToAssetPath(assets[0]);
 				editorPath = Path.GetDirectoryName(assetPath).Replace('\\', '/');

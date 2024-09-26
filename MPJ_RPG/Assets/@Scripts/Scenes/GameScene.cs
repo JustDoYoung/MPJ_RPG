@@ -6,56 +6,55 @@ using static Define;
 
 public class GameScene : BaseScene
 {
-    GameObject map;
+	public override bool Init()
+	{
+		if (base.Init() == false)
+			return false;
 
-    public override bool Init()
-    {
-        if (base.Init() == false) return false;
+		SceneType = EScene.GameScene;
 
-        SceneType = EScene.GameScene;
+		Managers.Map.LoadMap("BaseMap");
 
-        LoadMap();
+		HeroCamp camp = Managers.Object.Spawn<HeroCamp>(Vector3.zero, 0);
+		camp.SetCellPos(new Vector3Int(0, 0, 0), true);
 
+		for (int i = 0; i < 10; i++)
+		{
+			int heroTemplateID = HERO_WIZARD_ID + Random.Range(0, 5);
+			//int heroTemplateID = HERO_KNIGHT_ID;
+			//int heroTemplateID = HERO_WIZARD_ID;
 
-        HeroCamp camp = Managers.Object.Spawn<HeroCamp>(new Vector3Int(-10, -5, 0), 0);
-        for (int i = 0; i < 5; i++)
-        {
-            int heroID = HERO_KNIGHT_ID;
-            //int heroID = HERO_WIZARD_ID;
-            //int heroID = HERO_WIZARD_ID + Random.Range(0, 5);
-            //Hero hero = Managers.Object.Spawn<Hero>(new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0), heroID);
-            Managers.Object.Spawn<Hero>(new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0), heroID);
-        }
+			Vector3Int randCellPos = new Vector3Int(0 + Random.Range(-3, 3), 0 + Random.Range(-3, 3), 0);
+			if (Managers.Map.CanGo(randCellPos) == false)
+				continue;
 
-        {
-            Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_GOBLIN_ARCHER_ID);
-            Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_GOBLIN_ARCHER_ID);
-            Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_GOBLIN_ARCHER_ID);
-            //Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_BEAR_ID);
-            //Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_SLIME_ID);
-            //Managers.Object.Spawn<Monster>(new Vector3(0, 1, 0), MONSTER_SPIDER_COMMON_ID);
-        }
+			Hero hero = Managers.Object.Spawn<Hero>(new Vector3Int(1, 0, 0), heroTemplateID);
+			//hero.SetCellPos(randCellPos, true);
+			Managers.Map.MoveTo(hero, randCellPos, true);
+		}
 
-        Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
+		CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
+		camera.Target = camp;
 
-        CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
-        camera.Target = camp;
+		Managers.UI.ShowBaseUI<UI_Joystick>();
 
-        Managers.UI.ShowBaseUI<UI_Joystick>();
+		{
+			Monster monster = Managers.Object.Spawn<Monster>(new Vector3(1, 1, 0), MONSTER_SLIME_ID);
+			Managers.Map.MoveTo(monster, new Vector3Int(0, 4, 0), true);
+		}
 
+		{
+			Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
+			env.EnvState = EEnvState.Idle;
+		}
 
-        return true;
-    }
+		// TODO
 
-    private void LoadMap()
-    {
-        map = Managers.Resource.Instantiate("BaseMap");
-        map.transform.position = Vector3.zero;
-        map.name = "@BaseMap";
-    }
+		return true;
+	}
 
-    public override void Clear()
-    {
+	public override void Clear()
+	{
 
-    }
+	}
 }

@@ -121,6 +121,7 @@ namespace Spine.Unity {
 		public bool updateSeparatorPartScale = false;
 
 		private bool wasUpdatedAfterInit = true;
+		private bool requiresInstructionUpate = true;
 		private Texture baseTexture = null;
 
 #if UNITY_EDITOR
@@ -314,7 +315,7 @@ namespace Spine.Unity {
 			if (!this.IsValid) return;
 			if (canvasRenderer.cull) return;
 			if (update == CanvasUpdate.PreRender) {
-				PrepareInstructionsAndRenderers(isInRebuild: true);
+				if (requiresInstructionUpate) PrepareInstructionsAndRenderers(isInRebuild: true);
 				UpdateMeshToInstructions();
 			}
 			if (allowMultipleCanvasRenderers) canvasRenderer.Clear();
@@ -419,7 +420,9 @@ namespace Spine.Unity {
 			if (updateTiming == UpdateTiming.InLateUpdate)
 				Update(unscaledTime ? Time.unscaledDeltaTime : Time.deltaTime);
 
-			UpdateMesh();
+			PrepareInstructionsAndRenderers();
+
+			SetVerticesDirty(); // triggers Rebuild and avoids potential double-update in a single frame
 		}
 
 		protected void OnCullStateChanged (bool culled) {
@@ -465,9 +468,11 @@ namespace Spine.Unity {
 		public Skeleton Skeleton {
 			get {
 				Initialize(false);
+				requiresInstructionUpate = true;
 				return skeleton;
 			}
 			set {
+				requiresInstructionUpate = true;
 				skeleton = value;
 			}
 		}
@@ -535,7 +540,7 @@ namespace Spine.Unity {
 			if (mesh == null) {
 				return false;
 			}
-			if (mesh.vertexCount == 0 || mesh.bounds.size == Vector3.zero) {
+			if (mesh.vertexCount == 0) {
 				this.rectTransform.sizeDelta = new Vector2(50f, 50f);
 				this.rectTransform.pivot = new Vector2(0.5f, 0.5f);
 				return false;
@@ -567,7 +572,7 @@ namespace Spine.Unity {
 				}
 			}
 
-			if (!anyBoundsAdded || combinedBounds.size == Vector3.zero) {
+			if (!anyBoundsAdded) {
 				this.rectTransform.sizeDelta = new Vector2(50f, 50f);
 				this.rectTransform.pivot = new Vector2(0.5f, 0.5f);
 				return false;
@@ -717,6 +722,7 @@ namespace Spine.Unity {
 		}
 
 		public void PrepareInstructionsAndRenderers (bool isInRebuild = false) {
+			requiresInstructionUpate = false;
 			if (!this.allowMultipleCanvasRenderers) {
 				MeshGenerator.GenerateSingleSubmeshInstruction(currentInstructions, skeleton, null);
 				if (canvasRenderers.Count > 0)

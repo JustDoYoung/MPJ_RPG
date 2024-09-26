@@ -1,31 +1,36 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Define;
 
 public class TitleScene : BaseScene
 {
-    //private void StartLoadAsset()
-    //{
-    //    Managers.Resource.LoadAllAsync<UnityEngine.Object>("Preload", (key, count, totalCount) =>
-    //    {
-    //        print($"{key} {count}/{totalCount}");
-    //    });
-    //}
+	public override bool Init()
+	{
+		if (base.Init() == false)
+			return false;
 
-    public override bool Init()
+		SceneType = Define.EScene.TitleScene;
+
+		//StartLoadAssets();
+
+		return true;
+	}
+
+	void StartLoadAssets()
     {
-        if (base.Init() == false) return false;
+        Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
+        {
+			Debug.Log($"{key} {count}/{totalCount}");
 
-        SceneType = EScene.TitleScene;
-        //StartLoadAsset();
-
-        return true;
+			if (count == totalCount)
+			{
+				//Managers.Data.Init();
+			}
+		});
     }
 
-    public override void Clear()
-    {
-        
-    }
+	public override void Clear()
+	{
+
+	}
 }

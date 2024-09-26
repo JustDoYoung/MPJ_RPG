@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class Env : BaseObject
 {
@@ -28,7 +29,6 @@ public class Env : BaseObject
 			return false;
 
 		ObjectType = Define.EObjectType.Env;
-		EnvState = Define.EEnvState.Idle;
 
 		return true;
 	}
@@ -65,30 +65,32 @@ public class Env : BaseObject
 		}
 	}
 
-	#region Battle
 	public override void OnDamaged(BaseObject attacker, SkillBase skill)
 	{
-		if (EnvState == Define.EEnvState.Dead) return;
+		if (EnvState == EEnvState.Dead)
+			return;
 
 		base.OnDamaged(attacker, skill);
 
-		// TODO
-		EnvState = Define.EEnvState.OnDamaged;
 		float finalDamage = 1;
-		Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
+		EnvState = EEnvState.OnDamaged;
 
+		// TODO : Show UI
+
+		Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
 		if (Hp <= 0)
-			OnDead(attacker);
+			OnDead(attacker, skill);
 	}
 
-	public override void OnDead(BaseObject attacker)
+	public override void OnDead(BaseObject attacker, SkillBase skill)
 	{
-		base.OnDead(attacker);
+		base.OnDead(attacker, skill);
 
-		EnvState = Define.EEnvState.Dead;
+		EnvState = EEnvState.Dead;
 
-		//To do: 아이템 떨구기
+		// TODO : Drop Item	
+
 		Managers.Object.Despawn(this);
 	}
-	#endregion
+
 }

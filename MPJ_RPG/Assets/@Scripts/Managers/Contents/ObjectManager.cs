@@ -5,143 +5,117 @@ using static Define;
 
 public class ObjectManager
 {
-    public HashSet<Hero> Heros { get; } = new HashSet<Hero>();
-    public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
-    public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
-    public HashSet<Env> Envs { get; } = new HashSet<Env>();
-    public HeroCamp Camp { get; private set; }
+	public HashSet<Hero> Heroes { get; } = new HashSet<Hero>();
+	public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
+	public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
+	public HashSet<Env> Envs { get; } = new HashSet<Env>();
+	public HeroCamp Camp { get; private set; }
 
-    #region Root
-    public Transform HeroRoot { get { return GetRootTransform("@Heros"); } }
-    public Transform MonsterRoot { get { return GetRootTransform("@Monster"); } }
-    public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
-    public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
+	#region Roots
+	public Transform GetRootTransform(string name)
+	{
+		GameObject root = GameObject.Find(name);
+		if (root == null)
+			root = new GameObject { name = name };
 
-    public Transform GetRootTransform(string name)
-    {
-        GameObject root = GameObject.Find(name);
-        if (root == null)
-            root = new GameObject(name);
+		return root.transform;
+	}
 
-        return root.transform;
-    }
-    #endregion
+	public Transform HeroRoot { get { return GetRootTransform("@Heroes"); } }
+	public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
+	public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
+	public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
+	#endregion
 
-    public T Spawn<T>(Vector3 position, int templateID) where T : BaseObject
-    {
-        string prefabName = typeof(T).Name;
+	public T Spawn<T>(Vector3 position, int templateID) where T : BaseObject
+	{
+		string prefabName = typeof(T).Name;
 
-        GameObject go = Managers.Resource.Instantiate(prefabName);
-        go.name = prefabName;
-        go.transform.position = position;
+		GameObject go = Managers.Resource.Instantiate(prefabName);
+		go.name = prefabName;
+		go.transform.position = position;
 
-        BaseObject obj = go.GetComponent<BaseObject>();
+		BaseObject obj = go.GetComponent<BaseObject>();
 
-        switch (obj.ObjectType)
-        {
-            case EObjectType.Creature:
-                {
-                    Creature creature = go.GetComponent<Creature>();
-                    SpawnCreature(creature);
-                    creature.SetInfo(templateID);
-                    break;
-                }
-            case EObjectType.Projectile:
-                {
-                    obj.transform.parent = ProjectileRoot;
+		if (obj.ObjectType == EObjectType.Creature)
+		{
+			Creature creature = go.GetComponent<Creature>();
+			switch (creature.CreatureType)
+			{
+				case ECreatureType.Hero:
+					obj.transform.parent = HeroRoot;
+					Hero hero = creature as Hero;
+					Heroes.Add(hero);
+					break;
+				case ECreatureType.Monster:
+					obj.transform.parent = MonsterRoot;
+					Monster monster = creature as Monster;
+					Monsters.Add(monster);
+					break;
+			}
 
-                    Projectile projectile = go.GetComponent<Projectile>();
-                    Projectiles.Add(projectile);
+			creature.SetInfo(templateID);
+		}
+		else if (obj.ObjectType == EObjectType.Projectile)
+		{
+			obj.transform.parent = ProjectileRoot;
 
-                    projectile.SetInfo(templateID);
-                    break;
-                }
-            case EObjectType.Env:
-                {
-                    obj.transform.parent = EnvRoot;
-                    Env env = obj.GetComponent<Env>();
-                    Envs.Add(env);
-                    env.SetInfo(templateID);
-                    break;
-                }
-            case EObjectType.HeroCamp:
-                {
-                    Camp = go.GetComponent<HeroCamp>();
-                    break;
-                }
-            default:
-                break;
-        }
+			Projectile projectile = go.GetComponent<Projectile>();
+			Projectiles.Add(projectile);
 
-        return obj as T;
-    }
+			projectile.SetInfo(templateID);
+		}
+		else if (obj.ObjectType == EObjectType.Env)
+		{
+			obj.transform.parent = EnvRoot;
 
-    public void Despawn<T>(T obj) where T : BaseObject
-    {
-        switch (obj.ObjectType)
-        {
-            case EObjectType.Creature:
-                {
-                    Creature creature = obj.gameObject.GetComponent<Creature>();
-                    DeSpawnCreature(creature);
-                }
-                break;
-            case EObjectType.Projectile:
-                break;
-            case EObjectType.Env:
-                {
-                    Envs.Remove(obj as Env);
-                    break;
-                }
-            case EObjectType.HeroCamp:
-                {
-                    Camp = null;
-                    break;
-                }
-            default:
-                break;
-        }
+			Env env = go.GetComponent<Env>();
+			Envs.Add(env);
 
-        Managers.Resource.Destroy(obj.gameObject);
-    }
+			env.SetInfo(templateID);
+		}
+		else if (obj.ObjectType == EObjectType.HeroCamp)
+		{
+			Camp = go.GetComponent<HeroCamp>();
+		}
 
-    private void SpawnCreature(Creature creature)
-    {
-        switch (creature.CreatureType)
-        {
-            case ECreatureType.Hero:
-                creature.transform.parent = HeroRoot;
-                Hero hero = creature as Hero;
-                Heros.Add(hero);
-                break;
-            case ECreatureType.Monster:
-                creature.transform.parent = MonsterRoot;
-                Monster monster = creature as Monster;
-                Monsters.Add(monster);
-                break;
-            case ECreatureType.Npc:
-                break;
-            default:
-                break;
-        }
-    }
+		return obj as T;
+	}
 
-    private void DeSpawnCreature(Creature creature)
-    {
-        switch (creature.CreatureType)
-        {
-            case ECreatureType.Hero:
-                Hero hero = creature as Hero;
-                Heros.Remove(hero);
-                break;
-            case ECreatureType.Monster:
-                Monster monster = creature as Monster;
-                Monsters.Remove(monster);
-                break;
-            case ECreatureType.Npc:
-                break;
-            default:
-                break;
-        }
-    }
+	public void Despawn<T>(T obj) where T : BaseObject
+	{
+		EObjectType objectType = obj.ObjectType;
+
+		if (obj.ObjectType == EObjectType.Creature)
+		{
+			Creature creature = obj.GetComponent<Creature>();
+			switch (creature.CreatureType)
+			{
+				case ECreatureType.Hero:
+					Hero hero = creature as Hero;
+					Heroes.Remove(hero);
+					break;
+				case ECreatureType.Monster:
+					Monster monster = creature as Monster;
+					Monsters.Remove(monster);
+					break;
+			}
+		}
+		else if (obj.ObjectType == EObjectType.Projectile)
+		{
+			Projectile projectile = obj as Projectile;
+			Projectiles.Remove(projectile);
+		}
+		else if (obj.ObjectType == EObjectType.Env)
+		{
+			Env env = obj as Env;
+			Envs.Remove(env);
+		}
+		else if (obj.ObjectType == EObjectType.HeroCamp)
+		{
+			Camp = null;
+		}
+
+		Managers.Resource.Destroy(obj.gameObject);
+	}
 }

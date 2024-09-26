@@ -8,72 +8,61 @@ using static Define;
 
 public class BaseObject : InitBase
 {
-    public EObjectType ObjectType { get; protected set; } = EObjectType.None;
-    public  CircleCollider2D Collider { get; private set; }
-    public SkeletonAnimation SkeletonAnim { get; private set; }
-    public Rigidbody2D Rigidbody { get; private set; }
+	public EObjectType ObjectType { get; protected set; } = EObjectType.None;
+	public CircleCollider2D Collider { get; private set; }
+	public SkeletonAnimation SkeletonAnim { get; private set; }
+	public Rigidbody2D RigidBody { get; private set; }
 
-	/// <summary>
-	/// (병합연산자) public float ColliderRadius { get { return Collider?.radius ?? 0.0f; } }
-	/// </summary>
 	public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
-    public Vector3 CenterPosition { get { return transform.position + Collider.radius * Vector3.up; } }
+	public Vector3 CenterPosition { get { return transform.position + Vector3.up * ColliderRadius; } }
 
 	public int DataTemplateID { get; set; }
 
-	//좌우 뒤집기 - 1
 	bool _lookLeft = true;
 	public bool LookLeft
-    {
-        get { return _lookLeft; }
-        set
-        {
+	{
+		get { return _lookLeft; }
+		set
+		{
 			_lookLeft = value;
-			Flip(value);
-        }
-    }
+			Flip(!value);
+		}
+	}
 
-    public override bool Init()
-    {
-        if (base.Init() == false) return false;
+	public override bool Init()
+	{
+		if (base.Init() == false)
+			return false;
 
-        Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
+		Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
 		SkeletonAnim = GetComponent<SkeletonAnimation>();
-		Rigidbody = GetComponent<Rigidbody2D>();
+		RigidBody = GetComponent<Rigidbody2D>();
 
 		return true;
-    }
+	}
 
-    #region Move 처리
-    public void SetRigidBodyVelocity(Vector2 velocity)
+	public void LookAtTarget(BaseObject target)
 	{
-		if (Rigidbody == null)
-			return;
-
-		Rigidbody.velocity = velocity;
-
-		if (velocity.x < 0)
+		Vector2 dir = target.transform.position - transform.position;
+		if (dir.x < 0)
 			LookLeft = true;
-		else if (velocity.x > 0)
+		else
 			LookLeft = false;
 	}
 
-	//public void TranslateEx(Vector3 dir)
-	//{
-	//	//이동처리
-	//	transform.Translate(dir);
+	#region Battle
+	public virtual void OnDamaged(BaseObject attacker, SkillBase skill)
+	{
 
-	//	//좌우 뒤집기 - 2
-	//	if (dir.x < 0)
-	//		LookLeft = true;
-	//	else if (dir.x > 0)
-	//		LookLeft = false;
-	//}
+	}
+
+	public virtual void OnDead(BaseObject attacker, SkillBase skill)
+	{
+
+	}
 	#endregion
 
 	#region Spine
-	protected virtual void UpdateAnimation() { }
-
 	protected virtual void SetSpineAnimation(string dataLabel, int sortingOrder)
 	{
 		if (SkeletonAnim == null)
@@ -84,8 +73,12 @@ public class BaseObject : InitBase
 
 		// Spine SkeletonAnimation은 SpriteRenderer 를 사용하지 않고 MeshRenderer을 사용함
 		// 그렇기떄문에 2D Sort Axis가 안먹히게 되는데 SortingGroup을 SpriteRenderer,MeshRenderer을 같이 계산함.
-		SortingGroup sg = Utils.GetOrAddComponent<SortingGroup>(gameObject);
+		SortingGroup sg = Util.GetOrAddComponent<SortingGroup>(gameObject);
 		sg.sortingOrder = sortingOrder;
+	}
+
+	protected virtual void UpdateAnimation()
+	{
 	}
 
 	public void PlayAnimation(int trackIndex, string AnimName, bool loop)
@@ -104,42 +97,68 @@ public class BaseObject : InitBase
 		SkeletonAnim.AnimationState.AddAnimation(trackIndex, AnimName, loop, delay);
 	}
 
-	//좌우 뒤집기 - 3
 	public void Flip(bool flag)
 	{
 		if (SkeletonAnim == null)
 			return;
 
-		SkeletonAnim.Skeleton.ScaleX = flag ? 1 : -1;
+		SkeletonAnim.Skeleton.ScaleX = flag ? -1 : 1;
 	}
 
 	public virtual void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
 	{
-        Debug.Log("OnAnimEventHandler");
-    }
+		Debug.Log("OnAnimEventHandler");
+	}
 	#endregion
 
-	#region Battle
-	public virtual void OnDamaged(BaseObject attacker, SkillBase skill)
-	{
+	#region Map
+	public bool LerpCellPosCompleted { get; protected set; }
 
+	Vector3Int _cellPos;
+	public Vector3Int CellPos
+	{
+		get { return _cellPos; }
+		protected set
+		{
+			_cellPos = value;
+			LerpCellPosCompleted = false;
+		}
 	}
 
-	public virtual void OnDead(BaseObject attacker)
+	public void SetCellPos(Vector3Int cellPos, bool forceMove = false)
 	{
+		CellPos = cellPos;
+		LerpCellPosCompleted = false;
 
+		if (forceMove)
+		{
+			transform.position = Managers.Map.Cell2World(CellPos);
+			LerpCellPosCompleted = true;
+		}
 	}
-    #endregion
 
-    #region Helper
-	public void LookAtTarget(BaseObject target)
-    {
-		Vector2 dir = target.transform.position - transform.position;
+	public void LerpToCellPos(float moveSpeed)
+	{
+		if (LerpCellPosCompleted)
+			return;
+
+		Vector3 destPos = Managers.Map.Cell2World(CellPos);
+		Vector3 dir = destPos - transform.position;
 
 		if (dir.x < 0)
 			LookLeft = true;
 		else
 			LookLeft = false;
+
+		if (dir.magnitude < 0.01f)
+		{
+			transform.position = destPos;
+			LerpCellPosCompleted = true;
+			return;
+		}
+
+		float moveDist = Mathf.Min(dir.magnitude, moveSpeed * Time.deltaTime);
+		transform.position += dir.normalized * moveDist;
 	}
-    #endregion
+	#endregion
 }
