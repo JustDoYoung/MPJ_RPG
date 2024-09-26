@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using static Define;
 
 public class UI_TitleScene : UI_Scene
@@ -19,36 +19,40 @@ public class UI_TitleScene : UI_Scene
 
     public override bool Init()
     {
-        if (base.Init() == false) return false;
+        if (base.Init() == false)
+            return false;
 
         BindObjects(typeof(GameObjects));
         BindTexts(typeof(Texts));
 
-        GetObject((int)GameObjects.StartImage).BindEvent((evt) => {
-            print("ChangeScene");
-            Managers.Scene.LoadScene(EScene.GameScene);
-        });
+		GetObject((int)GameObjects.StartImage).BindEvent((evt) =>
+		{
+			Debug.Log("ChangeScene");
+			Managers.Scene.LoadScene(EScene.GameScene);
+		});
 
-        GetObject((int)GameObjects.StartImage).gameObject.SetActive(false);
-        GetText((int)Texts.DisplayText).text = $"";
+		GetObject((int)GameObjects.StartImage).gameObject.SetActive(false);
+		GetText((int)Texts.DisplayText).text = $"";
 
-        StartLoadAsset();
+		StartLoadAssets();
 
-        return true;
+		return true;
     }
 
-    private void StartLoadAsset()
-    {
-        Managers.Resource.LoadAllAsync<UnityEngine.Object>("Preload", (key, count, totalCount) =>
-        {
-            //print($"{key} {count}/{totalCount}");
+	void StartLoadAssets()
+	{
+		Managers.Resource.LoadAllAsync<Object>("Preload", (key, count, totalCount) =>
+		{
+			Debug.Log($"{key} {count}/{totalCount}");
 
-            if(count == totalCount)
-            {
-                Managers.Data.Init();
-                GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
-                GetText((int)Texts.DisplayText).text = $"Touch to Start";
-            }
-        });
-    }
+			if (count == totalCount)
+			{
+				Managers.Data.Init();
+
+				GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
+				GetText((int)Texts.DisplayText).text = "Touch To Start";
+
+			}
+		});
+	}
 }

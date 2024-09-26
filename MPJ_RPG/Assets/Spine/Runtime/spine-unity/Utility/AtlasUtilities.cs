@@ -740,12 +740,11 @@ namespace Spine.Unity.AttachmentTools {
 			float v2 = uvRect.yMin;
 
 			if (referenceRegion.degrees == 270) {
-				// at a 270 degree region, u2/v2 deltas and atlas width/height are swapped, and delta-v is negative.
-				float du = uvRect.width; // u2 - u;
-				float dv = uvRect.height; // v - v2;
-				float atlasAspectRatio = (float)page.width / (float)page.height;
-				u2 = u + (dv / atlasAspectRatio);
-				v2 = v - (du * atlasAspectRatio);
+				// at a 270 degree region, u2/v2 deltas are swapped, and delta-v is negative.
+				float du = u2 - u;
+				float dv = v - v2;
+				u2 = u + dv;
+				v2 = v - du;
 			}
 
 			return new AtlasRegion {

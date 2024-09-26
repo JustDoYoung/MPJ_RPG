@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace Data
 {
 	#region CreatureData
@@ -32,15 +33,15 @@ namespace Data
 		public string SkeletonDataID;
 		public string AnimatorName;
 		public List<int> SkillIdList = new List<int>();
-		public int DropItemId;
+		
 	}
-    #endregion
+	#endregion
 
-    #region MonsterData
-    [Serializable]
+	#region MonsterData
+	[Serializable]
 	public class MonsterData : CreatureData
 	{
-		
+		public int DropItemId;
 	}
 
 	[Serializable]
