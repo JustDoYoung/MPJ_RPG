@@ -101,7 +101,7 @@ public class Monster : Creature
 				return;
 			}
 
-			// Move
+			// patrol
 			FindPathAndMoveToCellPos(_destPos, MONSTER_DEFAULT_MOVE_DEPTH);
 
 			if (LerpCellPosCompleted)

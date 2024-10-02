@@ -53,7 +53,7 @@ public class Hero : Creature
 		Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
 		Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;
 
-		// Map
+		// Map, 피격판정으로만 물리시스템을 사용함.
 		Collider.isTrigger = true;
 		RigidBody.simulated = false;
 
@@ -127,17 +127,17 @@ public class Hero : Creature
 
 	protected override void UpdateMove() 
 	{
-		if (HeroMoveState == EHeroMoveState.ForcePath)
-		{
-			MoveByForcePath();
-			return;
-		}
+        if (HeroMoveState == EHeroMoveState.ForcePath)
+        {
+            MoveByForcePath();
+            return;
+        }
 
-		if (CheckHeroCampDistanceAndForcePath())
-			return;
+        if (CheckHeroCampDistanceAndForcePath())
+            return;
 
-		// 0. 누르고 있다면, 강제 이동
-		if (HeroMoveState == EHeroMoveState.ForceMove)
+        // 0. 누르고 있다면, 강제 이동
+        if (HeroMoveState == EHeroMoveState.ForceMove)
 		{
 			EFindPathResult result = FindPathAndMoveToCellPos(HeroCampDest.position, HERO_DEFAULT_MOVE_DEPTH);
 			return;
@@ -189,7 +189,9 @@ public class Hero : Creature
 		if (HeroMoveState == EHeroMoveState.ReturnToCamp)
 		{
 			Vector3 destPos = HeroCampDest.position;
-			if (FindPathAndMoveToCellPos(destPos, HERO_DEFAULT_MOVE_DEPTH) == EFindPathResult.Success)
+			//Vector3 destPos = Managers.Object.Camp.transform.position;
+			EFindPathResult result = FindPathAndMoveToCellPos(destPos, HERO_DEFAULT_MOVE_DEPTH);
+			if (result == EFindPathResult.Success)
 				return;
 
 			// 실패 사유 검사.
@@ -257,6 +259,7 @@ public class Hero : Creature
 			return;
 		}
 
+		print("aa");
 		Vector3Int cellPos = _forcePath.Peek();
 
 		if (MoveToCellPos(cellPos, 2))

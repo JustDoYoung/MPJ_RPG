@@ -137,6 +137,10 @@ public class BaseObject : InitBase
 		}
 	}
 
+	/// <summary>
+	/// 실제 이동을 담당.
+	/// </summary>
+	/// <param name="moveSpeed"></param>
 	public void LerpToCellPos(float moveSpeed)
 	{
 		if (LerpCellPosCompleted)
