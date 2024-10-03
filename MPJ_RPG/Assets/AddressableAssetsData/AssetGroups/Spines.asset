@@ -53,12 +53,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 378dd7a7a523b164496aa5b261580005
-    m_Address: bear_SkeletonData
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d89853370f7a3164f99dbc20eea32225
     m_Address: wood_common_SkeletonData
     m_ReadOnly: 0

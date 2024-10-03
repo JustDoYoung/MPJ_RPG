@@ -10,6 +10,8 @@ public abstract class SkillBase : InitBase
 
 	public Data.SkillData SkillData { get; private set; }
 
+	public float RemainCoolTime { get; set; }
+
 	public override bool Init()
 	{
 		if (base.Init() == false)
@@ -26,10 +28,8 @@ public abstract class SkillBase : InitBase
 		// Register AnimEvent
 		if (Owner.SkeletonAnim != null && Owner.SkeletonAnim.AnimationState != null)
 		{
-			Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-			Owner.SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
-			Owner.SkeletonAnim.AnimationState.Complete -= OnAnimCompleteHandler;
-			Owner.SkeletonAnim.AnimationState.Complete += OnAnimCompleteHandler;
+			Owner.SkeletonAnim.AnimationState.Event -= OnOwnerAnimEventHandler;
+			Owner.SkeletonAnim.AnimationState.Event += OnOwnerAnimEventHandler;
 		}
 	}
 
@@ -44,13 +44,34 @@ public abstract class SkillBase : InitBase
 		if (Owner.SkeletonAnim.AnimationState == null)
 			return;
 
-		Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-		Owner.SkeletonAnim.AnimationState.Complete -= OnAnimCompleteHandler;
+		Owner.SkeletonAnim.AnimationState.Event -= OnOwnerAnimEventHandler;
 	}
 
 	public virtual void DoSkill()
 	{
-		//RemainCoolTime = SkillData.CoolTime;
+		// 준비된 스킬에서 해제
+		if (Owner.Skills != null)
+			Owner.Skills.ActiveSkills.Remove(this);
+
+		float timeScale = 1.0f;
+
+		if (Owner.Skills.DefaultSkill == this)
+			Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = timeScale;
+		else
+			Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = 1;
+
+		StartCoroutine(CoCountdownCooldown());
+	}
+
+	private IEnumerator CoCountdownCooldown()
+	{
+		RemainCoolTime = SkillData.CoolTime;
+		yield return new WaitForSeconds(SkillData.CoolTime);
+		RemainCoolTime = 0;
+
+		// 준비된 스킬에 추가
+		if (Owner.Skills != null)
+			Owner.Skills.ActiveSkills.Add(this);
 	}
 
 	protected virtual void GenerateProjectile(Creature owner, Vector3 spawnPos)
@@ -76,6 +97,12 @@ public abstract class SkillBase : InitBase
 		projectile.SetSpawnInfo(Owner, this, excludeMask);
 	}
 
-	protected abstract void OnAnimEventHandler(TrackEntry trackEntry, Event e);
-	protected abstract void OnAnimCompleteHandler(TrackEntry trackEntry);
+	private void OnOwnerAnimEventHandler(TrackEntry trackEntry, Event e)
+	{
+		// 다른스킬의 애니메이션 이벤트도 받기 때문에 자기꺼만 써야함
+		if (trackEntry.Animation.Name == SkillData.AnimName)
+			OnAttackEvent();
+	}
+
+	protected abstract void OnAttackEvent();
 }

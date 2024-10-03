@@ -61,9 +61,8 @@ public class DataTransformer : EditorWindow
 				continue;
 
 			LoaderData loaderData = new LoaderData();
-
-			FieldInfo[] fields = loaderData.GetType().GetFields();
-			for (int f = 0; f < fields.Length; f++)
+			var fields = GetFieldsInBase(typeof(LoaderData));
+			for (int f = 0; f < fields.Count; f++)
 			{
 				FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
 				Type type = field.FieldType;
@@ -115,6 +114,34 @@ public class DataTransformer : EditorWindow
 			genericList.Add(item);
 
 		return genericList;
+	}
+
+	public static List<FieldInfo> GetFieldsInBase(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+	{
+		List<FieldInfo> fields = new List<FieldInfo>();
+		HashSet<string> fieldNames = new HashSet<string>(); // 중복방지
+		Stack<Type> stack = new Stack<Type>();
+
+		while (type != typeof(object))
+		{
+			stack.Push(type);
+			type = type.BaseType;
+		}
+
+		while (stack.Count > 0)
+		{
+			Type currentType = stack.Pop();
+
+			foreach (var field in currentType.GetFields(bindingFlags))
+			{
+				if (fieldNames.Add(field.Name))
+				{
+					fields.Add(field);
+				}
+			}
+		}
+
+		return fields;
 	}
 	#endregion
 #endif

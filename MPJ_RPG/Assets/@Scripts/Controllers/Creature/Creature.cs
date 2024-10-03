@@ -31,6 +31,19 @@ public class Creature : BaseObject
 	public float MoveSpeed { get; set; }
 	#endregion
 
+	protected float AttackDistance
+	{
+		get
+		{
+			float env = 2.2f;
+			if (Target != null && Target.ObjectType == EObjectType.Env)
+				return Mathf.Max(env, Collider.radius + Target.Collider.radius + 0.1f);
+
+			float baseValue = CreatureData.AtkRange;
+			return baseValue;
+		}
+	}
+
 	protected ECreatureState _creatureState = ECreatureState.None;
 	public virtual ECreatureState CreatureState
 	{
@@ -67,11 +80,11 @@ public class Creature : BaseObject
 		gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
 
 		// Collider
-		Collider.offset = new Vector2(CreatureData.ColliderOffsetX, CreatureData.ColliderOffstY);
+		Collider.offset = new Vector2(CreatureData.ColliderOffsetX, CreatureData.ColliderOffsetY);
 		Collider.radius = CreatureData.ColliderRadius;
 
 		// RigidBody
-		RigidBody.mass = CreatureData.Mass;
+		RigidBody.mass = 0;
 
 		// Spine
 		SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(CreatureData.SkeletonDataID);
@@ -89,11 +102,12 @@ public class Creature : BaseObject
 		SortingGroup sg = Util.GetOrAddComponent<SortingGroup>(gameObject);
 		sg.sortingOrder = SortingLayers.CREATURE;
 
-		// Skills
-		// CreatureData.SkillIdList;
+        // Skills
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this, CreatureData);
 
-		// Stat
-		MaxHp = CreatureData.MaxHp;
+        // Stat
+        MaxHp = CreatureData.MaxHp;
 		Hp = CreatureData.MaxHp;
 		Atk = CreatureData.MaxHp;
 		MaxHp = CreatureData.MaxHp;
@@ -160,7 +174,37 @@ public class Creature : BaseObject
 
 	protected virtual void UpdateIdle() { }
 	protected virtual void UpdateMove() { }
-	protected virtual void UpdateSkill() { }
+	protected virtual void UpdateSkill() 
+	{
+		if (_coWait != null) return;
+		if (Target.IsValid() == false || Target.ObjectType == EObjectType.HeroCamp)
+		{
+			CreatureState = ECreatureState.Idle;
+			return;
+		}
+
+		Vector3 dir = (Target.CenterPosition - CenterPosition);
+		float distToTargetSqr = dir.sqrMagnitude;
+		float attackDistanceSqr = AttackDistance * AttackDistance;
+		if (distToTargetSqr > attackDistanceSqr)
+		{
+			CreatureState = ECreatureState.Idle;
+			return;
+		}
+
+		// DoSkill
+		if (Skills.CurrentSkill == null)
+			print("aa");
+		Skills.CurrentSkill.DoSkill();
+
+		LookAtTarget(Target);
+
+		//Temp
+		var trackEntry = SkeletonAnim.state.GetCurrent(0);
+		float delay = trackEntry.Animation.Duration;
+
+		StartWait(delay);
+	}
 	protected virtual void UpdateDead() { }
 	#endregion
 
@@ -176,7 +220,7 @@ public class Creature : BaseObject
 		if (creature == null)
 			return;
 
-		// TEMP
+		// TEMP : 무적치트
 		if (CreatureType == ECreatureType.Hero)
 			return;
 
@@ -225,24 +269,18 @@ public class Creature : BaseObject
 		return target;
 	}
 
-	protected void ChaseOrAttackTarget(float chaseRange, SkillBase skill)
+	protected void ChaseOrAttackTarget(float chaseRange, float attackRange)
 	{
 		Vector3 dir = (Target.transform.position - transform.position);
 		float distToTargetSqr = dir.sqrMagnitude;
+		float attackDistanceSqr = attackRange * attackRange;
 
-		// TEMP
-		float attackRange = HERO_DEFAULT_MELEE_ATTACK_RANGE;
-		if (skill.SkillData.ProjectileId != 0)
-			attackRange = HERO_DEFAULT_RANGED_ATTACK_RANGE;
 
-		float finalAttackRange = attackRange + Target.ColliderRadius + ColliderRadius;
-		float attackDistanceSqr = finalAttackRange * finalAttackRange;
 
 		if (distToTargetSqr <= attackDistanceSqr)
 		{
 			// 공격 범위 이내로 들어왔다면 공격.
 			CreatureState = ECreatureState.Skill;
-			skill.DoSkill();
 			return;
 		}
 		else
@@ -259,6 +297,29 @@ public class Creature : BaseObject
 			}
 			return;
 		}
+	}
+	#endregion
+
+	#region Wait
+	protected Coroutine _coWait;
+
+	protected void StartWait(float seconds)
+	{
+		CancelWait();
+		_coWait = StartCoroutine(CoWait(seconds));
+	}
+
+	IEnumerator CoWait(float seconds)
+	{
+		yield return new WaitForSeconds(seconds);
+		_coWait = null;
+	}
+
+	protected void CancelWait()
+	{
+		if (_coWait != null)
+			StopCoroutine(_coWait);
+		_coWait = null;
 	}
 	#endregion
 
@@ -313,6 +374,7 @@ public class Creature : BaseObject
 		return Managers.Map.MoveTo(this, destCellPos);
 	}
 
+	//이동
 	protected IEnumerator CoLerpToCellPos()
 	{
 		while (true)
