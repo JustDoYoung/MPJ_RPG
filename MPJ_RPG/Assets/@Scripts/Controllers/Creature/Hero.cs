@@ -254,7 +254,6 @@ public class Hero : Creature
 			return;
 		}
 
-		print("aa");
 		Vector3Int cellPos = _forcePath.Peek();
 
 		if (MoveToCellPos(cellPos, 2))

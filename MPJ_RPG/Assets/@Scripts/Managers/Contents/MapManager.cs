@@ -226,6 +226,37 @@ public class MapManager
 		return false;
 	}
 
+	public List<T> GatherObjects<T>(Vector3 pos, float rangeX, float rangeY) where T : BaseObject
+	{
+		List<T> objects = new List<T>();
+
+		Vector3Int left = World2Cell(pos + new Vector3(-rangeX, 0));
+		Vector3Int right = World2Cell(pos + new Vector3(+rangeX, 0));
+		Vector3Int bottom = World2Cell(pos + new Vector3(0, -rangeY));
+		Vector3Int top = World2Cell(pos + new Vector3(0, +rangeY));
+		int minX = left.x;
+		int maxX = right.x;
+		int minY = bottom.y;
+		int maxY = top.y;
+
+		for (int x = minX; x <= maxX; x++)
+		{
+			for (int y = minY; y <= maxY; y++)
+			{
+				Vector3Int tilePos = new Vector3Int(x, y, 0);
+
+				// 타입에 맞는 리스트 리턴
+				T obj = GetObject(tilePos) as T;
+				if (obj == null)
+					continue;
+
+				objects.Add(obj);
+			}
+		}
+
+		return objects;
+	}
+
 	public void ClearObjects()
 	{
 		_cells.Clear();

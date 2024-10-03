@@ -39,10 +39,10 @@ public class GameScene : BaseScene
 		Managers.UI.ShowBaseUI<UI_Joystick>();
 
 
-		{
-			Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
-			env.EnvState = EEnvState.Idle;
-		}
+		//{
+		//	Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
+		//	env.EnvState = EEnvState.Idle;
+		//}
 
 		// TODO
 

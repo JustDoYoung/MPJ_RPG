@@ -10,16 +10,16 @@ public class AreaAttack : AreaSkill
 
 		_angleRange = 90;
 
-		//AddIndicatorComponent();
+        AddIndicatorComponent();
 
-		//if (_indicator != null)
-		//	_indicator.SetInfo(Owner, SkillData, Define.EIndicatorType.Cone);
-	}
+        if (_indicator != null)
+            _indicator.SetInfo(Owner, SkillData, Define.EIndicatorType.Cone);
+    }
 
 	public override void DoSkill()
 	{
 		base.DoSkill();
 
-		//SpawnSpellIndicator();
-	}
+        SpawnSpellIndicator();
+    }
 }

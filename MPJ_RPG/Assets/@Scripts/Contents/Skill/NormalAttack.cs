@@ -22,8 +22,8 @@ public class NormalAttack : SkillBase
 	{
 		base.DoSkill();
 
-		Owner.CreatureState = Define.ECreatureState.Skill;
-		Owner.PlayAnimation(0, SkillData.AnimName, false);
+		//Owner.CreatureState = Define.ECreatureState.Skill;
+		//Owner.PlayAnimation(0, SkillData.AnimName, false);
 
 		Owner.LookAtTarget(Owner.Target);
 	}
