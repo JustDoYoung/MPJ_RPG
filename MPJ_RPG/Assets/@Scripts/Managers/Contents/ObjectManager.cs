@@ -119,6 +119,13 @@ public class ObjectManager
 		Managers.Resource.Destroy(obj.gameObject);
 	}
 
+	public void ShowDamageFont(Vector2 position, float damage, Transform parent, bool isCritical = false)
+	{
+		GameObject go = Managers.Resource.Instantiate("DamageFont", pooling: true);
+		DamageFont damageText = go.GetOrAddComponent<DamageFont>();
+		damageText.SetInfo(position, damage, parent, isCritical);
+	}
+
 	#region Skill 판정
 	public List<Creature> FindConeRangeTargets(Creature owner, Vector3 dir, float range, int angleRange, bool isAllies = false)
 	{
