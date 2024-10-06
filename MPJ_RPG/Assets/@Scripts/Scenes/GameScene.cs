@@ -20,11 +20,11 @@ public class GameScene : BaseScene
 
 		for (int i = 0; i < 10; i++)
 		{
-			int heroTemplateID = HERO_WIZARD_ID + Random.Range(0, 2);
-			//int heroTemplateID = HERO_KNIGHT_ID;
-			//int heroTemplateID = HERO_WIZARD_ID;
+            //int heroTemplateID = HERO_WIZARD_ID + Random.Range(0, 2);
+            int heroTemplateID = HERO_LION_ID;
+            //int heroTemplateID = HERO_WIZARD_ID;
 
-			Vector3Int randCellPos = new Vector3Int(0 + Random.Range(-3, 3), 0 + Random.Range(-3, 3), 0);
+            Vector3Int randCellPos = new Vector3Int(0 + Random.Range(-3, 3), 0 + Random.Range(-3, 3), 0);
 			if (Managers.Map.CanGo(randCellPos) == false)
 				continue;
 

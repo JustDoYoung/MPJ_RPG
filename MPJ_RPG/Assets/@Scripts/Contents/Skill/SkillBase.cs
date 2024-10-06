@@ -49,6 +49,8 @@ public abstract class SkillBase : InitBase
 
 	public virtual void DoSkill()
 	{
+		if (Owner.CreatureType == Define.ECreatureType.Hero) 
+			print("a");
 		// 준비된 스킬에서 해제
 		if (Owner.Skills != null)
 			Owner.Skills.ActiveSkills.Remove(this);
@@ -104,7 +106,7 @@ public abstract class SkillBase : InitBase
 
 	private void OnOwnerAnimEventHandler(TrackEntry trackEntry, Event e)
 	{
-		// 다른스킬의 애니메이션 이벤트도 받기 때문에 자기꺼만 써야함
+		// 다른 스킬의 애니메이션 이벤트도 받기 때문에 자기꺼만 써야함
 		if (trackEntry.Animation.Name == SkillData.AnimName)
 			OnAttackEvent();
 	}

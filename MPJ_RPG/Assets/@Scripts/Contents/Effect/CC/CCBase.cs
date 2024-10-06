@@ -13,6 +13,7 @@ public class CCBase : EffectBase
 		if (base.Init() == false)
 			return false;
 
+		//타입 정의
 		EffectType = EEffectType.CrowdControl;
 		return true;
 	}
@@ -21,12 +22,12 @@ public class CCBase : EffectBase
 	{
 		base.ApplyEffect();
 
-		//lastState = Owner.CreatureState;
-		//if (lastState == ECreatureState.OnDamaged)
-		//	return;
+        lastState = Owner.CreatureState;
+        if (lastState == ECreatureState.OnDamaged)
+            return;
 
-		//Owner.CreatureState = ECreatureState.OnDamaged;
-	}
+        Owner.CreatureState = ECreatureState.OnDamaged;
+    }
 
 	public override bool ClearEffect(EEffectClearType clearType)
 	{
