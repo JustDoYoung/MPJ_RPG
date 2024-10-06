@@ -40,6 +40,7 @@ public static class Define
 		Creature,
 		Projectile,
 		Env,
+		Effect,
 	}
 
 	public enum ECreatureType
@@ -145,6 +146,27 @@ public static class Define
 		Add,
 		PercentAdd,
 		PercentMult,
+	}
+
+	public enum EEffectType
+	{
+		Buff,
+		Debuff,
+		CrowdControl,
+	}
+
+	public enum EEffectSpawnType
+	{
+		Skill, // 지속시간이 있는 기본적인 이펙트 
+		External, // 외부(장판스킬)에서 이펙트를 관리(지속시간에 영향을 받지않음)
+	}
+
+	public enum EEffectClearType
+	{
+		TimeOut, // 시간초과로 인한 Effect 종료
+		ClearSkill, // 정화 스킬로 인한 Effect 종료
+		TriggerOutAoE, // AoE스킬을 벗어난 종료
+		EndOfAirborne, // 에어본이 끝난 경우 호출되는 종료
 	}
 
 	public const float EFFECT_SMALL_RADIUS = 2.5f;

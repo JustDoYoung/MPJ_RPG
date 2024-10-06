@@ -10,6 +10,7 @@ public class ObjectManager
 	public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
 	public HashSet<Env> Envs { get; } = new HashSet<Env>();
 	public HeroCamp Camp { get; private set; }
+	public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
 
 	#region Roots
 	public Transform GetRootTransform(string name)
@@ -26,6 +27,11 @@ public class ObjectManager
 	public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
 	public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
 	#endregion
+	public T Spawn<T>(Vector3Int cellPos, int templateID) where T : BaseObject
+	{
+		Vector3 spawnPos = Managers.Map.Cell2World(cellPos);
+		return Spawn<T>(spawnPos, templateID);
+	}
 
 	public T Spawn<T>(Vector3 position, int templateID) where T : BaseObject
 	{
@@ -115,6 +121,11 @@ public class ObjectManager
 		{
 			Camp = null;
 		}
+		else if (obj.ObjectType == EObjectType.Effect)
+		{
+			EffectBase effect = obj as EffectBase;
+			Effects.Remove(effect);
+		}
 
 		Managers.Resource.Destroy(obj.gameObject);
 	}
@@ -124,6 +135,13 @@ public class ObjectManager
 		GameObject go = Managers.Resource.Instantiate("DamageFont", pooling: true);
 		DamageFont damageText = go.GetOrAddComponent<DamageFont>();
 		damageText.SetInfo(position, damage, parent, isCritical);
+	}
+
+	public GameObject SpawnGameObject(Vector3 position, string prefabName)
+	{
+		GameObject go = Managers.Resource.Instantiate(prefabName, pooling: true);
+		go.transform.position = position;
+		return go;
 	}
 
 	#region Skill 판정

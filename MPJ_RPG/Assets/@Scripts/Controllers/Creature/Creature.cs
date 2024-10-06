@@ -10,25 +10,22 @@ public class Creature : BaseObject
 {
 	public BaseObject Target { get; protected set; }
 	public SkillComponent Skills { get; protected set; }
+	public EffectComponent Effects { get; set; }
 
 	public Data.CreatureData CreatureData { get; private set; }
 	public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
 	#region Stats
 	public float Hp { get; set; }
-	public float MaxHp { get; set; }
-	public float MaxHpBonusRate { get; set; }
-	public float HealBonusRate { get; set; }
-	public float HpRegen { get; set; }
-	public float Atk { get; set; }
-	public float AttackRate { get; set; }
-	public float Def { get; set; }
-	public float DefRate { get; set; }
-	public float CriRate { get; set; }
-	public float CriDamage { get; set; }
-	public float DamageReduction { get; set; }
-	public float MoveSpeedRate { get; set; }
-	public float MoveSpeed { get; set; }
+	public CreatureStat MaxHp;
+	public CreatureStat Atk;
+	public CreatureStat CriRate;
+	public CreatureStat CriDamage;
+	public CreatureStat ReduceDamageRate;
+	public CreatureStat LifeStealRate;
+	public CreatureStat ThornsDamageRate; // 쏜즈
+	public CreatureStat MoveSpeed;
+	public CreatureStat AttackSpeedRate;
 	#endregion
 
 	protected float AttackDistance
@@ -87,34 +84,30 @@ public class Creature : BaseObject
 		RigidBody.mass = 0;
 
 		// Spine
-		SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(CreatureData.SkeletonDataID);
-		SkeletonAnim.Initialize(true);
-
-		// Register AnimEvent
-		if (SkeletonAnim.AnimationState != null)
-		{
-			SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-			SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
-		}
-
-		// Spine SkeletonAnimation은 SpriteRenderer 를 사용하지 않고 MeshRenderer을 사용함.
-		// 그렇기떄문에 2D Sort Axis가 안먹히게 되는데 SortingGroup을 SpriteRenderer, MeshRenderer을같이 계산함.
-		SortingGroup sg = Util.GetOrAddComponent<SortingGroup>(gameObject);
-		sg.sortingOrder = SortingLayers.CREATURE;
-
+		SetSpineAnimation(CreatureData.SkeletonDataID, SortingLayers.CREATURE);
+		
         // Skills
         Skills = gameObject.GetOrAddComponent<SkillComponent>();
         Skills.SetInfo(this, CreatureData);
 
-        // Stat
-        MaxHp = CreatureData.MaxHp;
+		// Stat
 		Hp = CreatureData.MaxHp;
-		Atk = CreatureData.MaxHp;
-		MaxHp = CreatureData.MaxHp;
-		MoveSpeed = CreatureData.MoveSpeed;
+		MaxHp = new CreatureStat(CreatureData.MaxHp);
+		Atk = new CreatureStat(CreatureData.Atk);
+		CriRate = new CreatureStat(CreatureData.CriRate);
+		CriDamage = new CreatureStat(CreatureData.CriDamage);
+		ReduceDamageRate = new CreatureStat(0);
+		LifeStealRate = new CreatureStat(0);
+		ThornsDamageRate = new CreatureStat(0);
+		MoveSpeed = new CreatureStat(CreatureData.MoveSpeed);
+		AttackSpeedRate = new CreatureStat(1);
 
 		// State
 		CreatureState = ECreatureState.Idle;
+
+		// Effect
+		Effects = gameObject.AddComponent<EffectComponent>();
+		Effects.SetInfo(this);
 
 		// Map
 		StartCoroutine(CoLerpToCellPos());
@@ -224,8 +217,8 @@ public class Creature : BaseObject
 		//if (CreatureType == ECreatureType.Hero)
 		//	return;
 
-		float finalDamage = creature.Atk; // TODO
-		Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp);
+		float finalDamage = creature.Atk.Value; // TODO
+		Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp.Value);
 
 		Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
 
@@ -234,6 +227,10 @@ public class Creature : BaseObject
 			OnDead(attacker, skill);
 			CreatureState = ECreatureState.Dead;
 		}
+
+		// 스킬에 따른 Effect 적용
+		if (skill.SkillData.EffectIds != null)
+			Effects.GenerateEffects(skill.SkillData.EffectIds.ToArray(), EEffectSpawnType.Skill);
 	}
 
 	public override void OnDead(BaseObject attacker, SkillBase skill)

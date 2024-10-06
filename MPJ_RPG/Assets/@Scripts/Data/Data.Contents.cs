@@ -175,4 +175,37 @@ namespace Data
 	}
 	#endregion
 
+	#region EffectData
+	[Serializable]
+	public class EffectData
+	{
+		public int DataId;
+		public string Name;
+		public string ClassName;
+		public string DescriptionTextID;
+		public string SkeletonDataID;
+		public string IconLabel;
+		public string SoundLabel;
+		public float Amount;
+		public float PercentAdd;
+		public float PercentMult;
+		public float TickTime;
+		public float TickCount;
+		public EEffectType EffectType;
+	}
+
+	[Serializable]
+	public class EffectDataLoader : ILoader<int, EffectData>
+	{
+		public List<EffectData> effects = new List<EffectData>();
+		public Dictionary<int, EffectData> MakeDict()
+		{
+			Dictionary<int, EffectData> dict = new Dictionary<int, EffectData>();
+			foreach (EffectData effect in effects)
+				dict.Add(effect.DataId, effect);
+			return dict;
+		}
+	}
+	#endregion
+
 }

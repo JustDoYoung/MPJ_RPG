@@ -37,7 +37,7 @@ public class CreatureStat
 	{
 	}
 
-	public CreatureStat(float baseValue) : this()
+	public CreatureStat(float baseValue) : this() //생성자 체이닝
 	{
 		BaseValue = baseValue;
 	}
@@ -76,6 +76,7 @@ public class CreatureStat
 		if (a.Order == b.Order)
 			return 0;
 
+		//내림차순으로
 		return (a.Order < b.Order) ? -1 : 1;
 	}
 

@@ -16,6 +16,7 @@ public class DataManager
     public Dictionary<int, Data.EnvData> EnvDic = new Dictionary<int, Data.EnvData>();
     public Dictionary<int, Data.SkillData> SkillDic = new Dictionary<int, Data.SkillData>();
     public Dictionary<int, Data.ProjectileData> ProjectileDic = new Dictionary<int, Data.ProjectileData>();
+    public Dictionary<int, Data.EffectData> EffectDic { get; private set; } = new Dictionary<int, Data.EffectData>();
 
     public void Init()
     {
