@@ -28,6 +28,16 @@ public class Creature : BaseObject
 	public CreatureStat AttackSpeedRate;
 	#endregion
 
+	float DistToTargetSqr
+	{
+		get
+		{
+			Vector3 dir = (Target.transform.position - transform.position);
+			float distToTarget = Math.Max(0, dir.magnitude - Target.ExtraCells * 1f - ExtraCells * 1f); // TEMP
+			return distToTarget * distToTarget;
+		}
+	}
+
 	protected float AttackDistance
 	{
 		get
@@ -183,8 +193,7 @@ public class Creature : BaseObject
 			return;
 		}
 
-		Vector3 dir = (Target.CenterPosition - CenterPosition);
-		float distToTargetSqr = dir.sqrMagnitude;
+		float distToTargetSqr = DistToTargetSqr;
 		float attackDistanceSqr = AttackDistance * AttackDistance;
 		if (distToTargetSqr > attackDistanceSqr)
 		{
@@ -219,11 +228,7 @@ public class Creature : BaseObject
 		if (creature == null)
 			return;
 
-		//// TEMP : 무적치트
-		//if (CreatureType == ECreatureType.Hero)
-		//	return;
-
-		float finalDamage = creature.Atk.Value; // TODO
+        float finalDamage = creature.Atk.Value; // TODO
 		Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp.Value);
 
 		Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
@@ -277,10 +282,8 @@ public class Creature : BaseObject
 	protected void ChaseOrAttackTarget(float chaseRange, float attackRange)
 	{
 		Vector3 dir = (Target.transform.position - transform.position);
-		float distToTargetSqr = dir.sqrMagnitude;
+		float distToTargetSqr = DistToTargetSqr;
 		float attackDistanceSqr = attackRange * attackRange;
-
-
 
 		if (distToTargetSqr <= attackDistanceSqr)
 		{
@@ -291,7 +294,7 @@ public class Creature : BaseObject
 		else
 		{
 			// 공격 범위 밖이라면 추적.
-			FindPathAndMoveToCellPos(Target.transform.position, HERO_DEFAULT_MOVE_DEPTH);
+			print(FindPathAndMoveToCellPos(Target.transform.position, HERO_DEFAULT_MOVE_DEPTH));
 
 			// 너무 멀어지면 포기.
 			float searchDistanceSqr = chaseRange * chaseRange;
@@ -348,7 +351,7 @@ public class Creature : BaseObject
 			return EFindPathResult.Fail_LerpCell;
 
         //A*
-        List<Vector3Int> path = Managers.Map.FindPath(CellPos, destCellPos, maxDepth);
+        List<Vector3Int> path = Managers.Map.FindPath(this, CellPos, destCellPos, maxDepth);
         if (path.Count < 2)
             return EFindPathResult.Fail_NoPath;
 

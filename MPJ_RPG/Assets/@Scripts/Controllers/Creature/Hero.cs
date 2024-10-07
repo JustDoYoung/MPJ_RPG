@@ -124,12 +124,14 @@ public class Hero : Creature
 
 	protected override void UpdateMove() 
 	{
+		//강제이동
         if (HeroMoveState == EHeroMoveState.ForcePath)
         {
             MoveByForcePath();
             return;
         }
 
+		//캠프 거리 체크
         if (CheckHeroCampDistanceAndForcePath())
             return;
 
@@ -227,10 +229,10 @@ public class Hero : Creature
 		if ((CellPos - destCellPos).magnitude <= 10)
 			return false;
 
-		if (Managers.Map.CanGo(destCellPos, ignoreObjects: true) == false)
+		if (Managers.Map.CanGo(this, destCellPos, ignoreObjects: true) == false)
 			return false;
 
-		List<Vector3Int> path = Managers.Map.FindPath(CellPos, destCellPos, 100);
+		List<Vector3Int> path = Managers.Map.FindPath(this, CellPos, destCellPos, 100);
 		if (path.Count < 2)
 			return false;
 

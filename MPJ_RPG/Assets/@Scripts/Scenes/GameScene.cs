@@ -18,14 +18,14 @@ public class GameScene : BaseScene
 		HeroCamp camp = Managers.Object.Spawn<HeroCamp>(Vector3.zero, 0);
 		camp.SetCellPos(new Vector3Int(0, 0, 0), true);
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 20; i++)
 		{
             //int heroTemplateID = HERO_WIZARD_ID + Random.Range(0, 2);
-            int heroTemplateID = HERO_LION_ID;
-            //int heroTemplateID = HERO_WIZARD_ID;
+            //int heroTemplateID = HERO_LION_ID;
+            int heroTemplateID = HERO_KNIGHT_ID;
 
             Vector3Int randCellPos = new Vector3Int(0 + Random.Range(-3, 3), 0 + Random.Range(-3, 3), 0);
-			if (Managers.Map.CanGo(randCellPos) == false)
+			if (Managers.Map.CanGo(null, randCellPos) == false)
 				continue;
 
 			Hero hero = Managers.Object.Spawn<Hero>(new Vector3Int(1, 0, 0), heroTemplateID);
@@ -37,16 +37,14 @@ public class GameScene : BaseScene
 		camera.Target = camp;
 
 		Managers.UI.ShowBaseUI<UI_Joystick>();
+        {
+            Monster monster = Managers.Object.Spawn<Monster>(new Vector3(0, 2, 0), MONSTER_BEAR_ID);
+			monster.ExtraCells = 1;
+        }
 
+        // TODO
 
-		//{
-		//	Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
-		//	env.EnvState = EEnvState.Idle;
-		//}
-
-		// TODO
-
-		return true;
+        return true;
 	}
 
 	public override void Clear()

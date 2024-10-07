@@ -49,8 +49,6 @@ public abstract class SkillBase : InitBase
 
 	public virtual void DoSkill()
 	{
-		if (Owner.CreatureType == Define.ECreatureType.Hero) 
-			print("a");
 		// 준비된 스킬에서 해제
 		if (Owner.Skills != null)
 			Owner.Skills.ActiveSkills.Remove(this);
@@ -74,6 +72,7 @@ public abstract class SkillBase : InitBase
 		// 준비된 스킬에 추가
 		if (Owner.Skills != null)
 			Owner.Skills.ActiveSkills.Add(this);
+
 	}
 
 	public virtual void CancelSkill()

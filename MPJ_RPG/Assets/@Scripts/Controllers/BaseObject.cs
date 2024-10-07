@@ -14,6 +14,7 @@ public class BaseObject : InitBase
 	public Rigidbody2D RigidBody { get; private set; }
 	private HurtFlashEffect HurtFlash;
 
+	public int ExtraCells { get; set; } = 0;
 	public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
 	public Vector3 CenterPosition { get { return transform.position + Vector3.up * ColliderRadius; } }
 

@@ -19,3 +19,7 @@
 ### 6. 객체 생성을 별도의 클래스로 관리한다.([팩토리패턴](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/팩토리패턴.md "리드미"))
 
 ### 7. UI 입력에 따른 객체의 상태변화는 옵저버 패턴과 State 패턴으로 관리한다.([옵저버패턴](https://github.com/JustDoYoung/MPJ_RPG/blob/main/Devlog_Sub/옵저버패턴.md "리드미"))
+
+### 8. 클래스 내에서 함수는 region으로 영역을 나눠 관리하고 중요도 별로 위치시킨다.(중요도가 떨어지는 함수는 밑에 배치.)
+- class가 많아지고 내부에 필드와 함수가 많아짐에 따라 복잡한 코드를 카테고리 별로 나눌 필요성이 있다.
+- 그리고 사용빈도와 중요도 별로 함수 위치를 지정해서 찾기 쉽게 관리한다.

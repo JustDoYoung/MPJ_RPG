@@ -37,7 +37,7 @@ public class HeroCamp : BaseObject
 
 		if (Managers.Map == null)
 			return;
-		if (Managers.Map.CanGo(newPos, ignoreObjects: true, ignoreSemiWall: true) == false)
+		if (Managers.Map.CanGo(null, newPos, ignoreObjects: true, ignoreSemiWall: true) == false)
 			return;
 
 		transform.position = newPos;
