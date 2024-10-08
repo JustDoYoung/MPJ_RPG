@@ -265,9 +265,13 @@ public class Creature : BaseObject
 			CreatureState = ECreatureState.Dead;
 		}
 
-		// 스킬에 따른 Effect 적용
+		// 스킬로 생기는 Effect 적용
 		if (skill.SkillData.EffectIds != null)
 			Effects.GenerateEffects(skill.SkillData.EffectIds.ToArray(), EEffectSpawnType.Skill, skill);
+
+		// AOE로 생기는 Effect
+		if (skill != null && skill.SkillData.AoEId != 0)
+			skill.GenerateAoE(transform.position);
 	}
 
 	public override void OnDead(BaseObject attacker, SkillBase skill)

@@ -208,4 +208,32 @@ namespace Data
 	}
 	#endregion
 
+	#region AoEData
+	[Serializable]
+	public class AoEData
+	{
+		public int DataId;
+		public string Name;
+		public string ClassName;
+		public string SkeletonDataID;
+		public string SoundLabel;
+		public float Duration;
+		public List<int> AllyEffects = new List<int>();
+		public List<int> EnemyEffects = new List<int>();
+		public string AnimName;
+	}
+
+	[Serializable]
+	public class AoEDataLoader : ILoader<int, AoEData>
+	{
+		public List<AoEData> aoes = new List<AoEData>();
+		public Dictionary<int, AoEData> MakeDict()
+		{
+			Dictionary<int, AoEData> dict = new Dictionary<int, AoEData>();
+			foreach (AoEData aoe in aoes)
+				dict.Add(aoe.DataId, aoe);
+			return dict;
+		}
+	}
+	#endregion
 }

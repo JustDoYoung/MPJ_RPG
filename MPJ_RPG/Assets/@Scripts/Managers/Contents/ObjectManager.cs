@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Define;
 
@@ -145,10 +147,41 @@ public class ObjectManager
 	}
 
 	#region Skill 판정
+	public List<Creature> FindCircleRangeTargets(Creature owner, Vector3 startPos, float range, bool isAllies = false)
+	{
+		HashSet<Creature> targets = new HashSet<Creature>();
+		HashSet<Creature> ret = new HashSet<Creature>();
+
+		ECreatureType targetType = Util.DetermineTargetType(owner.CreatureType, isAllies);
+
+		if (targetType == ECreatureType.Monster)
+		{
+			var objs = Managers.Map.GatherObjects<Monster>(owner.transform.position, range, range);
+			targets.AddRange(objs);
+		}
+		else if (targetType == ECreatureType.Hero)
+		{
+			var objs = Managers.Map.GatherObjects<Hero>(owner.transform.position, range, range);
+			targets.AddRange(objs);
+		}
+
+		foreach (var target in targets)
+		{
+			// 1. 거리안에 있는지 확인
+			var targetPos = target.transform.position;
+			float distSqr = (targetPos - startPos).sqrMagnitude;
+
+			if (distSqr < range * range)
+				ret.Add(target);
+		}
+
+		return ret.ToList();
+	}
+
 	public List<Creature> FindConeRangeTargets(Creature owner, Vector3 dir, float range, int angleRange, bool isAllies = false)
 	{
-		List<Creature> targets = new List<Creature>();
-		List<Creature> ret = new List<Creature>();
+		HashSet<Creature> targets = new HashSet<Creature>();
+		HashSet<Creature> ret = new HashSet<Creature>();
 
 		ECreatureType targetType = Util.DetermineTargetType(owner.CreatureType, isAllies);
 
@@ -188,7 +221,7 @@ public class ObjectManager
 			ret.Add(target);
 		}
 
-		return ret;
+		return ret.ToList();
 	}
 
 	#endregion

@@ -18,7 +18,7 @@ public class GameScene : BaseScene
 		HeroCamp camp = Managers.Object.Spawn<HeroCamp>(Vector3.zero, 0);
 		camp.SetCellPos(new Vector3Int(0, 0, 0), true);
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 1; i++)
 		{
             //int heroTemplateID = HERO_WIZARD_ID + Random.Range(0, 2);
             //int heroTemplateID = HERO_LION_ID;

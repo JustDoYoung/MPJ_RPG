@@ -1,4 +1,5 @@
 using Spine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,7 +81,8 @@ public abstract class SkillBase : InitBase
 
 	}
 
-	protected virtual void GenerateProjectile(Creature owner, Vector3 spawnPos)
+    #region 스킬 오브젝트 생성
+    protected virtual void GenerateProjectile(Creature owner, Vector3 spawnPos)
 	{
 		Projectile projectile = Managers.Object.Spawn<Projectile>(spawnPos, SkillData.ProjectileId);
 
@@ -102,6 +104,27 @@ public abstract class SkillBase : InitBase
 
 		projectile.SetSpawnInfo(Owner, this, excludeMask);
 	}
+
+	public virtual void GenerateAoE(Vector3 spawnPos)
+	{
+		AoEBase aoe = null;
+		int id = SkillData.AoEId;
+		string className = Managers.Data.AoEDic[id].ClassName;
+
+		Type componentType = Type.GetType(className);
+
+		if (componentType == null)
+		{
+			Debug.LogError("AoE Type not found: " + className);
+			return;
+		}
+
+		GameObject go = Managers.Object.SpawnGameObject(spawnPos, "AoE");
+		go.name = Managers.Data.AoEDic[id].ClassName;
+		aoe = go.AddComponent(componentType) as AoEBase;
+		aoe.SetInfo(SkillData.AoEId, Owner, this);
+	}
+	#endregion
 
 	private void OnOwnerAnimEventHandler(TrackEntry trackEntry, Event e)
 	{
