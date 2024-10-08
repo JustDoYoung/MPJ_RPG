@@ -48,7 +48,7 @@ public class Hero : Creature
 		if (base.Init() == false)
 			return false;
 
-		CreatureType = ECreatureType.Hero;
+		ObjectType = EObjectType.Hero;
 
 		Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
 		Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;

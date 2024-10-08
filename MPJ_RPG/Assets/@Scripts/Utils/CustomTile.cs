@@ -9,7 +9,6 @@ public class CustomTile : Tile
 	[Space]
 	[Header("For Designer")]
 	public Define.EObjectType ObjectType;
-	public Define.ECreatureType CreatureType;
 	public int DataTemplateID;
 	public string Name;
 }

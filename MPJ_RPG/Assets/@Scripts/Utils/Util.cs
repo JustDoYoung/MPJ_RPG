@@ -70,18 +70,18 @@ public static class Util
 	}
 
 
-	public static ECreatureType DetermineTargetType(ECreatureType ownerType, bool findAllies)
+	public static EObjectType DetermineTargetType(EObjectType ownerType, bool findAllies)
 	{
-		if (ownerType == Define.ECreatureType.Hero)
+		if (ownerType == Define.EObjectType.Hero)
 		{
-			return findAllies ? ECreatureType.Hero : ECreatureType.Monster;
+			return findAllies ? EObjectType.Hero : EObjectType.Monster;
 		}
-		else if (ownerType == Define.ECreatureType.Monster)
+		else if (ownerType == Define.EObjectType.Monster)
 		{
-			return findAllies ? ECreatureType.Monster : ECreatureType.Hero;
+			return findAllies ? EObjectType.Monster : EObjectType.Hero;
 		}
 
-		return ECreatureType.None;
+		return EObjectType.None;
 	}
 
 
