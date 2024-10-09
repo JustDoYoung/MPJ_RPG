@@ -14,6 +14,8 @@ public class MapManager
 	public string MapName { get; private set; }
 	public Grid CellGrid { get; private set; }
 
+	public StageTransition StageTransition;
+
 	// (CellPos, BaseObject)
 	Dictionary<Vector3Int, BaseObject> _cells = new Dictionary<Vector3Int, BaseObject>();
 
@@ -34,6 +36,8 @@ public class MapManager
 		GameObject map = Managers.Resource.Instantiate(mapName);
 		map.transform.position = Vector3.zero;
 		map.name = $"@Map_{mapName}";
+
+		StageTransition = map.GetComponent<StageTransition>();
 
 		Map = map;
 		MapName = mapName;

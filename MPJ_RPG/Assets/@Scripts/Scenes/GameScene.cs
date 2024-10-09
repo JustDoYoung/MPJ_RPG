@@ -14,6 +14,7 @@ public class GameScene : BaseScene
 		SceneType = EScene.GameScene;
 
 		Managers.Map.LoadMap("BaseMap");
+		Managers.Map.StageTransition.SetInfo();
 
 		HeroCamp camp = Managers.Object.Spawn<HeroCamp>(Vector3.zero, 0);
 		camp.SetCellPos(new Vector3Int(0, 0, 0), true);

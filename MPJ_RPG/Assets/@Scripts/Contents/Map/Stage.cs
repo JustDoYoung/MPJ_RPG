@@ -51,6 +51,8 @@ public class Stage : MonoBehaviour
         
         TilemapTerrain = Util.FindChild<Tilemap>(gameObject, "Terrain_01", true);
         SaveSpawnInfos();
+
+        gameObject.SetActive(false);
     }
 
     public bool IsPointInStage(Vector3 position)
