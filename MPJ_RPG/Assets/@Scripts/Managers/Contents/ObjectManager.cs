@@ -13,6 +13,7 @@ public class ObjectManager
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
     public HeroCamp Camp { get; private set; }
     public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
+    public HashSet<Npc> Npcs { get; } = new HashSet<Npc>();
 
     #region Roots
     public Transform GetRootTransform(string name)
@@ -28,6 +29,7 @@ public class ObjectManager
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
+    public Transform NpcRoot { get { return GetRootTransform("@Npc"); } }
     #endregion
     public T Spawn<T>(Vector3Int cellPos, int templateID) where T : BaseObject
     {
@@ -81,6 +83,15 @@ public class ObjectManager
         {
             Camp = go.GetComponent<HeroCamp>();
         }
+        else if (obj.ObjectType == EObjectType.Npc)
+        {
+            obj.transform.parent = NpcRoot;
+
+            Npc npc = go.GetOrAddComponent<Npc>();
+            Npcs.Add(npc);
+
+            npc.SetInfo(templateID);
+        }
 
         return obj as T;
     }
@@ -117,6 +128,11 @@ public class ObjectManager
         {
             EffectBase effect = obj as EffectBase;
             Effects.Remove(effect);
+        }
+        else if (obj.ObjectType == EObjectType.Npc)
+        {
+            Npc npc = obj as Npc;
+            Npcs.Remove(npc);
         }
 
         Managers.Resource.Destroy(obj.gameObject);

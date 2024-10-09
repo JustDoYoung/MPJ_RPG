@@ -96,18 +96,6 @@ public class MapManager
 		}
 	}
 
-	void SpawnObjectsByData(GameObject map, string mapName, string tilemap = "Tilemap_Object")
-	{
-		Tilemap tm = Util.FindChild<Tilemap>(map, tilemap, true);
-
-		if (tm != null)
-			tm.gameObject.SetActive(false);
-
-		//temp
-		return;
-
-	}
-
 	public bool MoveTo(Creature obj, Vector3Int cellPos, bool forceMove = false)
 	{
 		if (CanGo(obj, cellPos) == false)

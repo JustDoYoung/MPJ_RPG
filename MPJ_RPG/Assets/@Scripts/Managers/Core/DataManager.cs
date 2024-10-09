@@ -18,6 +18,7 @@ public class DataManager
     public Dictionary<int, Data.ProjectileData> ProjectileDic = new Dictionary<int, Data.ProjectileData>();
     public Dictionary<int, Data.EffectData> EffectDic { get; private set; } = new Dictionary<int, Data.EffectData>();
     public Dictionary<int, Data.AoEData> AoEDic { get; private set; } = new Dictionary<int, Data.AoEData>();
+    public Dictionary<int, Data.NpcData> NpcDic { get; private set; } = new Dictionary<int, Data.NpcData>();
 
     public void Init()
     {
@@ -28,6 +29,7 @@ public class DataManager
         ProjectileDic = LoadJson<Data.ProjectileDataLoader, int, Data.ProjectileData>("ProjectileData").MakeDict();
         EffectDic = LoadJson<Data.EffectDataLoader, int, Data.EffectData>("EffectData").MakeDict();
         AoEDic = LoadJson<Data.AoEDataLoader, int, Data.AoEData>("AoEData").MakeDict();
+        NpcDic = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string key)where Loader : ILoader<Key, Value>

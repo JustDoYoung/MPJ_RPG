@@ -33,21 +33,27 @@ public class UI_Joystick : UI_Base
 		gameObject.BindEvent(OnPointerUp, type: Define.EUIEvent.PointerUp);
 		gameObject.BindEvent(OnDrag, type: Define.EUIEvent.Drag);
 
+		GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
+		GetComponent<Canvas>().worldCamera = Camera.main;
+
 		return true;
 	}
 
 	#region Event
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		_background.transform.position = eventData.position;
-		_cursor.transform.position = eventData.position;
-		_touchPos = eventData.position;
+		_touchPos = Input.mousePosition;
+
+		Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		_background.transform.position = mouseWorldPos;
+		_cursor.transform.position = mouseWorldPos;
 
 		Managers.Game.JoystickState = EJoystickState.PointerDown;
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
+		_background.transform.position = _touchPos;
 		_cursor.transform.position = _touchPos;
 
 		Managers.Game.MoveDir = Vector2.zero;
@@ -61,7 +67,9 @@ public class UI_Joystick : UI_Base
 		float moveDist = Mathf.Min(touchDir.magnitude, _radius);
 		Vector2 moveDir = touchDir.normalized;
 		Vector2 newPosition = _touchPos + moveDir * moveDist;
-		_cursor.transform.position = newPosition;
+
+		Vector2 worldPos = Camera.main.ScreenToWorldPoint(newPosition);
+		_cursor.transform.position = worldPos;
 
 		Managers.Game.MoveDir = moveDir;
 		Managers.Game.JoystickState = EJoystickState.Drag;

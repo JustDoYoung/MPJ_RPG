@@ -191,6 +191,36 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52a639e4387c48d439920dd4f04f7dd0
+    m_Address: npc_portal_1_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c34f8e8a3fb833a4c8309493b2f11aa2
+    m_Address: npc_training_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46b7d6af8ab715b408ef0c1a2b5f639c
+    m_Address: npc_portal_2_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6831eed46263c046970de9fddca16c0
+    m_Address: npc_camp_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba99d5d2e0eeab542a19708c34adaaa1
+    m_Address: npc_smith_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6502b88284fefc8409f7fc1626d11bcf, type: 2}
   m_SchemaSet:
