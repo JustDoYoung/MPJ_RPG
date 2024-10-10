@@ -56,4 +56,9 @@ public class HeroCamp : BaseObject
 			Pivot.eulerAngles = new Vector3(0, 0, angle);
 		}
 	}
+
+	public void ForceMove(Vector3 position)
+	{
+		transform.position = position;
+	}
 }

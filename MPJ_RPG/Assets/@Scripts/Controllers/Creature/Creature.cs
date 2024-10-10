@@ -321,7 +321,7 @@ public class Creature : BaseObject
 		else
 		{
 			// 공격 범위 밖이라면 추적.
-			print(FindPathAndMoveToCellPos(Target.transform.position, HERO_DEFAULT_MOVE_DEPTH));
+			FindPathAndMoveToCellPos(Target.transform.position, HERO_DEFAULT_MOVE_DEPTH);
 
 			// 너무 멀어지면 포기.
 			float searchDistanceSqr = chaseRange * chaseRange;

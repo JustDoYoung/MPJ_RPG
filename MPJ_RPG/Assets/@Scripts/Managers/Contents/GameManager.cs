@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Define;
+using Random = UnityEngine.Random;
 
 public class GameManager
 {
@@ -38,15 +39,33 @@ public class GameManager
 
     public void TeleportHeroes(Vector3Int cellPos)
     {
-        //foreach (var hero in Managers.Object.Heroes)
-        //{
-        //    Vector3Int randCellPos = Managers.Game.GetNearbyPosition(hero, cellPos);
-        //    Managers.Map.MoveTo(hero, randCellPos, forceMove: true);
-        //}
+        foreach (var hero in Managers.Object.Heroes)
+        {
+            Vector3Int randCellPos = Managers.Game.GetNearbyPosition(hero, cellPos);
+            Managers.Map.MoveTo(hero, randCellPos, forceMove: true);
+        }
 
-        //Vector3 worldPos = Managers.Map.Cell2World(cellPos);
-        //Managers.Object.Camp.ForceMove(worldPos);
-        //Camera.main.transform.position = worldPos;
+        Vector3 worldPos = Managers.Map.Cell2World(cellPos);
+        Managers.Object.Camp.ForceMove(worldPos);
+        Camera.main.transform.position = worldPos;
+    }
+    #endregion
+
+    #region Helper
+    public Vector3Int GetNearbyPosition(BaseObject hero, Vector3Int pivot, int range = 5)
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            int x = Random.Range(-range, range);
+            int y = Random.Range(-range, range);
+            Vector3Int randCellPos = pivot + new Vector3Int(x, y, 0);
+            if (Managers.Map.CanGo(hero, randCellPos))
+                return randCellPos;
+        }
+
+        Debug.LogError($"GetNearbyPosition Failed");
+
+        return Vector3Int.zero;
     }
     #endregion
 

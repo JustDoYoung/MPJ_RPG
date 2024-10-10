@@ -226,7 +226,7 @@ public class Hero : Creature
 		// 너무 멀어서 못 간다.
 		Vector3 destPos = HeroCampDest.position;
 		Vector3Int destCellPos = Managers.Map.World2Cell(destPos);
-		if ((CellPos - destCellPos).magnitude <= 10)
+		if ((CellPos - destCellPos).magnitude <= 5)
 			return false;
 
 		if (Managers.Map.CanGo(this, destCellPos, ignoreObjects: true) == false)
