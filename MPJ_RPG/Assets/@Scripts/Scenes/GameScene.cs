@@ -37,10 +37,13 @@ public class GameScene : BaseScene
 		CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
 		camera.Target = camp;
 
-   //     {
-   //         Monster monster = Managers.Object.Spawn<Monster>(new Vector3(0, 2, 0), MONSTER_BEAR_ID);
-			//monster.ExtraCells = 1;
-   //     }
+		//     {
+		//         Monster monster = Managers.Object.Spawn<Monster>(new Vector3(0, 2, 0), MONSTER_BEAR_ID);
+		//monster.ExtraCells = 1;
+		//     }
+
+		UI_GameScene sceneUI = Managers.UI.ShowSceneUI<UI_GameScene>();
+		sceneUI.SetInfo();
 
 		Managers.UI.ShowBaseUI<UI_Joystick>();
 		// TODO

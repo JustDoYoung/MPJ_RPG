@@ -44,7 +44,7 @@ public class UI_GameScene : UI_Scene
 
         BindButtons(typeof(Buttons));
         BindTexts(typeof(Texts));
-        //BindSliders(typeof(Sliders));
+        BindSliders(typeof(Sliders));
 
         GetButton((int)Buttons.GoldPlusButton).gameObject.BindEvent(OnClickGoldPlusButton);
         GetButton((int)Buttons.DiaPlusButton).gameObject.BindEvent(OnClickDiaPlusButton);
@@ -74,7 +74,7 @@ public class UI_GameScene : UI_Scene
         if (_elapsedTime >= _updateInterval)
         {
             float fps = 1.0f / Time.deltaTime;
-            float ms = Time.deltaTime * 1000.0f;
+            float ms = Time.deltaTime * 1000.0f; // 1ms = 0.001초
             string text = string.Format("{0:N1} FPS ({1:N1}ms)", fps, ms);
             GetText((int)Texts.GoldCountText).text = text;
 
@@ -106,9 +106,9 @@ public class UI_GameScene : UI_Scene
     void OnClickHeroesListButton(PointerEventData evt)
     {
 		Debug.Log("OnClickHeroesListButton");
-		//UI_HeroesListPopup popup = Managers.UI.ShowPopupUI<UI_HeroesListPopup>();
-        //popup.SetInfo();
-	}
+        UI_HeroesListPopup HeroesListPopup = Managers.UI.ShowPopupUI<UI_HeroesListPopup>();
+        HeroesListPopup.SetInfo();
+    }
 
     void OnClickSetHeroesButton(PointerEventData evt)
     {

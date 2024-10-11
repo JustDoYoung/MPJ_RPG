@@ -38,6 +38,7 @@ public class UI_Base : InitBase
 	protected void BindTexts(Type type) { Bind<TMP_Text>(type); }
 	protected void BindButtons(Type type) { Bind<Button>(type); }
 	protected void BindToggles(Type type) { Bind<Toggle>(type); }
+	protected void BindSliders(Type type) { Bind<Slider>(type); }
 
 	protected T Get<T>(int idx) where T : UnityEngine.Object
 	{
