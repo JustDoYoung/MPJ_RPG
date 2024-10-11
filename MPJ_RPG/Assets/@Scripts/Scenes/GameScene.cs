@@ -43,9 +43,9 @@ public class GameScene : BaseScene
    //     }
 
 		Managers.UI.ShowBaseUI<UI_Joystick>();
-        // TODO
-
-        return true;
+		// TODO
+		Managers.UI.CacheAllPopups();
+		return true;
 	}
 
 	public override void Clear()
