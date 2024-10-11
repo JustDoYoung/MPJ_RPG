@@ -175,6 +175,16 @@ public static class Define
 		EndOfAirborne, // 에어본이 끝난 경우 호출되는 종료
 	}
 
+	public enum ELanguage
+	{
+		Korean,
+		English,
+		French,
+		SimplifiedChinese,
+		TraditionalChinese,
+		Japanese
+	}
+
 	public const float EFFECT_SMALL_RADIUS = 2.5f;
 	public const float EFFECT_NORMAL_RADIUS = 4.5f;
 	public const float EFFECT_BIG_RADIUS = 5.5f;

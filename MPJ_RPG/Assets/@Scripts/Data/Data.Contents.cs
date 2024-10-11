@@ -75,6 +75,34 @@ namespace Data
 	}
 	#endregion
 
+	#region HeroInfoData
+	[Serializable]
+	public class HeroInfoData
+	{
+		public int DataId;
+		public string NameTextId;
+		public string DescriptionTextId;
+		public string Rarity;
+		public float GachaSpawnWeight;
+		public float GachaWeight;
+		public int GachaExpCount;
+		public string IconImage;
+	}
+
+	[Serializable]
+	public class HeroInfoDataLoader : ILoader<int, HeroInfoData>
+	{
+		public List<HeroInfoData> heroInfo = new List<HeroInfoData>();
+		public Dictionary<int, HeroInfoData> MakeDict()
+		{
+			Dictionary<int, HeroInfoData> dict = new Dictionary<int, HeroInfoData>();
+			foreach (HeroInfoData info in heroInfo)
+				dict.Add(info.DataId, info);
+			return dict;
+		}
+	}
+	#endregion
+
 	#region SkillData
 	[Serializable]
 	public class SkillData
@@ -259,6 +287,28 @@ namespace Data
 			Dictionary<int, NpcData> dict = new Dictionary<int, NpcData>();
 			foreach (NpcData creature in creatures)
 				dict.Add(creature.DataId, creature);
+			return dict;
+		}
+	}
+	#endregion
+
+	#region TextData
+	[Serializable]
+	public class TextData
+	{
+		public string DataId;
+		public string KOR;
+	}
+
+	[Serializable]
+	public class TextDataLoader : ILoader<string, TextData>
+	{
+		public List<TextData> texts = new List<TextData>();
+		public Dictionary<string, TextData> MakeDict()
+		{
+			Dictionary<string, TextData> dict = new Dictionary<string, TextData>();
+			foreach (TextData text in texts)
+				dict.Add(text.DataId, text);
 			return dict;
 		}
 	}

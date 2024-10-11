@@ -39,6 +39,7 @@ public class UI_WaypointPopup : UI_Popup
         }
 
         Refresh();
+
         return true;
     }
 

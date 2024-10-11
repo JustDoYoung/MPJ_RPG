@@ -13,11 +13,27 @@ using UnityEngine;
 public class DataTransformer : EditorWindow
 {
 #if UNITY_EDITOR
+	[MenuItem("Tools/RemoveSaveData")]
+	public static void RemoveSaveData()
+	{
+		string path = Application.persistentDataPath + "/SaveData.json";
+		if (File.Exists(path))
+		{
+			File.Delete(path);
+			Debug.Log("SaveFile Deleted");
+		}
+		else
+		{
+			Debug.Log("No SaveFile Detected");
+		}
+	}
+
 	//메뉴버튼 생성+단축키(Ctrl+Shift+K)
 	[MenuItem("Tools/ParseExcel %#K")]
 	public static void ParseExcelDataToJson()
 	{
 		ParseExcelDataToJson<HeroDataLoader, HeroData>("Hero");
+		ParseExcelDataToJson<HeroInfoDataLoader, HeroInfoData>("HeroInfo");
 		ParseExcelDataToJson<MonsterDataLoader, MonsterData>("Monster");
 		ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
 		ParseExcelDataToJson<SkillDataLoader, SkillData>("Skill");
@@ -25,6 +41,7 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<EffectDataLoader, EffectData>("Effect");
 		ParseExcelDataToJson<AoEDataLoader, AoEData>("AoE");
 		ParseExcelDataToJson<NpcDataLoader, NpcData>("Npc");
+		ParseExcelDataToJson<TextDataLoader, TextData>("Text");
 
 		Debug.Log("DataTransformer Completed");
 	}
