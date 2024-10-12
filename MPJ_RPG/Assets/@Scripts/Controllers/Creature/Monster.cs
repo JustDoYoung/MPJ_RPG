@@ -1,3 +1,4 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using static Define;
 
 public class Monster : Creature
 {
+	public Data.MonsterData MonsterData { get { return (Data.MonsterData)CreatureData; } }
+
 	public override ECreatureState CreatureState 
 	{
 		get { return base.CreatureState; }
@@ -151,9 +154,62 @@ public class Monster : Creature
 	{
 		base.OnDead(attacker, skill);
 
-		// TODO : Drop Item
+		// Drop Item
+		RewardData rewardData = GetRandomReward();
+		if (rewardData != null)
+		{
+			var itemHolder = Managers.Object.Spawn<ItemHolder>(transform.position, MonsterData.DropItemId);
+			Vector2 ran = new Vector2(transform.position.x + Random.Range(-10, -15) * 0.1f, transform.position.y);
+			Vector2 ran2 = new Vector2(transform.position.x + Random.Range(10, 15) * 0.1f, transform.position.y);
+			Vector2 dropPos = Random.value < 0.5 ? ran : ran2;
+			itemHolder.SetInfo(0, rewardData.ItemTemplateId, dropPos);
+		}
+
+		// Check Quest
+		// var list = QuestManager.ProcessingQuestList();
+		// foreach (var quest in list)
+		// { // }
 
 		Managers.Object.Despawn(this);
+	}
+	#endregion
+
+	#region DropItem
+	RewardData GetRandomReward()
+	{
+		if (MonsterData == null)
+			return null;
+
+		if (Managers.Data.DropTableDic.TryGetValue(MonsterData.DropItemId, out DropTableData dropTableData) == false)
+			return null;
+
+		if (dropTableData.Rewards.Count <= 0)
+			return null;
+
+		int sum = 0;
+		int randValue = UnityEngine.Random.Range(0, 100);
+
+		foreach (RewardData item in dropTableData.Rewards)
+		{
+			sum += item.Probability;
+
+			if (randValue <= sum)
+				return item;
+		}
+
+		//return dropTableData.Rewards.RandomElementByWeight(e => e.Probability);
+		return null;
+	}
+
+	int GetRewardExp()
+	{
+		if (MonsterData == null)
+			return 0;
+
+		if (Managers.Data.DropTableDic.TryGetValue(MonsterData.DropItemId, out DropTableData dropTableData) == false)
+			return 0;
+
+		return dropTableData.RewardExp;
 	}
 	#endregion
 }

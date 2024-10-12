@@ -39,6 +39,9 @@ namespace Data
 	public class MonsterData : CreatureData
 	{
 		public int DropItemId;
+
+		[NonSerialized]
+		public DropTableData DropTable;
 	}
 
 	[Serializable]
@@ -312,5 +315,162 @@ namespace Data
 			return dict;
 		}
 	}
+	#endregion
+
+	#region Item
+	// Equipment.Weapon.Dagger
+	// Consumable.Potion.Hp
+	[Serializable]
+	public class BaseData
+	{
+		public int DataId;
+	}
+
+	[Serializable]
+	public class ItemData : BaseData
+	{
+		public string Name;
+		public EItemGroupType ItemGroupType;
+		public EItemType Type;
+		public EItemSubType SubType;
+		public EItemGrade Grade;
+		public int MaxStack;
+	}
+
+	[Serializable]
+	public class EquipmentData : ItemData
+	{
+		public int Damage;
+		public int Defence;
+		public int Speed;
+	}
+
+	[Serializable]
+	public class ConsumableData : ItemData
+	{
+		public double Value;
+		public int CoolTime;
+	}
+
+	[Serializable]
+	public class ItemDataLoader<T> : ILoader<int, T> where T : BaseData
+	{
+		public List<T> items = new List<T>();
+
+		public Dictionary<int, T> MakeDict()
+		{
+			Dictionary<int, T> dict = new Dictionary<int, T>();
+			foreach (T item in items)
+				dict.Add(item.DataId, item);
+
+			return dict;
+		}
+	}
+	#endregion
+
+	#region DropTable
+
+	public class RewardData
+	{
+		public int Probability; // 100분율
+		public int ItemTemplateId;
+		// public int Count;
+	}
+
+	[Serializable]
+	public class DropTableData_Internal
+	{
+		public int DataId;
+		public int RewardExp;
+		public int Prob1;
+		public int Item1;
+		public int Prob2;
+		public int Item2;
+		public int Prob3;
+		public int Item3;
+		public int Prob4;
+		public int Item4;
+		public int Prob5;
+		public int Item5;
+	}
+
+	[Serializable]
+	public class DropTableData
+	{
+		public int DataId;
+		public int RewardExp;
+		public List<RewardData> Rewards = new List<RewardData>();
+	}
+
+	[Serializable]
+	public class DropTableDataLoader : ILoader<int, DropTableData>
+	{
+		public List<DropTableData_Internal> dropTables = new List<DropTableData_Internal>();
+
+		public Dictionary<int, DropTableData> MakeDict()
+		{
+			Dictionary<int, DropTableData> dict = new Dictionary<int, DropTableData>();
+
+			foreach (DropTableData_Internal tempData in dropTables)
+			{
+				DropTableData data = new DropTableData()
+				{
+					DataId = tempData.DataId,
+					RewardExp = tempData.RewardExp,
+				};
+
+				if (tempData.Item1 > 0)
+				{
+					data.Rewards.Add(new RewardData()
+					{
+						Probability = tempData.Prob1,
+						ItemTemplateId = tempData.Item1,
+					});
+				}
+
+				if (tempData.Item2 > 0)
+				{
+					data.Rewards.Add(new RewardData()
+					{
+						Probability = tempData.Prob2,
+						ItemTemplateId = tempData.Item2,
+					});
+				}
+
+				if (tempData.Item3 > 0)
+				{
+					data.Rewards.Add(new RewardData()
+					{
+						Probability = tempData.Prob3,
+						ItemTemplateId = tempData.Item3,
+					});
+				}
+
+				if (tempData.Item4 > 0)
+				{
+					data.Rewards.Add(new RewardData()
+					{
+						Probability = tempData.Prob4,
+						ItemTemplateId = tempData.Item4,
+					});
+				}
+
+				if (tempData.Item5 > 0)
+				{
+					data.Rewards.Add(new RewardData()
+					{
+						Probability = tempData.Prob5,
+						ItemTemplateId = tempData.Item5,
+					});
+				}
+
+				dict.Add(tempData.DataId, data);
+			}
+
+			return dict;
+		}
+	}
+
+
 	#endregion
 }

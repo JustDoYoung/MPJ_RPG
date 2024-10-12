@@ -14,6 +14,7 @@ public class ObjectManager
     public HeroCamp Camp { get; private set; }
     public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
     public HashSet<Npc> Npcs { get; } = new HashSet<Npc>();
+    public HashSet<ItemHolder> ItemHolders { get; } = new HashSet<ItemHolder>();
 
     #region Roots
     public Transform GetRootTransform(string name)
@@ -30,6 +31,7 @@ public class ObjectManager
     public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
     public Transform NpcRoot { get { return GetRootTransform("@Npc"); } }
+    public Transform ItemHolderRoot { get { return GetRootTransform("@ItemHolders"); } }
     #endregion
     public T Spawn<T>(Vector3Int cellPos, int templateID) where T : BaseObject
     {
@@ -91,6 +93,13 @@ public class ObjectManager
             Npcs.Add(npc);
 
             npc.SetInfo(templateID);
+        }
+        else if (obj.ObjectType == EObjectType.ItemHolder)
+        {
+            obj.transform.parent = ItemHolderRoot;
+
+            ItemHolder itemHolder = go.GetOrAddComponent<ItemHolder>();
+            ItemHolders.Add(itemHolder);
         }
 
         return obj as T;
