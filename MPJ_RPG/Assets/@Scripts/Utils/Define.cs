@@ -232,6 +232,81 @@ public static class Define
 		ManaPotion,
 	}
 
+	public enum EEquipSlotType
+	{
+		None,
+		Weapon = 1,
+		Helmet = 2,
+		Armor = 3,
+		Shield = 4,
+		Gloves = 5,
+		Shoes = 6,
+		EquipMax,
+
+		Inventory = 100,
+		WareHouse = 200,
+	}
+
+	public enum EQuestPeriodType
+	{
+		Once, // 단발성
+		Daily,
+		Weekly,
+		Infinite, // 무한으로
+	}
+
+	public enum EQuestCondition
+	{
+		None,
+		Level,
+		ItemLevel,
+
+	}
+
+	public enum EQuestObjectiveType
+	{
+		KillMonster,
+		EarnMeat,
+		SpendMeat,
+		EarnWood,
+		SpendWood,
+		EarnMineral,
+		SpendMineral,
+		EarnGold,
+		SpendGold,
+		UseItem,
+		Survival,
+	}
+
+	public enum EQuestRewardType
+	{
+		Hero,
+		Gold,
+		Mineral,
+		Meat,
+		Wood,
+		Item,
+	}
+
+	public enum EQuestState
+	{
+		None,
+		Processing,
+		Completed,
+		Rewarded,
+	}
+
+	public enum EBroadcastEventType
+	{
+		None,
+		ChangeMeat,
+		ChangeWood,
+		ChangeMineral,
+		ChangeGold,
+		KillMonster,
+		LevelUp,
+	}
+
 	public const float EFFECT_SMALL_RADIUS = 2.5f;
 	public const float EFFECT_NORMAL_RADIUS = 4.5f;
 	public const float EFFECT_BIG_RADIUS = 5.5f;

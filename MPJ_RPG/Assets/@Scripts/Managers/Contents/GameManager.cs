@@ -8,6 +8,7 @@ using static Define;
 using Random = UnityEngine.Random;
 using Data;
 
+#region Save Data
 [Serializable]
 public class GameSaveData
 {
@@ -17,6 +18,13 @@ public class GameSaveData
     public int Gold = 0;
 
     public List<HeroSaveData> Heroes = new List<HeroSaveData>();
+
+    public int ItemDbIdGenerator = 1;
+    public List<ItemSaveData> Items = new List<ItemSaveData>();
+
+    public List<QuestSaveData> ProcessingQuests = new List<QuestSaveData>(); // 진행중
+    public List<QuestSaveData> CompletedQuests = new List<QuestSaveData>(); // 완료
+    public List<QuestSaveData> RewardedQuests = new List<QuestSaveData>(); // 보상 받음
 }
 
 [Serializable]
@@ -35,6 +43,28 @@ public enum HeroOwningState
     Picked,
 }
 
+[Serializable]
+public class ItemSaveData
+{
+    public int InstanceId;
+    public int DbId;
+    public int TemplateId;
+    public int Count;
+    public int EquipSlot; // 장착 + 인벤 + 창고
+                          //public int OwnerId;
+    public int EnchantCount;
+}
+
+[Serializable]
+public class QuestSaveData
+{
+    public int TemplateId;
+    public EQuestState State = EQuestState.None;
+    public List<int> ProgressCount = new List<int>();
+    public DateTime NextResetTime;
+}
+#endregion
+
 public class GameManager
 {
     #region GameData
@@ -47,7 +77,7 @@ public class GameManager
         private set
         {
             _saveData.Wood = value;
-            (Managers.UI.SceneUI as UI_GameScene)?.RefreshWoodText();
+            BroadcastEvent(EBroadcastEventType.ChangeWood, value);
         }
     }
 
@@ -57,7 +87,7 @@ public class GameManager
         private set
         {
             _saveData.Mineral = value;
-            (Managers.UI.SceneUI as UI_GameScene)?.RefreshMineralText();
+            BroadcastEvent(EBroadcastEventType.ChangeMineral, value);
         }
     }
 
@@ -67,7 +97,7 @@ public class GameManager
         private set
         {
             _saveData.Meat = value;
-            (Managers.UI.SceneUI as UI_GameScene)?.RefreshMeatText();
+            BroadcastEvent(EBroadcastEventType.ChangeMeat, value);
         }
     }
 
@@ -77,7 +107,7 @@ public class GameManager
         private set
         {
             _saveData.Gold = value;
-            (Managers.UI.SceneUI as UI_GameScene)?.RefreshGoldText();
+            BroadcastEvent(EBroadcastEventType.ChangeGold, value);
         }
     }
 
@@ -87,6 +117,17 @@ public class GameManager
     public int OwnedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Owned).Count(); } }
     public int PickedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Picked).Count(); } }
 
+    public int GenerateItemDbId()
+    {
+        int itemDbId = _saveData.ItemDbIdGenerator;
+        _saveData.ItemDbIdGenerator++;
+        return itemDbId;
+    }
+
+    public void BroadcastEvent(EBroadcastEventType eventType, int value)
+    {
+        OnBroadcastEvent?.Invoke(eventType, value);
+    }
     #endregion
 
     #region Save & Load	
@@ -98,6 +139,7 @@ public class GameManager
         if (File.Exists(Path))
             return;
 
+        // Hero
         var heroes = Managers.Data.HeroDic.Values.ToList();
         foreach (HeroData hero in heroes)
         {
@@ -109,6 +151,11 @@ public class GameManager
             SaveData.Heroes.Add(saveData);
         }
 
+        // Item
+        {
+
+        }
+
         // TEMP
         SaveData.Heroes[0].OwningState = HeroOwningState.Picked;
         SaveData.Heroes[1].OwningState = HeroOwningState.Owned;
@@ -116,6 +163,31 @@ public class GameManager
 
     public void SaveGame()
     {
+        // Hero
+
+        // Item
+        {
+            SaveData.Items.Clear();
+            foreach (var item in Managers.Inventory.AllItems)
+                SaveData.Items.Add(item.SaveData);
+        }
+
+        // Quest
+        {
+            SaveData.ProcessingQuests.Clear();
+            SaveData.CompletedQuests.Clear();
+            SaveData.RewardedQuests.Clear();
+
+            foreach (Quest item in Managers.Quest.ProcessingQuests)
+                SaveData.ProcessingQuests.Add(item.SaveData);
+
+            foreach (Quest item in Managers.Quest.CompletedQuests)
+                SaveData.CompletedQuests.Add(item.SaveData);
+
+            foreach (Quest item in Managers.Quest.RewardedQuests)
+                SaveData.RewardedQuests.Add(item.SaveData);
+        }
+
         string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);
         File.WriteAllText(Path, jsonStr);
         Debug.Log($"Save Game Completed : {Path}");
@@ -131,6 +203,40 @@ public class GameManager
 
         if (data != null)
             Managers.Game.SaveData = data;
+
+        // Hero
+
+        // Item
+        {
+            Managers.Inventory.Clear();
+
+            foreach (ItemSaveData itemSaveData in data.Items)
+            {
+                Managers.Inventory.AddItem(itemSaveData);
+            }
+        }
+
+        // Quest
+        {
+            Managers.Quest.Clear();
+
+            foreach (QuestSaveData questSaveData in data.ProcessingQuests)
+            {
+                Managers.Quest.AddQuest(questSaveData);
+            }
+
+            foreach (QuestSaveData questSaveData in data.CompletedQuests)
+            {
+                Managers.Quest.AddQuest(questSaveData);
+            }
+
+            foreach (QuestSaveData questSaveData in data.RewardedQuests)
+            {
+                Managers.Quest.AddQuest(questSaveData);
+            }
+
+            Managers.Quest.AddUnknownQuests();
+        }
 
         Debug.Log($"Save Game Loaded : {Path}");
         return true;
@@ -202,5 +308,7 @@ public class GameManager
     #region Action
     public event Action<Vector2> OnMoveDirChanged;
     public event Action<EJoystickState> OnJoystickStateChanged;
+
+    public event Action<EBroadcastEventType, int> OnBroadcastEvent;
     #endregion
 }

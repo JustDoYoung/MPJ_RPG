@@ -166,9 +166,7 @@ public class Monster : Creature
 		}
 
 		// Check Quest
-		// var list = QuestManager.ProcessingQuestList();
-		// foreach (var quest in list)
-		// { // }
+		Managers.Game.BroadcastEvent(EBroadcastEventType.KillMonster, MonsterData.DataId);
 
 		Managers.Object.Despawn(this);
 	}

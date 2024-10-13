@@ -473,4 +473,48 @@ namespace Data
 
 
 	#endregion
+
+	#region QuestData
+
+	[Serializable]
+	public class QuestData
+	{
+		public int TemplateId;
+		public string DescriptionTextId;
+		public EQuestPeriodType QuestPeriodType;
+		//public EQuestCondition Condition;
+		public List<QuestTaskData> QuestTasks = new List<QuestTaskData>();
+		public List<QuestRewardData> Rewards = new List<QuestRewardData>();
+	}
+
+	[Serializable]
+	public class QuestTaskData
+	{
+		public EQuestObjectiveType ObjectiveType;
+		public string DescriptionTextId;
+		public int ObjectiveDataId;
+		public int ObjectiveCount;
+	}
+
+	[Serializable]
+	public class QuestRewardData
+	{
+		public EQuestRewardType RewardType;
+		public int RewardDataId;
+		public int RewardCount;
+	}
+
+	[Serializable]
+	public class QuestDataLoader : ILoader<int, QuestData>
+	{
+		public List<QuestData> quests = new List<QuestData>();
+		public Dictionary<int, QuestData> MakeDict()
+		{
+			Dictionary<int, QuestData> dict = new Dictionary<int, QuestData>();
+			foreach (QuestData quest in quests)
+				dict.Add(quest.TemplateId, quest);
+			return dict;
+		}
+	}
+	#endregion
 }
