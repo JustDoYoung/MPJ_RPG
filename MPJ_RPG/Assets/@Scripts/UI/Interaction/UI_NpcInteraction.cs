@@ -34,26 +34,7 @@ public class UI_NpcInteraction : UI_Base
 
     private void OnClickInteractionButton(PointerEventData evt)
     {
-        switch (_owner.Data.NpcType)
-        {
-            case Define.ENpcType.Camp:
-                break;
-            case Define.ENpcType.Portal:
-                break;
-            case Define.ENpcType.Waypoint:
-                Managers.UI.ShowPopupUI<UI_WaypointPopup>();
-                break;
-            case Define.ENpcType.BlackSmith:
-                break;
-            case Define.ENpcType.Guild:
-                break;
-            case Define.ENpcType.TreasureBox:
-                break;
-            case Define.ENpcType.Dungeon:
-                break;
-            default:
-				break;
-		}
+        _owner?.OnClickEvent();
 
         Debug.Log("OnClickInteractionButton");
     }

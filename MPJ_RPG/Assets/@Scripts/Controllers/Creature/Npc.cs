@@ -5,12 +5,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
+public interface INpcInteraction
+{
+	public void SetInfo(Npc owner);
+	public void HandleOnClickEvent();
+	public bool CanInteract();
+}
+
 public class Npc : BaseObject
 {
 	public NpcData Data { get; set; }
 
 	private SkeletonAnimation _skeletonAnim;
 	private UI_NpcInteraction _ui;
+
+	public ENpcType NpcType { get { return Data.NpcType; } }
+
+	public INpcInteraction Interaction { get; private set; }
 
 	public override bool Init()
 	{
@@ -36,5 +47,19 @@ public class Npc : BaseObject
         button.transform.localPosition = new Vector3(0f, 3f);
         _ui = button.GetComponent<UI_NpcInteraction>();
         _ui.SetInfo(DataTemplateID, this);
-    }
+
+		switch (Data.NpcType)
+		{
+			case ENpcType.Quest:
+				Interaction = new QuestInteraction();
+				break;
+		}
+
+		Interaction?.SetInfo(this);
+	}
+
+	public virtual void OnClickEvent()
+	{
+		Interaction?.HandleOnClickEvent();
+	}
 }

@@ -46,15 +46,30 @@ public static class Define
 		ItemHolder,
 	}
 
+	public enum EHeroOwningState
+	{
+		Unowned,
+		Owned,
+		Picked,
+	}
+
 	public enum ENpcType
 	{
-		Camp,
+		None,
+		StartPosition,
+		Guild,
 		Portal,
 		Waypoint,
 		BlackSmith,
-		Guild,
+		Training,
 		TreasureBox,
-		Dungeon
+		Dungeon,
+		Quest,
+		GoldStorage,
+		WoodStorage,
+		MineralStorage,
+		Exchange,
+		RuneStone,
 	}
 
 	public enum ECreatureState
@@ -276,6 +291,7 @@ public static class Define
 		SpendGold,
 		UseItem,
 		Survival,
+		ClearDungeon,
 	}
 
 	public enum EQuestRewardType
@@ -305,6 +321,17 @@ public static class Define
 		ChangeGold,
 		KillMonster,
 		LevelUp,
+		DungeonClear
+	}
+
+	public enum EResourceType
+	{
+		Wood,
+		Mineral,
+		Meat,
+		Gold,
+		Materials,
+		Dia
 	}
 
 	public const float EFFECT_SMALL_RADIUS = 2.5f;

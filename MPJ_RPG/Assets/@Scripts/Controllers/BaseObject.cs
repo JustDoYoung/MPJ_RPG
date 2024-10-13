@@ -104,6 +104,8 @@ public class BaseObject : InitBase
 	{
 		if (SkeletonAnim == null)
 			return null;
+		if (SkeletonAnim.AnimationState == null)
+			return null;
 
 		TrackEntry entry = SkeletonAnim.AnimationState.SetAnimation(trackIndex, animName, loop);
 

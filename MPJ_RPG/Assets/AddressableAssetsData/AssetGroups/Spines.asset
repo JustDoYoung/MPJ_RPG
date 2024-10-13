@@ -23,8 +23,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bf9ec093fe189a04d92278eaa0f28574
-    m_Address: goblin_SkeletonData
+  - m_GUID: b1f3de98401d58b42abe5f7a8eefe9f5
+    m_Address: frog_boss_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -47,32 +47,32 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c04a934a0d842c449af7df0ced7349d3
-    m_Address: slime_SkeletonData
+  - m_GUID: 26b6bf94695dbaf4b900289255a0a924
+    m_Address: bee_rare_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 378dd7a7a523b164496aa5b261580005
-    m_Address: bear_SkeletonData
+  - m_GUID: c5583bd05b07c9b46b2794d35d903f2c
+    m_Address: wild_boar_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d89853370f7a3164f99dbc20eea32225
-    m_Address: wood_common_SkeletonData
+  - m_GUID: b39b1570d984bc043ae032bf2ecd95d4
+    m_Address: farm_ghost_common_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6ce17ac50939a804bb5f392fb7971eef
-    m_Address: spider_rare_SkeletonData
+  - m_GUID: 80e75f1e2e49ff14693f84e1c8b9936d
+    m_Address: farm_ghost_rare_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: df80bf8d422a13445870a721c43099d8
-    m_Address: spider_common_SkeletonData
+  - m_GUID: 063bf282551654b4481f2670e723e50a
+    m_Address: scarecrow_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -217,6 +217,96 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ba99d5d2e0eeab542a19708c34adaaa1
     m_Address: npc_smith_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 378dd7a7a523b164496aa5b261580005
+    m_Address: bear_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d89853370f7a3164f99dbc20eea32225
+    m_Address: wood_common_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ce17ac50939a804bb5f392fb7971eef
+    m_Address: spider_rare_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df80bf8d422a13445870a721c43099d8
+    m_Address: spider_common_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c04a934a0d842c449af7df0ced7349d3
+    m_Address: slime_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf9ec093fe189a04d92278eaa0f28574
+    m_Address: goblin_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46b31fc28451c544cad593833c7d3f8d
+    m_Address: bee_common_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27d1b9dfdc83ba141aa23de4108d89db
+    m_Address: chicken_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57bf06976ff9c50479b04730af49f94d
+    m_Address: frog_common_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 880bb7bc06c88334fb20e314ee2a68e1
+    m_Address: flower_boss_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 191589009586a124095c92a3a57f964b
+    m_Address: form_jinn_common_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ca53758ac833cd4599a6cc0a24d3e28
+    m_Address: warm_common_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acf7940995ffcb14184d0f5f1e081f9c
+    m_Address: wood_rare_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ecdcf590219f144faab6ab9e3144c8c
+    m_Address: form_jinn_rare_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ced561fcd58d66d4c85a437e76f92fdb
+    m_Address: wild_boar_boss_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload

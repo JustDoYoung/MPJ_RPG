@@ -48,6 +48,7 @@ public class DataTransformer : EditorWindow
 		ParseExcelDataToJson<ItemDataLoader<ConsumableData>, ConsumableData>("Item_Consumable");
 
 		ParseExcelDataToJson<DropTableDataLoader, DropTableData_Internal>("DropTable");
+		ParseExcelDataToJson<QuestDataLoader, QuestData>("Quest");
 
 		Debug.Log("DataTransformer Completed");
 	}
@@ -74,42 +75,149 @@ public class DataTransformer : EditorWindow
 	{
 		List<LoaderData> loaderDatas = new List<LoaderData>();
 
-		//경로에 있는 파일을 읽어서 string 배열에 저장
-		string[] lines = File.ReadAllText($"{Application.dataPath}/@Resources/Data/ExcelData/{filename}Data.csv").Split("\n");
+		string[] lines = File.ReadAllText($"{Application.dataPath}/@Resources/Data/ExcelData/{filename}Data.csv").Trim().Split("\n");
 
-		//string 배열을 순회하며 행별로 파싱해 필드 값에 저장
+		List<string[]> rows = new List<string[]>();
+
+		int innerFieldCount = 0;
 		for (int l = 1; l < lines.Length; l++)
 		{
 			string[] row = lines[l].Replace("\r", "").Split(',');
-			if (row.Length == 0)
-				continue;
-			if (string.IsNullOrEmpty(row[0]))
-				continue;
+			rows.Add(row);
+		}
 
+		for (int r = 0; r < rows.Count; r++)
+		{
+			if (rows[r].Length == 0)
+				continue;
+			if (string.IsNullOrEmpty(rows[r][0]))
+				continue;
+			innerFieldCount = 0;
+			//Dragon 파생클래스를 GetField하면 파생클래스 변수 -> 부모 변수로 되어 있음. 순서 변경
 			LoaderData loaderData = new LoaderData();
-			var fields = GetFieldsInBase(typeof(LoaderData));
+			Type loaderDataType = typeof(LoaderData);
+			BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+			var fields = GetFieldsInBase(loaderDataType, bindingFlags);
+
+			int nextIndex;
+			for (nextIndex = r + 1; nextIndex < rows.Count; nextIndex++)
+			{
+				if (string.IsNullOrEmpty(rows[nextIndex][0]) == false)
+					break;
+			}
+
 			for (int f = 0; f < fields.Count; f++)
 			{
 				FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
 				Type type = field.FieldType;
 
-				if (field.HasAttribute(typeof(NonSerializedAttribute)))
-					continue;
-
-				//참고) 컬렉션(데이터 그룹) : 배열, 리스트, set, 딕셔너리
-				//List<>, Dictionary<> ... 모두 제네릭 타입
 				if (type.IsGenericType)
 				{
-					object value = ConvertList(row[f], type);
-					field.SetValue(loaderData, value);
+					Type valueType = type.GetGenericArguments()[0];
+					Type genericListType = typeof(List<>).MakeGenericType(valueType);
+					var genericList = Activator.CreateInstance(genericListType) as IList;
+
+					for (int i = r; i < nextIndex; i++)
+					{
+						if (string.IsNullOrEmpty(rows[i][f + innerFieldCount]))
+							continue;
+						Debug.Log($"filename = {filename} ,  {field} -> {rows[i][f]}");
+						{
+							bool isCustomClass = valueType.IsClass && !valueType.IsPrimitive && valueType != typeof(string);
+
+							if (isCustomClass)
+							{
+								object fieldInstance = Activator.CreateInstance(valueType);
+
+								Type fieldType = fieldInstance.GetType();
+								FieldInfo[] fieldInfos = fieldType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+								for (int k = 0; k < fieldInfos.Length; k++)
+								{
+									FieldInfo innerField = valueType.GetFields()[k];
+									string str = rows[i][f + innerFieldCount + k];
+									object convertedValue = ConvertValue(str, innerField.FieldType);
+									if (convertedValue != null)
+									{
+										innerField.SetValue(fieldInstance, convertedValue);
+									}
+								}
+
+								string nextStr = null;
+								if (i + 1 < rows.Count)
+								{
+									if (f + innerFieldCount < rows[i + 1].Length)
+									{
+										//DataId가 null이면 리스트가 아직 끝난게 아님
+										if (string.IsNullOrEmpty(rows[i + 1][0]))
+											nextStr = rows[i + 1][f + innerFieldCount];
+									}
+								}
+								if (string.IsNullOrEmpty(nextStr))
+								{
+									innerFieldCount = fieldInfos.Length - 1;
+								}
+								else if (i + 1 == nextIndex)
+									innerFieldCount = fieldInfos.Length - 1;
+
+								genericList.Add(fieldInstance);
+
+								// field.SetValue(loaderData, fieldInstance);
+							}
+							else
+							{
+								object value = ConvertValue(rows[i][f], valueType);
+								genericList.Add(value);
+							}
+						}
+					}
+
+					if (genericList != null)
+					{
+						field.SetValue(loaderData, genericList);
+					}
 				}
 				else
 				{
-					object value = ConvertValue(row[f], type);
-					field.SetValue(loaderData, value);
+					Debug.Log($"filename = {filename} ,  {field} -> {rows[r][f]}");
+					if (rows[r][f].Contains("780"))
+					{
+						Debug.Log($"filename = {filename} ,  {field} -> {rows[r][f]}");
+					}
+
+					bool isCustomClass = field.FieldType.IsClass && !field.FieldType.IsPrimitive && field.FieldType != typeof(string);
+					if (isCustomClass)
+					{
+						object fieldInstance = Activator.CreateInstance(field.FieldType);
+
+						Type fieldType = fieldInstance.GetType();
+						FieldInfo[] fieldInfos = fieldType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+						for (int i = 0; i < fieldInfos.Length; i++)
+						{
+							FieldInfo innerField = field.FieldType.GetFields()[i];
+							string value = rows[r][f + innerFieldCount + i];
+							object convertedValue = ConvertValue(value, innerField.FieldType);
+							if (convertedValue != null)
+							{
+								innerField.SetValue(fieldInstance, convertedValue);
+							}
+
+						}
+						innerFieldCount = fieldInfos.Length - 1;
+						field.SetValue(loaderData, fieldInstance);
+					}
+					else
+					{
+						//기타필드 처리
+						object value = ConvertValue(rows[r][f], field.FieldType);
+						if (value != null)
+						{
+							field.SetValue(loaderData, value);
+						}
+					}
 				}
 			}
-
 			loaderDatas.Add(loaderData);
 		}
 

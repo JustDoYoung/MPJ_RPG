@@ -128,6 +128,78 @@ public class GameManager
     {
         OnBroadcastEvent?.Invoke(eventType, value);
     }
+
+    public bool CheckResource(EResourceType eResourceType, int amount)
+    {
+        switch (eResourceType)
+        {
+            case EResourceType.Wood:
+                return Wood >= amount;
+            case EResourceType.Mineral:
+                return Mineral >= amount;
+            case EResourceType.Meat:
+                return Meat >= amount;
+            case EResourceType.Gold:
+                return Gold >= amount;
+            case EResourceType.Dia:
+                return true;
+            case EResourceType.Materials:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool SpendResource(EResourceType eResourceType, int amount)
+    {
+        if (CheckResource(eResourceType, amount) == false)
+            return false;
+
+        switch (eResourceType)
+        {
+            case EResourceType.Wood:
+                Wood -= amount;
+                break;
+            case EResourceType.Mineral:
+                Mineral -= amount;
+                break;
+            case EResourceType.Meat:
+                Meat -= amount;
+                break;
+            case EResourceType.Gold:
+                Gold -= amount;
+                break;
+            case EResourceType.Dia:
+                break;
+            case EResourceType.Materials:
+                break;
+        }
+
+        return true;
+    }
+
+    public void EarnResource(EResourceType eResourceType, int amount)
+    {
+        switch (eResourceType)
+        {
+            case EResourceType.Wood:
+                Wood += amount;
+                break;
+            case EResourceType.Mineral:
+                Mineral += amount;
+                break;
+            case EResourceType.Meat:
+                Meat += amount;
+                break;
+            case EResourceType.Gold:
+                Gold += amount;
+                break;
+            case EResourceType.Dia:
+                break;
+            case EResourceType.Materials:
+                break;
+        }
+    }
     #endregion
 
     #region Save & Load	
@@ -177,15 +249,6 @@ public class GameManager
             SaveData.ProcessingQuests.Clear();
             SaveData.CompletedQuests.Clear();
             SaveData.RewardedQuests.Clear();
-
-            foreach (Quest item in Managers.Quest.ProcessingQuests)
-                SaveData.ProcessingQuests.Add(item.SaveData);
-
-            foreach (Quest item in Managers.Quest.CompletedQuests)
-                SaveData.CompletedQuests.Add(item.SaveData);
-
-            foreach (Quest item in Managers.Quest.RewardedQuests)
-                SaveData.RewardedQuests.Add(item.SaveData);
         }
 
         string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);

@@ -113,31 +113,31 @@ public class MapEditor : MonoBehaviour
 			}
 			AssetDatabase.CreateAsset(customTile, path);
 		}
-		#endregion
+        #endregion
 
-		#region Npc
-		//Dictionary<int, Data.NpcData> Npc = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
-		//foreach (var data in Npc.Values)
-		//{
-		//	CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
-		//	customTile.Name = data.Name;
-		//	customTile.DataId = data.DataId;
-		//	customTile.ObjectType = Define.EObjectType.Npc;
-		//	string name = $"{data.DataId}_{data.Name}";
-		//	string path = "Assets/@Resources/TileMaps/01_asset/dev/Npc";
-		//	path = Path.Combine(path, $"{name}.Asset");
+        #region Npc
+        Dictionary<int, Data.NpcData> Npc = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
+        foreach (var data in Npc.Values)
+        {
+            CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
+            customTile.Name = data.Name;
+            customTile.DataId = data.DataId;
+            customTile.ObjectType = Define.EObjectType.Npc;
+            string name = $"{data.DataId}_{data.Name}";
+            string path = "Assets/@Resources/TileMaps/01_asset/dev/Npc";
+            path = Path.Combine(path, $"{name}.Asset");
 
-		//	if (path == "")
-		//		continue;
+            if (path == "")
+                continue;
 
-		//	if (File.Exists(path))
-		//	{
-		//		continue;
-		//	}
-		//	AssetDatabase.CreateAsset(customTile, path);
-		//}
-		#endregion
-	}
+            if (File.Exists(path))
+            {
+                continue;
+            }
+            AssetDatabase.CreateAsset(customTile, path);
+        }
+        #endregion
+    }
 
 	private static Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
 	{
