@@ -36,14 +36,14 @@ public class QuestInteraction : INpcInteraction
 		{
 			case EQuestObjectiveType.SpendMeat:
 			case EQuestObjectiveType.EarnMeat:
-
-				_quest.State = EQuestState.Processing;
-				if (Managers.Game.SpendResource(EResourceType.Meat, questTask.TaskData.ObjectiveCount) == false)
-				{
-					Debug.Log("Meat 부족");
+                {
+					_quest.State = EQuestState.Processing;
+					if (Managers.Game.SpendResource(EResourceType.Meat, questTask.TaskData.ObjectiveCount) == false)
+					{
+						Debug.Log("Meat 부족");
+					}
+					break;
 				}
-				break;
-
 			case EQuestObjectiveType.KillMonster:
 				break;
 			case EQuestObjectiveType.ClearDungeon:

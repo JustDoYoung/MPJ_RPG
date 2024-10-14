@@ -93,8 +93,6 @@ public class Stage : MonoBehaviour
             Vector3 worldPos = info.WorldPos;
             Vector3Int cellPos = info.CellPos;
             
-            if (Managers.Map.CanGo(null, cellPos) == false)
-                return;
             
             switch (info.ObjectType)
             {
@@ -129,9 +127,9 @@ public class Stage : MonoBehaviour
                 case EObjectType.Env:
                     Managers.Object.Despawn(obj as Env);
                     break;
-                //case EObjectType.Npc:
-                //    Managers.Object.Despawn(obj as Npc);
-                //    break;
+                case EObjectType.Npc:
+                    Managers.Object.Despawn(obj as Npc);
+                    break;
             }
         }
 
@@ -171,5 +169,8 @@ public class Stage : MonoBehaviour
                 _spawnInfos.Add(info);
             }
         }
+
+        if (transform.name.Contains("forest"))
+            print("ss");
     }
 }

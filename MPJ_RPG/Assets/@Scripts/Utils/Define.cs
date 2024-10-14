@@ -321,7 +321,8 @@ public static class Define
 		ChangeGold,
 		KillMonster,
 		LevelUp,
-		DungeonClear
+		DungeonClear,
+		QuestClear
 	}
 
 	public enum EResourceType

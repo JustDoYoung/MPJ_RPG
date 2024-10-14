@@ -22,9 +22,7 @@ public class GameSaveData
     public int ItemDbIdGenerator = 1;
     public List<ItemSaveData> Items = new List<ItemSaveData>();
 
-    public List<QuestSaveData> ProcessingQuests = new List<QuestSaveData>(); // 진행중
-    public List<QuestSaveData> CompletedQuests = new List<QuestSaveData>(); // 완료
-    public List<QuestSaveData> RewardedQuests = new List<QuestSaveData>(); // 보상 받음
+    public List<QuestSaveData> AllQuests = new List<QuestSaveData>();
 }
 
 [Serializable]
@@ -33,14 +31,7 @@ public class HeroSaveData
     public int DataId = 0;
     public int Level = 1;
     public int Exp = 0;
-    public HeroOwningState OwningState = HeroOwningState.Unowned;
-}
-
-public enum HeroOwningState
-{
-    Unowned,
-    Owned,
-    Picked,
+    public EHeroOwningState OwningState = EHeroOwningState.Unowned;
 }
 
 [Serializable]
@@ -76,8 +67,9 @@ public class GameManager
         get { return _saveData.Wood; }
         private set
         {
+            int diff = _saveData.Wood - value;
             _saveData.Wood = value;
-            BroadcastEvent(EBroadcastEventType.ChangeWood, value);
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeWood, diff);
         }
     }
 
@@ -86,8 +78,9 @@ public class GameManager
         get { return _saveData.Mineral; }
         private set
         {
+            int diff = _saveData.Mineral - value;
             _saveData.Mineral = value;
-            BroadcastEvent(EBroadcastEventType.ChangeMineral, value);
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeMineral, diff);
         }
     }
 
@@ -96,8 +89,9 @@ public class GameManager
         get { return _saveData.Meat; }
         private set
         {
+            int diff = _saveData.Meat - value;
             _saveData.Meat = value;
-            BroadcastEvent(EBroadcastEventType.ChangeMeat, value);
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeMeat, diff);
         }
     }
 
@@ -106,16 +100,17 @@ public class GameManager
         get { return _saveData.Gold; }
         private set
         {
+            int diff = _saveData.Gold - value;
             _saveData.Gold = value;
-            BroadcastEvent(EBroadcastEventType.ChangeGold, value);
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeGold, diff);
         }
     }
 
     public List<HeroSaveData> AllHeroes { get { return _saveData.Heroes; } }
     public int TotalHeroCount { get { return _saveData.Heroes.Count; } }
-    public int UnownedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Unowned).Count(); } }
-    public int OwnedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Owned).Count(); } }
-    public int PickedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Picked).Count(); } }
+    public int UnownedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == EHeroOwningState.Unowned).Count(); } }
+    public int OwnedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == EHeroOwningState.Owned).Count(); } }
+    public int PickedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == EHeroOwningState.Picked).Count(); } }
 
     public int GenerateItemDbId()
     {
@@ -228,14 +223,46 @@ public class GameManager
 
         }
 
+        // Quest
+        {
+            var quests = Managers.Data.QuestDic.Values.ToList();
+
+            foreach (QuestData questData in quests)
+            {
+                QuestSaveData saveData = new QuestSaveData()
+                {
+                    TemplateId = questData.DataId,
+                    State = EQuestState.None,
+                    ProgressCount = new List<int>(),
+                    NextResetTime = DateTime.Now,
+                };
+
+                for (int i = 0; i < questData.QuestTasks.Count; i++)
+                {
+                    saveData.ProgressCount.Add(0);
+                }
+
+                Debug.Log("SaveDataQuest");
+                Managers.Quest.AddQuest(saveData);
+            }
+        }
+
         // TEMP
-        SaveData.Heroes[0].OwningState = HeroOwningState.Picked;
-        SaveData.Heroes[1].OwningState = HeroOwningState.Owned;
+        SaveData.Heroes[0].OwningState = EHeroOwningState.Picked;
+        SaveData.Heroes[1].OwningState = EHeroOwningState.Owned;
+
+        Wood = 100;
+        Gold = 100;
+        Mineral = 100;
+        Meat = 100;
     }
 
     public void SaveGame()
     {
         // Hero
+        {
+            SaveData.Heroes.Clear();
+        }
 
         // Item
         {
@@ -246,9 +273,9 @@ public class GameManager
 
         // Quest
         {
-            SaveData.ProcessingQuests.Clear();
-            SaveData.CompletedQuests.Clear();
-            SaveData.RewardedQuests.Clear();
+            SaveData.AllQuests.Clear();
+            foreach (var quest in Managers.Quest.AllQuests.Values)
+                SaveData.AllQuests.Add(quest.SaveData);
         }
 
         string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);
@@ -268,11 +295,13 @@ public class GameManager
             Managers.Game.SaveData = data;
 
         // Hero
+        {
+
+        }
 
         // Item
         {
             Managers.Inventory.Clear();
-
             foreach (ItemSaveData itemSaveData in data.Items)
             {
                 Managers.Inventory.AddItem(itemSaveData);
@@ -282,22 +311,12 @@ public class GameManager
         // Quest
         {
             Managers.Quest.Clear();
-
-            foreach (QuestSaveData questSaveData in data.ProcessingQuests)
+            foreach (QuestSaveData questSaveData in data.AllQuests)
             {
                 Managers.Quest.AddQuest(questSaveData);
             }
 
-            foreach (QuestSaveData questSaveData in data.CompletedQuests)
-            {
-                Managers.Quest.AddQuest(questSaveData);
-            }
-
-            foreach (QuestSaveData questSaveData in data.RewardedQuests)
-            {
-                Managers.Quest.AddQuest(questSaveData);
-            }
-
+            //새로운 퀘스트 생길 시 추가
             Managers.Quest.AddUnknownQuests();
         }
 

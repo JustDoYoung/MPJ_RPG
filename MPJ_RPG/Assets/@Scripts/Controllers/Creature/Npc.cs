@@ -23,6 +23,18 @@ public class Npc : BaseObject
 
 	public INpcInteraction Interaction { get; private set; }
 
+	private void Update()
+	{
+		if (Interaction != null && Interaction.CanInteract())
+		{
+			_ui.gameObject.SetActive(true);
+		}
+		else
+		{
+			_ui.gameObject.SetActive(false);
+		}
+	}
+
 	public override bool Init()
 	{
 		if (base.Init() == false)
@@ -48,6 +60,7 @@ public class Npc : BaseObject
         _ui = button.GetComponent<UI_NpcInteraction>();
         _ui.SetInfo(DataTemplateID, this);
 
+		//Npc가 보유한 퀘스트 설정
 		switch (Data.NpcType)
 		{
 			case ENpcType.Quest:

@@ -72,8 +72,6 @@ public class Quest
 
 		Quest quest = null;
 
-		// TODO?
-
 		quest = new Quest(saveData);
 
 		if (quest != null)
@@ -86,19 +84,58 @@ public class Quest
 
 	public void OnHandleBroadcastEvent(EBroadcastEventType eventType, int value)
 	{
-		// ? Task?
-		switch (eventType)
+		if (eventType == EBroadcastEventType.QuestClear)
+			return;
+
+		GetCurrentTask().OnHandleBroadcastEvent(eventType, value);
+
+		for (int i = 0; i < _questTasks.Count; i++)
 		{
-			case EBroadcastEventType.ChangeMeat:
-				break;
-			case EBroadcastEventType.ChangeWood:
-				break;
-			case EBroadcastEventType.ChangeMineral:
-				break;
-			case EBroadcastEventType.ChangeGold:
-				break;
-			case EBroadcastEventType.KillMonster:
-				break;
+			SaveData.ProgressCount[i] = _questTasks[i].Count;
+		}
+
+		if (IsCompleted() && State != EQuestState.Rewarded)
+		{
+			State = EQuestState.Completed;
+			GiveReward(); // Rewarded State
+			Managers.Game.BroadcastEvent(EBroadcastEventType.QuestClear, QuestData.DataId);
+		}
+	}
+
+	public void GiveReward()
+	{
+		if (State == EQuestState.Rewarded)
+			return;
+
+		if (IsCompleted() == false)
+			return;
+
+		SaveData.State = EQuestState.Rewarded;
+
+		foreach (var reward in QuestData.Rewards)
+		{
+			switch (reward.RewardType)
+			{
+				case EQuestRewardType.Gold:
+					Managers.Game.EarnResource(EResourceType.Gold, reward.RewardCount);
+					break;
+				case EQuestRewardType.Hero:
+					//int heroId = reward.RewardDataId;
+					//Managers.Hero.AcquireHeroCard(heroId, reward.RewardCount);
+					//Managers.Hero.PickHero(heroId, Vector3Int.zero);
+					break;
+				case EQuestRewardType.Meat:
+					Managers.Game.EarnResource(EResourceType.Meat, reward.RewardCount);
+					break;
+				case EQuestRewardType.Mineral:
+					Managers.Game.EarnResource(EResourceType.Mineral, reward.RewardCount);
+					break;
+				case EQuestRewardType.Wood:
+					Managers.Game.EarnResource(EResourceType.Wood, reward.RewardCount);
+					break;
+				case EQuestRewardType.Item:
+					break;
+			}
 		}
 	}
 }
