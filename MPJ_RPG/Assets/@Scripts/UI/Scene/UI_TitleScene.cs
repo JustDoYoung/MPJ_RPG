@@ -53,7 +53,6 @@ public class UI_TitleScene : UI_Scene
 				if (Managers.Game.LoadGame() == false)
 				{
 					Managers.Game.InitGame();
-					Managers.Game.SaveGame();
 				}
 
 				GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);

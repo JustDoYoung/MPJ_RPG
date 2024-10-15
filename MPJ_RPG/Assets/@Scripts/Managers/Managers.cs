@@ -15,12 +15,14 @@ public class Managers : MonoBehaviour
 	private MapManager _map = new MapManager();
 	private InventoryManager _inventory = new InventoryManager();
 	private QuestManager _quest = new QuestManager();
+	private HeroManager _hero = new HeroManager();
 
 	public static GameManager Game { get { return Instance?._game; } }
 	public static ObjectManager Object { get { return Instance?._object; } }
 	public static MapManager Map { get { return Instance?._map; } }
 	public static InventoryManager Inventory { get { return Instance?._inventory; } }
 	public static QuestManager Quest { get { return Instance?._quest; } }
+	public static HeroManager Hero { get { return Instance?._hero; } }
 	#endregion
 
 	#region Core

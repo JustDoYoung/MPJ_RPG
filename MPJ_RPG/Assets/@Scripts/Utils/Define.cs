@@ -322,7 +322,8 @@ public static class Define
 		KillMonster,
 		LevelUp,
 		DungeonClear,
-		QuestClear
+		QuestClear,
+		ChangeCrew
 	}
 
 	public enum EResourceType

@@ -52,7 +52,7 @@ public class Quest
 	{
 		for (int i = 0; i < QuestData.QuestTasks.Count; i++)
 		{
-			if (i < SaveData.ProgressCount.Count)
+			if (i >= SaveData.ProgressCount.Count)
 				return false;
 
 			QuestTaskData questTaskData = QuestData.QuestTasks[i];
@@ -87,13 +87,16 @@ public class Quest
 		if (eventType == EBroadcastEventType.QuestClear)
 			return;
 
+		//현재 퀘스트 일 업데이트
 		GetCurrentTask().OnHandleBroadcastEvent(eventType, value);
 
+		//전체 퀘스트 진행도 업데이트
 		for (int i = 0; i < _questTasks.Count; i++)
 		{
 			SaveData.ProgressCount[i] = _questTasks[i].Count;
 		}
 
+		//현재 퀘스트 완료 체크
 		if (IsCompleted() && State != EQuestState.Rewarded)
 		{
 			State = EQuestState.Completed;
@@ -120,10 +123,10 @@ public class Quest
 					Managers.Game.EarnResource(EResourceType.Gold, reward.RewardCount);
 					break;
 				case EQuestRewardType.Hero:
-					//int heroId = reward.RewardDataId;
-					//Managers.Hero.AcquireHeroCard(heroId, reward.RewardCount);
-					//Managers.Hero.PickHero(heroId, Vector3Int.zero);
-					break;
+                    int heroId = reward.RewardDataId;
+                    Managers.Hero.AcquireHeroCard(heroId, reward.RewardCount);
+                    Managers.Hero.PickHero(heroId, Vector3Int.zero);
+                    break;
 				case EQuestRewardType.Meat:
 					Managers.Game.EarnResource(EResourceType.Meat, reward.RewardCount);
 					break;

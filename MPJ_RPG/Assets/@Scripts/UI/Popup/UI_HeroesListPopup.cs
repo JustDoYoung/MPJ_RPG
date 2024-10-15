@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Define;
 
 public class UI_HeroesListPopup : UI_Popup
 {
@@ -88,12 +89,12 @@ public class UI_HeroesListPopup : UI_Popup
 		GetText((int)Texts.WaitingHeroesCountText).text = $"{Managers.Game.OwnedHeroCount} / ??";
 		GetText((int)Texts.UnownedHeroesCountText).text = $"{Managers.Game.UnownedHeroCount} / ??";
 
-		Refresh_Hero(_equippedHeroes, HeroOwningState.Picked);
-		Refresh_Hero(_waitingHeroes, HeroOwningState.Owned);
-		Refresh_Hero(_unownedHeroes, HeroOwningState.Unowned);
+		Refresh_Hero(_equippedHeroes, EHeroOwningState.Picked);
+		Refresh_Hero(_waitingHeroes, EHeroOwningState.Owned);
+		Refresh_Hero(_unownedHeroes, EHeroOwningState.Unowned);
 	}
 
-	void Refresh_Hero(List<UI_HeroesList_HeroItem> list, HeroOwningState owningState)
+	void Refresh_Hero(List<UI_HeroesList_HeroItem> list, EHeroOwningState owningState)
 	{
 		List<HeroSaveData> heroes = Managers.Game.AllHeroes.Where(h => h.OwningState == owningState).ToList();
 

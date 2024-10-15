@@ -169,8 +169,5 @@ public class Stage : MonoBehaviour
                 _spawnInfos.Add(info);
             }
         }
-
-        if (transform.name.Contains("forest"))
-            print("ss");
     }
 }

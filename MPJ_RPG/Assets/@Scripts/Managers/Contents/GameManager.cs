@@ -17,11 +17,9 @@ public class GameSaveData
     public int Meat = 0;
     public int Gold = 0;
 
-    public List<HeroSaveData> Heroes = new List<HeroSaveData>();
-
     public int ItemDbIdGenerator = 1;
+    public List<HeroSaveData> Heroes = new List<HeroSaveData>();
     public List<ItemSaveData> Items = new List<ItemSaveData>();
-
     public List<QuestSaveData> AllQuests = new List<QuestSaveData>();
 }
 
@@ -255,6 +253,10 @@ public class GameManager
         Gold = 100;
         Mineral = 100;
         Meat = 100;
+
+        string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);
+        File.WriteAllText(Path, jsonStr);
+        Debug.Log($"Save Game Completed : {Path}");
     }
 
     public void SaveGame()
@@ -262,6 +264,10 @@ public class GameManager
         // Hero
         {
             SaveData.Heroes.Clear();
+            foreach (var heroinfo in Managers.Hero.AllHeroInfos.Values)
+            {
+                SaveData.Heroes.Add(heroinfo.SaveData);
+            }
         }
 
         // Item
@@ -296,7 +302,14 @@ public class GameManager
 
         // Hero
         {
+            Managers.Hero.AllHeroInfos.Clear();
+            foreach (HeroSaveData heroSaveData in data.Heroes)
+            {
+                Managers.Hero.AddHeroInfo(heroSaveData);
 
+            }
+
+            Managers.Hero.AddUnknownHeroes();
         }
 
         // Item

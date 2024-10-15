@@ -166,7 +166,7 @@ public class Monster : Creature
 		}
 
 		// Check Quest
-		Managers.Game.BroadcastEvent(EBroadcastEventType.KillMonster, MonsterData.DataId);
+		//Managers.Game.BroadcastEvent(EBroadcastEventType.KillMonster, MonsterData.DataId);
 
 		Managers.Object.Despawn(this);
 	}
