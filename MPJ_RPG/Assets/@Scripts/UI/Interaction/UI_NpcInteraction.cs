@@ -29,6 +29,9 @@ public class UI_NpcInteraction : UI_Base
     public void SetInfo(int dataId, Npc owner)
     {
         _owner = owner;
+        transform.SetParent(_owner.transform);
+        transform.localPosition = new Vector3(0f, 3f);
+
         GetButton((int)Buttons.InteractionButton).gameObject.BindEvent(OnClickInteractionButton);
     }
 

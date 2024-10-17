@@ -7,7 +7,7 @@ using static Define;
 
 public class Hero : Creature
 {
-	public bool NeedArrange { get; set; }
+	public bool NeedArrange { get; set; } = true;
 
 	public override ECreatureState CreatureState
 	{
@@ -76,8 +76,10 @@ public class Hero : Creature
 		get
 		{
 			HeroCamp camp = Managers.Object.Camp;
-			if (HeroMoveState == EHeroMoveState.ReturnToCamp)
+			if (HeroMoveState == EHeroMoveState.ForceMove || HeroMoveState == EHeroMoveState.ReturnToCamp || HeroMoveState == EHeroMoveState.ForcePath)
+            {
 				return camp.Pivot;
+            }
 
 			return camp.Destination;
 		}
@@ -86,6 +88,7 @@ public class Hero : Creature
 	#region AI
 	protected override void UpdateIdle() 
 	{
+		print($"{transform.name} : {CreatureState}");
 		// 0. 이동 상태라면 강제 변경
 		if (HeroMoveState == EHeroMoveState.ForceMove)
 		{
@@ -125,7 +128,7 @@ public class Hero : Creature
 	protected override void UpdateMove() 
 	{
 		//강제이동
-        if (HeroMoveState == EHeroMoveState.ForcePath)
+		if (HeroMoveState == EHeroMoveState.ForcePath)
         {
             MoveByForcePath();
             return;
@@ -148,7 +151,7 @@ public class Hero : Creature
 			// 몬스터 죽었으면 포기.
 			if (Target.IsValid() == false)
 			{
-				HeroMoveState = EHeroMoveState.None;
+				HeroMoveState = EHeroMoveState.ForcePath;
 				CreatureState = ECreatureState.Move;
 				return;
 			}
@@ -188,6 +191,7 @@ public class Hero : Creature
 			Vector3 destPos = HeroCampDest.position;
 			//Vector3 destPos = Managers.Object.Camp.transform.position;
 			EFindPathResult result = FindPathAndMoveToCellPos(destPos, HERO_DEFAULT_MOVE_DEPTH);
+
 			if (result == EFindPathResult.Success)
 				return;
 
@@ -212,31 +216,36 @@ public class Hero : Creature
 					return;
 				}
 			}
+
+			HeroMoveState = EHeroMoveState.None;
 		}
 
 		// 4. 기타 (누르다 뗐을 때)
 		if (LerpCellPosCompleted)
+        {
 			CreatureState = ECreatureState.Idle;
+        }
 	}
 
 	Queue<Vector3Int> _forcePath = new Queue<Vector3Int>();
 
 	bool CheckHeroCampDistanceAndForcePath()
 	{
+		if (Target != null) return false;
+
 		// 너무 멀어서 못 간다.
-		Vector3 destPos = HeroCampDest.position;
+		Vector3 destPos = Managers.Object.Camp.Pivot.position;
 		Vector3Int destCellPos = Managers.Map.World2Cell(destPos);
+		
 		if ((CellPos - destCellPos).magnitude <= 5)
 			return false;
 
-		if (Managers.Map.CanGo(this, destCellPos, ignoreObjects: true) == false)
-			return false;
-
 		List<Vector3Int> path = Managers.Map.FindPath(this, CellPos, destCellPos, 100);
-		if (path.Count < 2)
-			return false;
 
-		HeroMoveState = EHeroMoveState.ForcePath;
+		if (path.Count < 2)
+		{
+			return false;
+		}
 
 		_forcePath.Clear();
 		foreach (var p in path)
@@ -244,6 +253,11 @@ public class Hero : Creature
 			_forcePath.Enqueue(p);
 		}
 		_forcePath.Dequeue();
+
+		if (Managers.Map.CanGo(this, destCellPos, ignoreObjects: true) == false)
+			return false;
+
+		HeroMoveState = EHeroMoveState.ForcePath;
 
 		return true;
 	}

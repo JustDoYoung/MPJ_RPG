@@ -143,7 +143,7 @@ public class BaseObject : InitBase
 	#region Map
 	public bool LerpCellPosCompleted { get; protected set; }
 
-	Vector3Int _cellPos;
+	protected Vector3Int _cellPos;
 	public Vector3Int CellPos
 	{
 		get { return _cellPos; }

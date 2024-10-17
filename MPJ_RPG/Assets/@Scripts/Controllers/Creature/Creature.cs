@@ -308,10 +308,19 @@ public class Creature : BaseObject
 
 	protected void ChaseOrAttackTarget(float chaseRange, float attackRange)
 	{
-		Vector3 dir = (Target.transform.position - transform.position);
-		float distToTargetSqr = DistToTargetSqr;
+
+        Vector3 dir = (Managers.Object.Camp.Pivot.position - transform.position);
+        if (dir.magnitude >= HERO_SEARCH_DISTANCE)
+        {
+            Target = null;
+            CreatureState = ECreatureState.Move;
+            return;
+        }
+
+        float distToTargetSqr = DistToTargetSqr;
 		float attackDistanceSqr = attackRange * attackRange;
 
+		
 		if (distToTargetSqr <= attackDistanceSqr)
 		{
 			// 공격 범위 이내로 들어왔다면 공격.
@@ -322,6 +331,7 @@ public class Creature : BaseObject
 		{
 			// 공격 범위 밖이라면 추적.
 			FindPathAndMoveToCellPos(Target.transform.position, HERO_DEFAULT_MOVE_DEPTH);
+
 
 			// 너무 멀어지면 포기.
 			float searchDistanceSqr = chaseRange * chaseRange;

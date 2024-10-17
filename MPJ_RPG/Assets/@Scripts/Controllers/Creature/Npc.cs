@@ -55,9 +55,10 @@ public class Npc : BaseObject
         #endregion
 
         // Npc 상호작용을 위한 버튼
-        GameObject button = Managers.Resource.Instantiate("UI_NpcInteraction", gameObject.transform);
-        button.transform.localPosition = new Vector3(0f, 3f);
-        _ui = button.GetComponent<UI_NpcInteraction>();
+        //GameObject button = Managers.Resource.Instantiate("UI_NpcInteraction", gameObject.transform);
+        //button.transform.localPosition = new Vector3(0f, 3f);
+        //_ui = button.GetComponent<UI_NpcInteraction>();
+		_ui = Managers.UI.ShowBaseUI<UI_NpcInteraction>();
         _ui.SetInfo(DataTemplateID, this);
 
 		//Npc가 보유한 퀘스트 설정

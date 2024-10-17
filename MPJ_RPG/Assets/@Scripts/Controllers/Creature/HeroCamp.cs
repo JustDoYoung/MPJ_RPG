@@ -41,6 +41,7 @@ public class HeroCamp : BaseObject
 			return;
 
 		transform.position = newPos;
+		_cellPos = Managers.Map.World2Cell(newPos);
 
 		// Map Transition
 		Managers.Map.StageTransition.CheckMapChanged(newPos);
