@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using WebPacket;
 using static Define;
 
 public class GameScene : BaseScene
@@ -39,10 +41,6 @@ public class GameScene : BaseScene
 		CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
 		camera.Target = camp;
 
-		//     {
-		//         Monster monster = Managers.Object.Spawn<Monster>(new Vector3(0, 2, 0), MONSTER_BEAR_ID);
-		//monster.ExtraCells = 1;
-		//     }
 
 		UI_GameScene sceneUI = Managers.UI.ShowSceneUI<UI_GameScene>();
 		sceneUI.SetInfo();
@@ -50,6 +48,7 @@ public class GameScene : BaseScene
 		Managers.UI.ShowBaseUI<UI_Joystick>();
 		// TODO
 		Managers.UI.CacheAllPopups();
+
 		return true;
 	}
 

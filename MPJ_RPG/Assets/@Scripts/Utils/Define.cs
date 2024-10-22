@@ -336,7 +336,15 @@ public static class Define
 		Dia
 	}
 
-	public const float EFFECT_SMALL_RADIUS = 2.5f;
+    public enum EProviderType
+    {
+        None = 0,
+        Guest = 1,
+        Google = 2,
+        Facebook = 3,
+    }
+
+    public const float EFFECT_SMALL_RADIUS = 2.5f;
 	public const float EFFECT_NORMAL_RADIUS = 4.5f;
 	public const float EFFECT_BIG_RADIUS = 5.5f;
 

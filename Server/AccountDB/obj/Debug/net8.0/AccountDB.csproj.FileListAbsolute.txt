@@ -1,0 +1,15 @@
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\bin\Debug\net8.0\AccountDB.deps.json
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\bin\Debug\net8.0\AccountDB.runtimeconfig.json
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\bin\Debug\net8.0\AccountDB.dll
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\bin\Debug\net8.0\AccountDB.pdb
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.csproj.AssemblyReference.cache
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.GeneratedMSBuildEditorConfig.editorconfig
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.AssemblyInfoInputs.cache
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.AssemblyInfo.cs
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.csproj.CoreCompileInputs.cache
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.sourcelink.json
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.dll
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\refint\AccountDB.dll
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.pdb
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\AccountDB.genruntimeconfig.cache
+D:\D\Github\Unity\MPJ_RPG\Server\AccountDB\obj\Debug\net8.0\ref\AccountDB.dll

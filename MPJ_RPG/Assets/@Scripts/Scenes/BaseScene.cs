@@ -21,6 +21,8 @@ public abstract class BaseScene : InitBase
 			go.AddComponent<StandaloneInputModule>();
 		}
 
+		
+
 		return true;
 	}
 
