@@ -50,5 +50,31 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "AccountServer.Controllers.RankingController",
+    "Method": "UpdateRanking",
+    "RelativePath": "api/ranking/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "UpdateRankingPacketReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "UpdateRankingPacketRes",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

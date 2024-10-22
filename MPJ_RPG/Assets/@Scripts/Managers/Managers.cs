@@ -5,6 +5,7 @@ using WebPacket;
 
 public class Managers : MonoBehaviour
 {
+	public static string Jwt {  get; set; }
 	public static bool Initialized { get; set; } = false;
 
 	private static Managers s_instance;

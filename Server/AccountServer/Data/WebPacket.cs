@@ -13,3 +13,14 @@ public class LoginAccountPacketRes
     public long accountDbId { get; set; }
     public string jwt { get; set; } = string.Empty;
 }
+
+public class UpdateRankingPacketReq
+{
+    public string jwt { get; set; } = string.Empty ;
+    public int score { get; set; }
+}
+
+public class UpdateRankingPacketRes
+{
+    public bool success { get; set; } = false;
+}

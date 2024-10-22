@@ -44,6 +44,7 @@ public class WebManager
 		Managers.Instance.StartCoroutine(CoSendWebRequest(url, UnityWebRequest.kHttpVerbGET, obj, res));
 	}
 
+	//웹 서버와 통신
 	IEnumerator CoSendWebRequest<T>(string url, string method, object obj, Action<T> res)
 	{
 		if (string.IsNullOrEmpty(BaseUrl))

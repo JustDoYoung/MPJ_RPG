@@ -5,7 +5,7 @@
 namespace AccountDB.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Rank : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,10 +24,30 @@ namespace AccountDB.Migrations
                     table.PrimaryKey("PK_Account", x => x.AccountDbId);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Ranking",
+                columns: table => new
+                {
+                    RankingDbId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Score = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ranking", x => x.RankingDbId);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Account_LoginProviderUserId",
                 table: "Account",
                 column: "LoginProviderUserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ranking_Username",
+                table: "Ranking",
+                column: "Username",
                 unique: true);
         }
 
@@ -36,6 +56,9 @@ namespace AccountDB.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Account");
+
+            migrationBuilder.DropTable(
+                name: "Ranking");
         }
     }
 }

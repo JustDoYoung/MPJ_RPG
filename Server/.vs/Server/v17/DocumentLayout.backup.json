@@ -3,8 +3,23 @@
   "WorkspaceRootPath": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/AccountDB/True/SqlTable/dbo.Ranking.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\services\\rankingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\services\\rankingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\controllers\\rankingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\controllers\\rankingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\services\\jwttokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\services\\jwttokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\data\\webpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\data\\webpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\services\\facebookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -15,24 +30,20 @@
       "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\data\\webpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\data\\webpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{41F49764-B56F-47C5-BA1D-B8F9897F1286}|AccountDB\\AccountDB.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountdb\\accountdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41F49764-B56F-47C5-BA1D-B8F9897F1286}|AccountDB\\AccountDB.csproj|solutionrelative:accountdb\\accountdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\services\\jwttokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\services\\jwttokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{41F49764-B56F-47C5-BA1D-B8F9897F1286}|AccountDB\\AccountDB.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountdb\\datamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{41F49764-B56F-47C5-BA1D-B8F9897F1286}|AccountDB\\AccountDB.csproj|solutionrelative:accountdb\\datamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{41F49764-B56F-47C5-BA1D-B8F9897F1286}|AccountDB\\AccountDB.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountdb\\accountdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{41F49764-B56F-47C5-BA1D-B8F9897F1286}|AccountDB\\AccountDB.csproj|solutionrelative:accountdb\\accountdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|d:\\d\\github\\unity\\mpj_rpg\\server\\accountserver\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCF8CEC-78A2-46B1-B402-207545C3C5A3}|AccountServer\\AccountServer.csproj|solutionrelative:accountserver\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,32 +53,107 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Program.cs",
               "RelativeDocumentMoniker": "AccountServer\\Program.cs",
               "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Program.cs",
               "RelativeToolTip": "AccountServer\\Program.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABUAAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAABcAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-21T15:00:13.766Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AccountService.cs",
-              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\AccountService.cs",
-              "RelativeDocumentMoniker": "AccountServer\\Services\\AccountService.cs",
-              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\AccountService.cs",
-              "RelativeToolTip": "AccountServer\\Services\\AccountService.cs",
-              "ViewState": "AgIAACMAAAAAAAAAAAAYwC0AAAAJAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "FacebookService.cs",
+              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\FacebookService.cs",
+              "RelativeDocumentMoniker": "AccountServer\\Services\\FacebookService.cs",
+              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\FacebookService.cs",
+              "RelativeToolTip": "AccountServer\\Services\\FacebookService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAArwCAAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-21T09:08:09.612Z",
+              "WhenOpened": "2024-10-21T09:17:12.334Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RankingController.cs",
+              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Controllers\\RankingController.cs",
+              "RelativeDocumentMoniker": "AccountServer\\Controllers\\RankingController.cs",
+              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Controllers\\RankingController.cs",
+              "RelativeToolTip": "AccountServer\\Controllers\\RankingController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwCEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:29:46.345Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WebPacket.cs",
+              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Data\\WebPacket.cs",
+              "RelativeDocumentMoniker": "AccountServer\\Data\\WebPacket.cs",
+              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Data\\WebPacket.cs",
+              "RelativeToolTip": "AccountServer\\Data\\WebPacket.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAYwBYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T09:00:16.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RankingService.cs",
+              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\RankingService.cs",
+              "RelativeDocumentMoniker": "AccountServer\\Services\\RankingService.cs",
+              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\RankingService.cs",
+              "RelativeToolTip": "AccountServer\\Services\\RankingService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAArwB4AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:30:18.039Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "JwtTokenService.cs",
+              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\JwtTokenService.cs",
+              "RelativeDocumentMoniker": "AccountServer\\Services\\JwtTokenService.cs",
+              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\JwtTokenService.cs",
+              "RelativeToolTip": "AccountServer\\Services\\JwtTokenService.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAArwEQAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T09:41:45.879Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "dbo.Ranking [\uB370\uC774\uD130]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/AccountDB/True/SqlTable/dbo.Ranking.sql",
+              "ToolTip": "dbo.Ranking [\uB370\uC774\uD130]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-10-22T10:46:40.435Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DataModel.cs",
+              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountDB\\DataModel.cs",
+              "RelativeDocumentMoniker": "AccountDB\\DataModel.cs",
+              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountDB\\DataModel.cs",
+              "RelativeToolTip": "AccountDB\\DataModel.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAYwBYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T07:58:19.855Z",
               "EditorCaption": ""
             },
             {
@@ -78,74 +164,35 @@
               "RelativeDocumentMoniker": "AccountDB\\AccountDbContext.cs",
               "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountDB\\AccountDbContext.cs",
               "RelativeToolTip": "AccountDB\\AccountDbContext.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAAAwAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAYwAwAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-21T08:27:01.429Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DataModel.cs",
-              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountDB\\DataModel.cs",
-              "RelativeDocumentMoniker": "AccountDB\\DataModel.cs",
-              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountDB\\DataModel.cs",
-              "RelativeToolTip": "AccountDB\\DataModel.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAYwA0AAAAVAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "AccountService.cs",
+              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\AccountService.cs",
+              "RelativeDocumentMoniker": "AccountServer\\Services\\AccountService.cs",
+              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\AccountService.cs",
+              "RelativeToolTip": "AccountServer\\Services\\AccountService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-21T07:58:19.855Z",
+              "WhenOpened": "2024-10-21T09:08:09.612Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "WebPacket.cs",
-              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Data\\WebPacket.cs",
-              "RelativeDocumentMoniker": "AccountServer\\Data\\WebPacket.cs",
-              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Data\\WebPacket.cs",
-              "RelativeToolTip": "AccountServer\\Data\\WebPacket.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-21T09:00:16.906Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "AccountController.cs",
               "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "AccountServer\\Controllers\\AccountController.cs",
               "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Controllers\\AccountController.cs",
               "RelativeToolTip": "AccountServer\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAYwBMAAABjAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABMAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-21T08:56:44.815Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "JwtTokenService.cs",
-              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\JwtTokenService.cs",
-              "RelativeDocumentMoniker": "AccountServer\\Services\\JwtTokenService.cs",
-              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\JwtTokenService.cs",
-              "RelativeToolTip": "AccountServer\\Services\\JwtTokenService.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAYwBMAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-21T09:41:45.879Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FacebookService.cs",
-              "DocumentMoniker": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\FacebookService.cs",
-              "RelativeDocumentMoniker": "AccountServer\\Services\\FacebookService.cs",
-              "ToolTip": "D:\\D\\Github\\Unity\\MPJ_RPG\\Server\\AccountServer\\Services\\FacebookService.cs",
-              "RelativeToolTip": "AccountServer\\Services\\FacebookService.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAArwCAAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-21T09:17:12.334Z",
               "EditorCaption": ""
             }
           ]

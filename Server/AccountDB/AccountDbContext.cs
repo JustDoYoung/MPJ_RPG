@@ -11,6 +11,7 @@ namespace AccountDB
     public class AccountDbContext : DbContext
     {
         public DbSet<AccountDb> Accounts { get; set; }
+        public DbSet<RankingDb> Rankings { get; set; }
         static readonly ILoggerFactory _logger = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         public static string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AccountDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
@@ -31,6 +32,14 @@ namespace AccountDB
         {
             builder.Entity<AccountDb>()
                 .HasIndex(t => t.LoginProviderUserId)
+                .IsUnique();
+
+            builder.Entity<AccountDb>()
+                .HasIndex(t => t.Username)
+                .IsUnique();
+
+            builder.Entity<RankingDb>()
+                .HasIndex(t => t.Username)
                 .IsUnique();
         }
     }

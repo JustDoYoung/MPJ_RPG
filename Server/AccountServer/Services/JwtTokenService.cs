@@ -25,6 +25,7 @@ namespace AccountServer.Services
             var claims = new Claim[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, accountDbId.ToString()), // Subject
+                new Claim(JwtRegisteredClaimNames.Name, "Scott"), //temp Name
 				new Claim(JwtRegisteredClaimNames.Iat, now.ToString()), // Issued At
 				new Claim(JwtRegisteredClaimNames.Exp, expired.ToString()) // Expiration
 			};
@@ -51,6 +52,29 @@ namespace AccountServer.Services
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             JwtSecurityToken decipher = handler.ReadJwtToken(token);
             return decipher;
+        }
+
+        public int GetAccountDbIdFromToken(string token)
+        {
+            JwtSecurityToken jwtToken = DecipherJwtAccessToken(token);
+            string? value = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+            if (value == null) return 0;
+
+            return int.Parse(value);
+        }
+
+        public string? GetUsernameFromToken(string token)
+        {
+            JwtSecurityToken jwtToken = DecipherJwtAccessToken(token);
+            string? value = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Name)?.Value;
+
+            return value;
+        }
+
+        public bool ValidateJwtAccessToken(string token)
+        {
+            return ValidateJwtAccessToken(token, SECRET_KEY);
         }
 
         public bool ValidateJwtAccessToken(string token, string key)

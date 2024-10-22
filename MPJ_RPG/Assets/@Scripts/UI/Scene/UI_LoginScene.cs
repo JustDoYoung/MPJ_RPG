@@ -64,11 +64,38 @@ public class UI_LoginScene : UI_Scene
                 Debug.Log($"AccountDbId : {res.accountDbId}");
                 Debug.Log($"JWT : {res.jwt}");
 
+                Managers.Jwt = res.jwt;
+
+                //Ranking test
+                UpdateRank();
+
                 //todo : game server
             }
             else
             {
                 Debug.Log("Login Fail");
+            }
+        });
+    }
+
+    //temp
+    void UpdateRank()
+    {
+        UpdateRankingPacketReq req = new UpdateRankingPacketReq()
+        {
+            jwt = Managers.Jwt,
+            score = 100
+        };
+
+        Managers.Web.SendPostRequest<UpdateRankingPacketRes>($"api/ranking/update", req, (res) =>
+        {
+            if (res.success == true)
+            {
+                Debug.Log("Success");
+            }
+            else
+            {
+                Debug.Log("Fail");
             }
         });
     }

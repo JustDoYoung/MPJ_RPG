@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountDB.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20241021084707_init")]
-    partial class init
+    [Migration("20241022081059_Rank")]
+    partial class Rank
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace AccountDB.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AccountDB.DataModel+AccountDb", b =>
+            modelBuilder.Entity("AccountDB.AccountDb", b =>
                 {
                     b.Property<int>("AccountDbId")
                         .ValueGeneratedOnAdd()
@@ -45,6 +45,29 @@ namespace AccountDB.Migrations
                         .IsUnique();
 
                     b.ToTable("Account");
+                });
+
+            modelBuilder.Entity("AccountDB.RankingDb", b =>
+                {
+                    b.Property<int>("RankingDbId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RankingDbId"));
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("RankingDbId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Ranking");
                 });
 #pragma warning restore 612, 618
         }
