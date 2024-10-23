@@ -24,3 +24,19 @@ public class UpdateRankingPacketRes
 {
     public bool success { get; set; } = false;
 }
+
+public class RankerData
+{
+    public string username { get; set; } = string.Empty;
+    public int score { get; set; }
+}
+
+public class GetRankersPacketReq
+{
+    public string jwt { get; set; } = string.Empty;
+}
+
+public class GetRankersPacketRes
+{
+    public  List<RankerData> rankerDatas { get; set; } = new List<RankerData>();
+}

@@ -46,4 +46,21 @@ namespace WebPacket
     {
 		public bool success;
     }
+
+    [Serializable]
+    public class GetRankersPacketReq
+    {
+        public string jwt = string.Empty;
+    }
+    [Serializable]
+    public class GetRankersPacketRes
+    {
+        public List<RankerData> rankerDatas= new List<RankerData>();
+    }
+    [Serializable]
+    public class RankerData
+    {
+        public string username  = string.Empty;
+        public int score;
+    }
 }

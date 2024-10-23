@@ -1,5 +1,6 @@
 ﻿
 using AccountDB;
+using Microsoft.EntityFrameworkCore;
 
 namespace AccountServer.Services
 {
@@ -32,6 +33,14 @@ namespace AccountServer.Services
             await _dbcontext.SaveChangesAsync();
 
             return true;
+        }
+
+        internal async Task<List<RankingDb>> GetRankers(int num)
+        {
+            return await _dbcontext.Rankings
+                .OrderByDescending(t => t.Score)
+                .Take(num)
+                .ToListAsync();
         }
     }
 }

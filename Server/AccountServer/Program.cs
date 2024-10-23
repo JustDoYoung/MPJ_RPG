@@ -22,6 +22,7 @@ namespace AccountServer
             builder.Services.AddSingleton<JwtTokenService>();
             builder.Services.AddScoped<RankingService>();
             builder.Services.AddScoped<AccountService>();
+            builder.Services.AddHostedService<TimedHostedService>();
 
             var app = builder.Build();
 

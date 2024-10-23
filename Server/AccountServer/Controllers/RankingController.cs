@@ -1,4 +1,5 @@
-﻿using AccountServer.Services;
+﻿using AccountDB;
+using AccountServer.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,31 @@ namespace AccountServer.Controllers
 
             return res;
 
+        }
+
+        [HttpPost]
+        [Route("getrankers")]
+        public async Task<GetRankersPacketRes> GetRankers([FromBody] GetRankersPacketReq req)
+        {
+            GetRankersPacketRes res = new GetRankersPacketRes();
+
+            bool auth = _jwt.ValidateJwtAccessToken(req.jwt);
+            if (auth == false)
+                return res;
+
+            //top 10
+            List<RankingDb> rankers = await _ranking.GetRankers(10); 
+
+            foreach (RankingDb rankingDb in rankers)
+            {
+                res.rankerDatas.Add(new RankerData()
+                {
+                    username = rankingDb.Username,
+                    score = rankingDb.Score,
+                });
+            }
+
+            return res;
         }
     }
 }

@@ -53,6 +53,32 @@
   },
   {
     "ContainingType": "AccountServer.Controllers.RankingController",
+    "Method": "GetRankers",
+    "RelativePath": "api/ranking/getrankers",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "GetRankersPacketReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GetRankersPacketRes",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "AccountServer.Controllers.RankingController",
     "Method": "UpdateRanking",
     "RelativePath": "api/ranking/update",
     "HttpMethod": "POST",

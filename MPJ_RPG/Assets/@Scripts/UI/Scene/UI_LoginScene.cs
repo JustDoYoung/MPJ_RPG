@@ -67,13 +67,34 @@ public class UI_LoginScene : UI_Scene
                 Managers.Jwt = res.jwt;
 
                 //Ranking test
-                UpdateRank();
+                //UpdateRank();
+                GetRankers();
 
                 //todo : game server
             }
             else
             {
                 Debug.Log("Login Fail");
+            }
+        });
+    }
+
+    void GetRankers()
+    {
+        GetRankersPacketReq req = new GetRankersPacketReq()
+        {
+            jwt = Managers.Jwt
+        };
+
+        Managers.Web.SendPostRequest<GetRankersPacketRes>($"api/ranking/getrankers", req, (res) =>
+        {
+            if (res.rankerDatas.Count > 0)
+            {
+                Debug.Log("Success");
+            }
+            else
+            {
+                Debug.Log("Fail");
             }
         });
     }
